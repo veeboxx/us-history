@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 760" role="img" aria-labelledby="title desc">
+  <title id="title">American bald eagle header watermark</title>
+  <desc id="desc">A symmetrical, spread-wing bald eagle rendered as a subtle navy vector watermark on a transparent background.</desc>
+
+  <!-- Transparent background by design. Change --eagle to recolor the artwork. -->
+  <style>
+    :root { --eagle: #17324d; }
+    .soft { fill: var(--eagle); fill-opacity: .095; }
+    .line { fill: none; stroke: var(--eagle); stroke-opacity: .12; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+
+  <g transform="translate(800 378)">
+    <!-- Back wing mass -->
+    <path class="soft" d="
+      M-32,-90
+      C-170,-176 -312,-241 -465,-261
+      C-575,-275 -684,-246 -758,-193
+      C-690,-196 -627,-180 -573,-145
+      C-650,-139 -711,-109 -755,-59
+      C-657,-86 -568,-71 -495,-27
+      C-575,-15 -635,20 -672,73
+      C-565,31 -468,36 -390,81
+      C-455,104 -499,145 -520,197
+      C-425,146 -338,141 -264,172
+      C-306,204 -329,245 -329,289
+      C-243,214 -167,183 -88,186
+      C-109,221 -116,258 -108,296
+      C-55,251 -20,207 0,158
+      C20,207 55,251 108,296
+      C116,258 109,221 88,186
+      C167,183 243,214 329,289
+      C329,245 306,204 264,172
+      C338,141 425,146 520,197
+      C499,145 455,104 390,81
+      C468,36 565,31 672,73
+      C635,20 575,-15 495,-27
+      C568,-71 657,-86 755,-59
+      C711,-109 650,-139 573,-145
+      C627,-180 690,-196 758,-193
+      C684,-246 575,-275 465,-261
+      C312,-241 170,-176 32,-90
+      Z"/>
+
+    <!-- Primary wing feather cuts -->
+    <path class="line" d="M-61,-70 C-232,-158 -390,-203 -568,-205"/>
+    <path class="line" d="M-72,-38 C-267,-102 -438,-119 -620,-95"/>
+    <path class="line" d="M-81,-4 C-257,-31 -417,-20 -563,28"/>
+    <path class="line" d="M61,-70 C232,-158 390,-203 568,-205"/>
+    <path class="line" d="M72,-38 C267,-102 438,-119 620,-95"/>
+    <path class="line" d="M81,-4 C257,-31 417,-20 563,28"/>
+
+    <!-- Tail -->
+    <path class="soft" d="
+      M-84,143
+      C-111,189 -145,239 -204,300
+      C-137,282 -89,265 -46,230
+      C-57,284 -72,326 -102,373
+      C-43,336 -15,301 0,255
+      C15,301 43,336 102,373
+      C72,326 57,284 46,230
+      C89,265 137,282 204,300
+      C145,239 111,189 84,143
+      Z"/>
+
+    <!-- Body -->
+    <path class="soft" d="
+      M0,-112
+      C-74,-107 -120,-50 -120,31
+      C-120,98 -82,160 -43,205
+      C-25,226 -12,245 0,267
+      C12,245 25,226 43,205
+      C82,160 120,98 120,31
+      C120,-50 74,-107 0,-112 Z"/>
+
+    <!-- White head suggested through negative-space contour -->
+    <path d="
+      M-80,-84
+      C-66,-145 -19,-184 46,-177
+      C91,-172 124,-146 141,-112
+      C113,-119 88,-111 66,-92
+      C52,-79 43,-62 37,-43
+      C10,-65 -23,-76 -80,-84 Z"
+      fill="#ffffff" fill-opacity=".34"/>
+
+    <!-- Brow / eye -->
+    <path class="line" d="M18,-116 C49,-127 78,-122 102,-104"/>
+    <ellipse cx="73" cy="-101" rx="8" ry="6" fill="#17324d" fill-opacity=".19"/>
+
+    <!-- Beak -->
+    <path class="soft" d="
+      M97,-100
+      C147,-96 184,-76 202,-48
+      C174,-50 149,-45 129,-33
+      C148,-28 163,-18 171,-2
+      C140,-7 113,-20 92,-41
+      C105,-58 107,-78 97,-100 Z"/>
+
+    <!-- Chest feather accents -->
+    <path class="line" d="M-58,29 C-36,49 -20,69 0,96 C20,69 36,49 58,29"/>
+    <path class="line" d="M-43,90 C-26,111 -12,129 0,150 C12,129 26,111 43,90"/>
+
+    <!-- Talon suggestion -->
+    <path class="line" d="M-32,186 C-58,217 -74,242 -83,274 M32,186 C58,217 74,242 83,274"/>
+    <path class="line" d="M-83,274 l-30,24 M-83,274 l-4,35 M83,274 l30,24 M83,274 l4,35"/>
+  </g>
+</svg>
