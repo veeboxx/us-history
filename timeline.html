@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timeline — US History</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    .page-hero {
+      background: var(--surface);
+      border-bottom: 1px solid rgba(4,43,88,0.08);
+      padding: 48px 24px 32px;
+      text-align: center;
+    }
+
+    .page-hero h1 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      text-transform: none;
+      letter-spacing: -0.01em;
+    }
+
+    .page-hero h1 em { font-style: italic; color: var(--ice-blue); }
+    .page-hero p { margin: 10px auto 0; color: var(--shadow-blue); font-size: 0.95rem; }
+
+    /* Era jump links */
+    .era-nav {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 16px 24px 20px;
+      border-bottom: 1px solid rgba(4,43,88,0.06);
+      position: sticky;
+      top: var(--nav-height);
+      z-index: 100;
+      background: var(--deep-sea-90);
+      backdrop-filter: blur(12px);
+    }
+
+    .era-link {
+      padding: 5px 14px;
+      border-radius: 100px;
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--shadow-blue);
+      transition: all 0.2s ease;
+    }
+
+    .era-link:hover, .era-link.active {
+      color: var(--ice-blue);
+      background: rgba(239,155,12,0.1);
+    }
+
+    /* Timeline container */
+    .timeline {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      position: relative;
+    }
+
+    /* The vertical line */
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 28px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom,
+        rgba(239,155,12,0.2),
+        rgba(239,155,12,0.06)
+      );
+    }
+
+    /* Era section */
+    .era {
+      margin-bottom: 20px;
+      scroll-margin-top: 140px;
+    }
+
+    .era-title {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-top: 32px;
+    }
+
+    .era-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 3px solid var(--ice-blue);
+      background: var(--deep-sea);
+      flex-shrink: 0;
+      position: relative;
+      left: 20px;
+      z-index: 2;
+      box-shadow: 0 0 12px rgba(239,155,12,0.25);
+    }
+
+    .era-label {
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--ice-blue);
+      padding: 4px 14px;
+      border: 1px solid rgba(239,155,12,0.2);
+      border-radius: 100px;
+      background: rgba(239,155,12,0.06);
+    }
+
+    /* Individual event */
+    .event {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 28px;
+      padding-left: 0;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .event.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .event-marker {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      width: 58px;
+    }
+
+    .event-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--boundless);
+      border: 2px solid rgba(239,155,12,0.2);
+      position: relative;
+      left: 0;
+      z-index: 2;
+      transition: all 0.3s ease;
+    }
+
+    .event:hover .event-dot {
+      background: var(--ice-blue);
+      border-color: var(--ice-blue);
+      box-shadow: 0 0 8px rgba(239,155,12,0.35);
+    }
+
+    .event-year {
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--shadow-blue);
+      margin-top: 6px;
+      text-align: center;
+      letter-spacing: 0.05em;
+    }
+
+    .event-content {
+      flex: 1;
+      padding: 14px 18px;
+      background: var(--surface-card);
+      border: 1px solid rgba(4,43,88,0.06);
+      border-radius: var(--radius-md);
+      transition: border-color 0.2s ease;
+    }
+
+    .event:hover .event-content {
+      border-color: rgba(239,155,12,0.2);
+    }
+
+    .event-content h3 {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--ice-white);
+      margin-bottom: 4px;
+    }
+
+    .event-content p {
+      font-size: 0.85rem;
+      color: var(--fog);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .event-tag {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 0.55rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 2px 8px;
+      border-radius: 100px;
+      margin-top: 8px;
+    }
+
+    .tag-people { color: #B8790A; background: rgba(184,121,10,0.12); }
+    .tag-conflict { color: #B83A26; background: rgba(184,58,38,0.12); }
+    .tag-economy { color: #5B6B2E; background: rgba(91,107,46,0.12); }
+    .tag-politics { color: #3E6478; background: rgba(62,100,120,0.12); }
+    .tag-culture { color: #6E3A52; background: rgba(110,58,82,0.12); }
+
+    @media (max-width: 580px) {
+      .timeline::before { left: 18px; }
+      .era-dot { left: 10px; width: 14px; height: 14px; }
+      .event-marker { width: 40px; }
+      .event-dot { width: 8px; height: 8px; }
+      .event { gap: 12px; }
+    }
+  </style>
+</head>
+
+<body class="page-transition">
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><span class="brand-accent">US</span> History</a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="stories/">Stories</a></li>
+      <li><a href="games.html">Games</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      <li><a href="vocab.html">Vocab</a></li>
+      <li><a href="timeline.html">Timeline</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <h1>US <em>Timeline</em></h1>
+  <p>Key events from [starting point] to the present day.</p>
+</header>
+
+<nav class="era-nav" id="eraNav">
+  <a href="#era-1" class="era-link">[Era 1]</a>
+  <a href="#era-2" class="era-link">[Era 2]</a>
+  <a href="#era-3" class="era-link">[Era 3]</a>
+  <a href="#era-4" class="era-link">[Era 4]</a>
+  <a href="#era-5" class="era-link">[Era 5]</a>
+  <a href="#era-6" class="era-link">[Era 6]</a>
+  <a href="#era-7" class="era-link">[Era 7]</a>
+</nav>
+
+<div class="timeline">
+
+  <!-- ERA 1 -->
+  <div class="era" id="era-1">
+    <div class="era-title"><div class="era-dot"></div><span class="era-label">[Era 1 Label]</span></div>
+
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
+      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-people">People</span></div>
+    </div>
+
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
+      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-culture">Culture</span></div>
+    </div>
+  </div>
+
+  <!-- ERA 2 -->
+  <div class="era" id="era-2">
+    <div class="era-title"><div class="era-dot"></div><span class="era-label">[Era 2 Label]</span></div>
+
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
+      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-politics">Politics</span></div>
+    </div>
+  </div>
+
+  <!-- ERA 3 -->
+  <div class="era" id="era-3">
+    <div class="era-title"><div class="era-dot"></div><span class="era-label">[Era 3 Label]</span></div>
+
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
+      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-economy">Economy</span></div>
+    </div>
+  </div>
+
+  <!-- ERA 4 -->
+  <div class="era" id="era-4">
+    <div class="era-title"><div class="era-dot"></div><span class="era-label">[Era 4 Label]</span></div>
+
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
+      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-conflict">Conflict</span></div>
+    </div>
+  </div>
+
+  <!-- ERA 5 -->
+  <div class="era" id="era-5">
+    <div class="era-title"><div class="era-dot"></div><span class="era-label">[Era 5 Label]</span></div>
+
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
+      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-people">People</span></div>
+    </div>
+  </div>
+
+  <!-- ERA 6 -->
+  <div class="era" id="era-6">
+    <div class="era-title"><div class="era-dot"></div><span class="era-label">[Era 6 Label]</span></div>
+
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
+      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-conflict">Conflict</span></div>
+    </div>
+  </div>
+
+  <!-- ERA 7 -->
+  <div class="era" id="era-7">
+    <div class="era-title"><div class="era-dot"></div><span class="era-label">[Era 7 Label]</span></div>
+
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
+      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-culture">Culture</span></div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <p>&copy; 2025&ndash;2026 US History &middot; [Grade Level]</p>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  /* Scroll-triggered reveals for events */
+  const events = document.querySelectorAll('.event');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+
+  events.forEach(el => observer.observe(el));
+
+  /* Active era tracking */
+  const eras = document.querySelectorAll('.era');
+  const eraLinks = document.querySelectorAll('.era-link');
+
+  function updateEra() {
+    let current = '';
+    eras.forEach(era => {
+      if (era.getBoundingClientRect().top < 250) current = era.id;
+    });
+    eraLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
+  }
+
+  window.addEventListener('scroll', updateEra, { passive: true });
+  updateEra();
+</script>
+</body>
+</html>

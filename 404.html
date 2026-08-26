@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Page Not Found</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .lost-page {
+      min-height: calc(100vh - var(--nav-height));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+      gap: 24px;
+    }
+
+    .lost-img {
+      max-width: 320px;
+      width: 100%;
+      animation: floatLost 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatLost {
+      0% { transform: translateY(0) rotate(-0.5deg); }
+      100% { transform: translateY(-8px) rotate(0.5deg); }
+    }
+
+    .lost-page h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--ice-white);
+    }
+
+    .lost-page p {
+      font-size: 1.05rem;
+      color: var(--shadow-blue);
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .lost-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+
+<body class="page-transition">
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-brand">
+      <span class="brand-accent">US</span> History
+    </a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/stories/">Stories</a></li>
+      <li><a href="/games.html">Games</a></li>
+      <li><a href="/resources.html">Resources</a></li>
+      <li><a href="/vocab.html">Vocab</a></li>
+      <li><a href="/timeline.html">Timeline</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="lost-page">
+  <svg class="lost-img" viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A torn, rolled-up parchment map with a broken wax seal">
+    <ellipse cx="160" cy="235" rx="110" ry="10" fill="#042B58" opacity="0.06"/>
+    <path d="M55 60 Q50 40 70 35 L250 35 Q270 40 265 60 L268 190 Q270 210 250 212 L72 210 Q52 208 55 188 Z" fill="#FDFBF5" stroke="#042B58" stroke-width="1.5" opacity="0.9"/>
+    <path d="M70 40 Q60 90 72 150 Q58 165 75 205" fill="none" stroke="#042B58" stroke-width="1" opacity="0.15"/>
+    <path d="M120 70 L210 70 M100 95 L230 95 M110 120 L200 120 M100 145 L220 145 M120 170 L190 170" stroke="#042B58" stroke-width="1.5" opacity="0.18" stroke-linecap="round"/>
+    <path d="M170 95 L200 130 L165 150 L140 120 Z" fill="none" stroke="#B83A26" stroke-width="1.2" opacity="0.4"/>
+    <path d="M185 70 Q225 60 260 90" fill="none" stroke="#042B58" stroke-width="1" stroke-dasharray="3 4" opacity="0.3"/>
+    <path d="M40 55 Q30 130 45 195 Q30 200 25 190 Q15 130 30 50 Q35 45 40 55 Z" fill="#F2EAD9" stroke="#042B58" stroke-width="1.2"/>
+    <path d="M280 55 Q292 130 275 195 Q292 200 298 188 Q308 128 292 48 Q286 44 280 55 Z" fill="#F2EAD9" stroke="#042B58" stroke-width="1.2"/>
+    <circle cx="160" cy="150" r="22" fill="#EF9B0C" opacity="0.92"/>
+    <path d="M160 130 L160 150 L145 165" fill="none" stroke="#B8790A" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+    <path d="M142 165 Q160 178 178 165 L172 172 Q160 180 148 172 Z" fill="#EF9B0C" opacity="0.85"/>
+  </svg>
+  <h1>This Page Is History</h1>
+  <p>[US-History-themed 404 message — this page doesn't exist, but the course continues.]</p>
+  <div class="lost-actions">
+    <a href="/index.html" class="btn btn--primary">Back to Home</a>
+    <a href="/games.html" class="btn">Play a Game</a>
+  </div>
+</main>
+
+<script src="/js/main.js"></script>
+</body>
+</html>
