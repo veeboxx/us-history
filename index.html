@@ -30,7 +30,7 @@
       background-repeat: no-repeat;
       background-position: center 46%;
       background-size: min(1300px, 145%) auto;
-      opacity: 0.8;
+      opacity: 1;
       will-change: transform;
       pointer-events: none;
     }
@@ -319,17 +319,17 @@
 <script>
   /* Stars — quiet twinkling points, replacing the old rising bubbles */
   const sc = document.getElementById('stars');
-  for (let i = 0; i < 22; i++) {
+  for (let i = 0; i < 34; i++) {
     const s = document.createElement('div');
     s.classList.add('star');
     s.style.left = Math.random() * 100 + '%';
-    s.style.top = 8 + Math.random() * 55 + '%';
-    const size = 1.5 + Math.random() * 2.2;
+    s.style.top = 6 + Math.random() * 60 + '%';
+    const size = 2 + Math.random() * 2.8;
     s.style.width = size + 'px';
     s.style.height = size + 'px';
-    s.style.setProperty('--dur', (3 + Math.random() * 5) + 's');
-    s.style.setProperty('--delay', (Math.random() * 8) + 's');
-    s.style.setProperty('--peak', (0.25 + Math.random() * 0.35).toString());
+    s.style.setProperty('--dur', (2.5 + Math.random() * 4) + 's');
+    s.style.setProperty('--delay', (Math.random() * 5) + 's');
+    s.style.setProperty('--peak', (0.4 + Math.random() * 0.45).toString());
     sc.appendChild(s);
   }
 
