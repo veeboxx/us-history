@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <title>U.S. History</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    /* === AGED PARCHMENT HERO — flat warm field, soft gold glow, no banding === */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      max-height: 960px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #F8F3EC;
+    }
+
+    /* Eagle watermark — parallax background layer */
+    .hero-eagle {
+      position: absolute;
+      inset: -8% 0 -8% 0;
+      z-index: 1;
+      background-image: url("assets/us-history-eagle-header.svg");
+      background-repeat: no-repeat;
+      background-position: center 46%;
+      background-size: min(1300px, 145%) auto;
+      opacity: 0.8;
+      will-change: transform;
+      pointer-events: none;
+    }
+
+    /* Soft cream vignette behind the title, so the eagle never fights the text for legibility */
+    .hero-vignette {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(900px, 100%);
+      height: 60%;
+      background: radial-gradient(
+        ellipse 50% 50% at 50% 50%,
+        rgba(248, 243, 236, 0.85) 0%,
+        rgba(248, 243, 236, 0.45) 55%,
+        transparent 100%
+      );
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Soft gold glow behind the title, standing in for the old "light from above" */
+    .hero-light {
+      position: absolute;
+      top: -10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120%;
+      height: 70%;
+      background: radial-gradient(
+        ellipse 45% 55% at 50% 20%,
+        rgba(239, 155, 12, 0.10) 0%,
+        rgba(239, 155, 12, 0.03) 50%,
+        transparent 100%
+      );
+      z-index: 2;
+      animation: lightPulse 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes lightPulse {
+      0% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+
+    /* Noise texture overlay — keeps the flat field from looking too digital-clean */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 128px 128px;
+      pointer-events: none;
+    }
+
+    /* Stars — quiet twinkling dots, replacing the old rising bubbles. Sits above the eagle/vignette. */
+    .hero-stars {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--ice-blue);
+      opacity: 0;
+      animation: twinkle var(--dur) ease-in-out infinite;
+      animation-delay: var(--delay);
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.7); }
+      50% { opacity: var(--peak); transform: scale(1); }
+    }
+
+    .hero-fade {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 160px;
+      background: linear-gradient(to bottom, transparent, #F8F3EC);
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-eagle { transform: none !important; }
+    }
+
+    /* === HERO CONTENT — editorial typography === */
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      max-width: 860px;
+      padding: 0 24px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 5px 18px;
+      border: 1px solid rgba(239, 155, 12, 0.25);
+      border-radius: 100px;
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: rgba(239, 155, 12, 0.85);
+      margin-bottom: 32px;
+    }
+
+    .hero-title {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-weight: 400;
+      font-style: normal;
+      font-size: clamp(3.5rem, 10vw, 7rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      text-transform: none;
+      color: var(--ice-white);
+      margin-bottom: 24px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--ice-blue);
+    }
+
+    .hero-tagline {
+      font-family: var(--font-body);
+      font-size: clamp(0.85rem, 1.8vw, 1rem);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: rgba(4, 43, 88, 0.55);
+      margin-bottom: 40px;
+    }
+
+    .quick-links {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Unit labels */
+    .unit-number {
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--ice-blue);
+      opacity: 0.8;
+      margin-bottom: 8px;
+    }
+
+    body { background: #F8F3EC; }
+    .section:first-of-type { padding-top: 80px; }
+
+    @media (max-width: 768px) {
+      .hero { height: 85vh; min-height: 500px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .star { animation: none; }
+      .hero-light { animation: none; }
+    }
+  </style>
+</head>
+
+<body class="page-transition">
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><span class="brand-accent">U.S.</span> History</a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="stories/">Stories</a></li>
+      <li><a href="games.html">Games</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      <li><a href="vocab.html">Vocab</a></li>
+      <li><a href="timeline.html">Timeline</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-eagle" id="heroEagle"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-light"></div>
+  <div class="hero-stars" id="stars"></div>
+
+  <div class="hero-fade"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">8th Grade &middot; 2026&ndash;2027</div>
+    <h1 class="hero-title">US<br><em>History</em></h1>
+    <p class="hero-tagline">From Roanoke to the Civil War — the story of a young nation</p>
+    <div class="quick-links">
+      <a href="stories/" class="btn btn--primary">Read Stories</a>
+      <a href="games.html" class="btn">Play Games</a>
+    </div>
+  </div>
+</section>
+
+<!-- EXPLORE -->
+<section class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Explore</h2>
+      <p>Everything you need for class, all in one place.</p>
+      <div class="section-divider"></div>
+    </div>
+    <div class="card-grid reveal-stagger">
+      <a href="stories/" class="card">
+        <span class="card-icon">📖</span><h3>Stories</h3>
+        <p>History told like it should be — short reads with real stories about real people.</p>
+        <span class="card-arrow">&rarr;</span>
+      </a>
+      <a href="games.html" class="card">
+        <span class="card-icon">🎮</span><h3>Games &amp; Activities</h3>
+        <p>Simulations, choose-your-path games, and review games for every unit.</p>
+        <span class="card-arrow">&rarr;</span>
+      </a>
+      <a href="resources.html" class="card">
+        <span class="card-icon">📋</span><h3>Resources</h3>
+        <p>Readings, activities, DBQs, and primary source links.</p>
+        <span class="card-arrow">&rarr;</span>
+      </a>
+      <a href="vocab.html" class="card">
+        <span class="card-icon">🔤</span><h3>Vocab Review</h3>
+        <p>Interactive flashcards for every unit. Flip, shuffle, and study.</p>
+        <span class="card-arrow">&rarr;</span>
+      </a>
+      <a href="timeline.html" class="card">
+        <span class="card-icon">⏳</span><h3>Timeline</h3>
+        <p>Key events from Roanoke to the eve of the Civil War, all in one scroll.</p>
+        <span class="card-arrow">&rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- UNITS -->
+<section class="section" id="units" style="border-top: 1px solid rgba(4,43,88,0.08); border-bottom: 1px solid rgba(4,43,88,0.08);">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>This Year's Quarters</h2>
+      <p>The journey through 8th grade U.S. History, quarter by quarter.</p>
+      <div class="section-divider"></div>
+    </div>
+    <div class="card-grid reveal-stagger">
+      <div class="card" style="cursor:default"><div class="unit-number">Quarter 1 &middot; Sept 1&ndash;Nov 6</div><h3>Founding a Nation</h3><p>Roanoke, the 13 Colonies, colonial life, and the French &amp; Indian War.</p></div>
+      <div class="card" style="cursor:default"><div class="unit-number">Quarter 2 &middot; Nov 9&ndash;Jan 22</div><h3>Revolution</h3><p>Taxation, Boston, the Declaration of Independence, and the fight for independence.</p></div>
+      <div class="card" style="cursor:default"><div class="unit-number">Quarter 3 &middot; Jan 26&ndash;Apr 2</div><h3>A New Government</h3><p>The Constitution, the Bill of Rights, the early presidents, and westward exploration.</p></div>
+      <div class="card" style="cursor:default"><div class="unit-number">Quarter 4 &middot; Apr 12&ndash;Jun 15</div><h3>Expansion &amp; Division</h3><p>Indian Removal, the Industrial Revolution, westward expansion, and the road to civil war.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- INFO -->
+<section class="info-strip reveal">
+  <div class="container">
+    <div class="info-grid">
+      <div class="info-item"><span class="info-label">Teacher</span><span class="info-value">Mr. Lieder</span></div>
+      <div class="info-item"><span class="info-label">Grade</span><span class="info-value">8th Grade</span></div>
+      <div class="info-item"><span class="info-label">Subject</span><span class="info-value">U.S. History</span></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <p>&copy; 2026&ndash;2027 U.S. History &middot; 8th Grade</p>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  /* Stars — quiet twinkling points, replacing the old rising bubbles */
+  const sc = document.getElementById('stars');
+  for (let i = 0; i < 22; i++) {
+    const s = document.createElement('div');
+    s.classList.add('star');
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = 8 + Math.random() * 55 + '%';
+    const size = 1.5 + Math.random() * 2.2;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.setProperty('--dur', (3 + Math.random() * 5) + 's');
+    s.style.setProperty('--delay', (Math.random() * 8) + 's');
+    s.style.setProperty('--peak', (0.25 + Math.random() * 0.35).toString());
+    sc.appendChild(s);
+  }
+
+  /* Eagle watermark parallax — drifts slower than the page scroll */
+  const eagle = document.getElementById('heroEagle');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (eagle && !prefersReducedMotion) {
+    let ticking = false;
+    function updateParallax() {
+      const offset = window.scrollY * 0.12;
+      eagle.style.transform = `translateY(${offset}px)`;
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+</script>
+</body>
+</html>
