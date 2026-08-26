@@ -3,173 +3,131 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <title>US History</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <title>Stories — U.S. History</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <style>
-    /* === AGED PARCHMENT HERO — flat warm field, soft gold glow, no banding === */
-    .hero {
-      position: relative;
-      height: 100vh;
-      min-height: 600px;
-      max-height: 960px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      background: #F8F3EC;
-    }
-
-    /* Soft gold glow behind the title, standing in for the old "light from above" */
-    .hero-light {
-      position: absolute;
-      top: -10%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 120%;
-      height: 70%;
-      background: radial-gradient(
-        ellipse 45% 55% at 50% 20%,
-        rgba(239, 155, 12, 0.10) 0%,
-        rgba(239, 155, 12, 0.03) 50%,
-        transparent 100%
-      );
-      z-index: 2;
-      animation: lightPulse 12s ease-in-out infinite alternate;
-    }
-
-    @keyframes lightPulse {
-      0% { opacity: 0.6; }
-      100% { opacity: 1; }
-    }
-
-    /* Noise texture overlay — keeps the flat field from looking too digital-clean */
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      opacity: 0.025;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-      background-size: 128px 128px;
-      pointer-events: none;
-    }
-
-    /* Stars — quiet twinkling dots, replacing the old rising bubbles */
-    .hero-stars {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .star {
-      position: absolute;
-      border-radius: 50%;
-      background: var(--ice-blue);
-      opacity: 0;
-      animation: twinkle var(--dur) ease-in-out infinite;
-      animation-delay: var(--delay);
-    }
-
-    @keyframes twinkle {
-      0%, 100% { opacity: 0; transform: scale(0.7); }
-      50% { opacity: var(--peak); transform: scale(1); }
-    }
-
-    .hero-fade {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 160px;
-      background: linear-gradient(to bottom, transparent, #F8F3EC);
-      z-index: 6;
-      pointer-events: none;
-    }
-
-    /* === HERO CONTENT — editorial typography === */
-    .hero-content {
-      position: relative;
-      z-index: 10;
+    .page-hero {
+      background: var(--surface);
+      border-bottom: 1px solid rgba(4,43,88,0.08);
+      padding: 56px 24px 36px;
       text-align: center;
-      max-width: 860px;
-      padding: 0 24px;
     }
 
-    .hero-badge {
-      display: inline-block;
-      padding: 5px 18px;
-      border: 1px solid rgba(239, 155, 12, 0.25);
-      border-radius: 100px;
-      font-family: var(--font-display);
-      font-size: 0.65rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.25em;
-      color: rgba(239, 155, 12, 0.85);
-      margin-bottom: 32px;
-    }
-
-    .hero-title {
+    .page-hero h1 {
       font-family: 'Instrument Serif', Georgia, serif;
       font-weight: 400;
-      font-style: normal;
-      font-size: clamp(3.5rem, 10vw, 7rem);
-      line-height: 0.95;
-      letter-spacing: -0.02em;
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
       text-transform: none;
-      color: var(--ice-white);
-      margin-bottom: 24px;
+      letter-spacing: -0.01em;
     }
 
-    .hero-title em {
-      font-style: italic;
-      color: var(--ice-blue);
-    }
+    .page-hero h1 em { font-style: italic; color: var(--ice-blue); }
+    .page-hero p { margin: 12px auto 0; color: var(--shadow-blue); font-size: 0.95rem; max-width: 480px; }
 
-    .hero-tagline {
-      font-family: var(--font-body);
-      font-size: clamp(0.85rem, 1.8vw, 1rem);
-      font-weight: 400;
-      letter-spacing: 0.04em;
-      color: rgba(4, 43, 88, 0.55);
-      margin-bottom: 40px;
-    }
-
-    .quick-links {
+    .era-filter {
       display: flex;
-      gap: 14px;
+      gap: 6px;
       justify-content: center;
       flex-wrap: wrap;
+      padding: 18px 24px;
+      border-bottom: 1px solid rgba(4,43,88,0.06);
     }
 
-    /* Unit labels */
-    .unit-number {
+    .era-btn {
+      padding: 6px 16px;
+      border-radius: 100px;
       font-family: var(--font-display);
       font-size: 0.7rem;
-      font-weight: 800;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.08em;
+      color: var(--shadow-blue);
+      background: none;
+      border: 1px solid rgba(4,43,88,0.08);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .era-btn:hover, .era-btn.active {
       color: var(--ice-blue);
-      opacity: 0.8;
+      background: rgba(239,155,12,0.08);
+      border-color: rgba(239,155,12,0.2);
+    }
+
+    .story-feed { max-width: 760px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    .story-card {
+      display: block;
+      padding: 32px 0;
+      border-bottom: 1px solid rgba(4,43,88,0.06);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .story-card:first-child { padding-top: 0; }
+    .story-card:hover .story-title { color: var(--ice-blue); }
+
+    .story-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+
+    .story-era {
+      font-family: var(--font-display);
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 3px 10px;
+      border-radius: 100px;
+      color: var(--ice-blue);
+      background: rgba(239,155,12,0.08);
+    }
+
+    .story-read-time {
+      font-family: var(--font-display);
+      font-size: 0.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--boundless);
+    }
+
+    .story-title {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(1.4rem, 3.5vw, 2rem);
+      line-height: 1.2;
+      color: var(--ice-white);
       margin-bottom: 8px;
+      transition: color 0.2s ease;
     }
 
-    body { background: #F8F3EC; }
-    .section:first-of-type { padding-top: 80px; }
+    .story-title em { font-style: italic; }
 
-    @media (max-width: 768px) {
-      .hero { height: 85vh; min-height: 500px; }
+    .story-preview { font-size: 0.9rem; color: var(--fog); line-height: 1.6; max-width: 600px; }
+
+    .story-arrow {
+      display: inline-block;
+      margin-top: 12px;
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--shadow-blue);
+      transition: all 0.2s ease;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .star { animation: none; }
-      .hero-light { animation: none; }
+    .story-card:hover .story-arrow { color: var(--ice-blue); transform: translateX(4px); }
+
+    /* Coming soon cards — visually dimmed, not clickable */
+    .story-card.coming-soon {
+      opacity: 0.45;
+      cursor: default;
+      pointer-events: none;
     }
+
+    .story-card.hidden { display: none; }
   </style>
 </head>
 
@@ -177,125 +135,110 @@
 
 <nav class="site-nav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-brand"><span class="brand-accent">US</span> History</a>
+    <a href="../index.html" class="nav-brand"><span class="brand-accent">U.S.</span> History</a>
     <button class="nav-toggle" aria-label="Menu" aria-expanded="false">&#9776;</button>
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="stories/">Stories</a></li>
-      <li><a href="games.html">Games</a></li>
-      <li><a href="resources.html">Resources</a></li>
-      <li><a href="vocab.html">Vocab</a></li>
-      <li><a href="timeline.html">Timeline</a></li>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../stories/">Stories</a></li>
+      <li><a href="../games.html">Games</a></li>
+      <li><a href="../resources.html">Resources</a></li>
+      <li><a href="../vocab.html">Vocab</a></li>
+      <li><a href="../timeline.html">Timeline</a></li>
     </ul>
   </div>
 </nav>
 
-<section class="hero">
-  <div class="hero-light"></div>
-  <div class="hero-stars" id="stars"></div>
+<header class="page-hero">
+  <h1><em>Stories</em></h1>
+  <p>History told like it should be. Short reads about real people, real events, and how they shaped a young nation.</p>
+</header>
 
-  <div class="hero-fade"></div>
+<div class="era-filter">
+  <button class="era-btn active" data-era="all">All</button>
+  <button class="era-btn" data-era="q1">Founding a Nation</button>
+  <button class="era-btn" data-era="q2">Revolution</button>
+  <button class="era-btn" data-era="q3">A New Government</button>
+  <button class="era-btn" data-era="q4">Expansion &amp; Division</button>
+</div>
 
-  <div class="hero-content">
-    <div class="hero-badge">[Grade Level] &middot; 2026&ndash;2027</div>
-    <h1 class="hero-title">US<br><em>History</em></h1>
-    <p class="hero-tagline">[Tagline — one line about the course]</p>
-    <div class="quick-links">
-      <a href="stories/" class="btn btn--primary">Read Stories</a>
-      <a href="games.html" class="btn">Play Games</a>
+<div class="story-feed" id="feed">
+
+  <!-- ===== QUARTER 1: FOUNDING A NATION ===== -->
+
+  <a href="columbus.html" class="story-card" data-era="q1" data-quarter="1">
+    <div class="story-meta">
+      <span class="story-era">Age of Exploration</span>
+      <span class="story-read-time">8 min read</span>
     </div>
+    <h2 class="story-title">The Admiral Who Got It <em>Wrong</em></h2>
+    <p class="story-preview">He crossed an ocean nobody in Europe had crossed before and never figured out what he'd actually found. Two continents ended up named after someone else.</p>
+    <span class="story-arrow">Read &rarr;</span>
+  </a>
+
+  <a href="ponce-de-leon.html" class="story-card" data-era="q1" data-quarter="1">
+    <div class="story-meta">
+      <span class="story-era">Age of Exploration</span>
+      <span class="story-read-time">7 min read</span>
+    </div>
+    <h2 class="story-title">The Fountain That <em>Wasn't</em></h2>
+    <p class="story-preview">He's remembered for chasing eternal youth in Florida. He was actually chasing gold, land, and a rumor — and the real story is stranger than the legend.</p>
+    <span class="story-arrow">Read &rarr;</span>
+  </a>
+
+  <a href="de-soto.html" class="story-card" data-era="q1" data-quarter="1">
+    <div class="story-meta">
+      <span class="story-era">Age of Exploration</span>
+      <span class="story-read-time">9 min read</span>
+    </div>
+    <h2 class="story-title">The River That Kept <em>His Secret</em></h2>
+    <p class="story-preview">He marched an army across the Southeast for four years searching for gold that was never there. The Mississippi River became his grave instead.</p>
+    <span class="story-arrow">Read &rarr;</span>
+  </a>
+
+  <a href="roanoke.html" class="story-card" data-era="q1" data-quarter="1">
+    <div class="story-meta">
+      <span class="story-era">Colonization</span>
+      <span class="story-read-time">[Read Time]</span>
+    </div>
+    <h2 class="story-title">The Lost Colony of <em>Roanoke</em></h2>
+    <p class="story-preview">In 1587, over 100 English colonists settled Roanoke Island. Three years later, they were gone — leaving behind one carved word and centuries of theories.</p>
+    <span class="story-arrow">Read &rarr;</span>
+  </a>
+
+  <div class="story-card coming-soon" data-era="q1">
+    <div class="story-meta"><span class="story-era">Colonization</span><span class="story-read-time">Coming soon</span></div>
+    <h2 class="story-title">Salem: A City on <em>a Hill</em></h2>
+    <p class="story-preview">Fear, faith, and false accusations turn a Massachusetts town against itself.</p>
+    <span class="story-arrow">Coming soon</span>
   </div>
-</section>
 
-<!-- EXPLORE -->
-<section class="section">
-  <div class="container">
-    <div class="section-header reveal">
-      <h2>Explore</h2>
-      <p>Everything you need for class, all in one place.</p>
-      <div class="section-divider"></div>
-    </div>
-    <div class="card-grid reveal-stagger">
-      <a href="stories/" class="card">
-        <span class="card-icon">📖</span><h3>Stories</h3>
-        <p>History told like it should be — short reads with real stories about real people.</p>
-        <span class="card-arrow">&rarr;</span>
-      </a>
-      <a href="games.html" class="card">
-        <span class="card-icon">🎮</span><h3>Games &amp; Activities</h3>
-        <p>Simulations, choose-your-path games, and review games for every unit.</p>
-        <span class="card-arrow">&rarr;</span>
-      </a>
-      <a href="resources.html" class="card">
-        <span class="card-icon">📋</span><h3>Resources</h3>
-        <p>Readings, activities, DBQs, and primary source links.</p>
-        <span class="card-arrow">&rarr;</span>
-      </a>
-      <a href="vocab.html" class="card">
-        <span class="card-icon">🔤</span><h3>Vocab Review</h3>
-        <p>Interactive flashcards for every unit. Flip, shuffle, and study.</p>
-        <span class="card-arrow">&rarr;</span>
-      </a>
-      <a href="timeline.html" class="card">
-        <span class="card-icon">⏳</span><h3>Timeline</h3>
-        <p>Key events from [starting point] to the present day, all in one scroll.</p>
-        <span class="card-arrow">&rarr;</span>
-      </a>
-    </div>
-  </div>
-</section>
+  <!-- ===== QUARTER 4: EXPANSION & DIVISION ===== -->
 
-<!-- UNITS -->
-<section class="section" id="units" style="border-top: 1px solid rgba(4,43,88,0.08); border-bottom: 1px solid rgba(4,43,88,0.08);">
-  <div class="container">
-    <div class="section-header reveal">
-      <h2>This Year's Units</h2>
-      <p>[One line describing the course's journey]</p>
-      <div class="section-divider"></div>
-    </div>
-    <div class="card-grid reveal-stagger">
-      <div class="card" style="cursor:default"><div class="unit-number">Unit 1</div><h3>[Unit 1 Title]</h3><p>[One-line description]</p></div>
-      <div class="card" style="cursor:default"><div class="unit-number">Unit 2</div><h3>[Unit 2 Title]</h3><p>[One-line description]</p></div>
-      <div class="card" style="cursor:default"><div class="unit-number">Unit 3</div><h3>[Unit 3 Title]</h3><p>[One-line description]</p></div>
-      <div class="card" style="cursor:default"><div class="unit-number">Unit 4</div><h3>[Unit 4 Title]</h3><p>[One-line description]</p></div>
-      <div class="card" style="cursor:default"><div class="unit-number">Unit 5</div><h3>[Unit 5 Title]</h3><p>[One-line description]</p></div>
-      <div class="card" style="cursor:default"><div class="unit-number">Unit 6</div><h3>[Unit 6 Title]</h3><p>[One-line description]</p></div>
-    </div>
+  <div class="story-card coming-soon" data-era="q4">
+    <div class="story-meta"><span class="story-era">Expansion &amp; Division</span><span class="story-read-time">Coming soon</span></div>
+    <h2 class="story-title">Voices of the <em>Underground Railroad</em></h2>
+    <p class="story-preview">Letters and firsthand accounts from the network that carried thousands to freedom.</p>
+    <span class="story-arrow">Coming soon</span>
   </div>
-</section>
 
-<!-- INFO -->
-<section class="info-strip reveal">
-  <div class="container">
-    <div class="info-grid">
-      <div class="info-item"><span class="info-label">Teacher</span><span class="info-value">Mr. L</span></div>
-      <div class="info-item"><span class="info-label">Grade</span><span class="info-value">[Grade Level]</span></div>
-      <div class="info-item"><span class="info-label">Subject</span><span class="info-value">US History</span></div>
-    </div>
-  </div>
-</section>
+</div>
 
 <footer class="site-footer">
-  <p>&copy; 2025&ndash;2026 US History &middot; [Grade Level]</p>
+  <p>&copy; 2026&ndash;2027 U.S. History &middot; 8th Grade</p>
 </footer>
 
-<script src="js/main.js"></script>
+<script src="../js/main.js"></script>
 <script>
-  /* Stars — quiet twinkling points, replacing the old rising bubbles */
-  const sc = document.getElementById('stars');
-  for (let i = 0; i < 22; i++) {
-    const s = document.createElement('div');
-    s.classList.add('star');
-    s.style.left = Math.random() * 100 + '%';
-    s.style.top = 8 + Math.random() * 55 + '%';
-    const size = 1.5 + Math.random() * 2.2;
-    s.style.width = size + 'px';
-    s.style.height = size + 'px';
-    s.style.setProperty('--dur', (3 + Math.random() * 5) + 's');
-    s.style.setProperty('--delay', (Math.random() * 8) + 's');
-    s.style.setProperty('--peak', (0.25 + Math.random() * 0.35).toString());
-    sc.appendChild(s);
-  }
+  const btns = document.querySelectorAll('.era-btn');
+  const cards = document.querySelectorAll('.story-card');
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const era = btn.dataset.era;
+      cards.forEach(c => c.classList.toggle('hidden', era !== 'all' && c.dataset.era !== era));
+    });
+  });
 </script>
 </body>
 </html>
