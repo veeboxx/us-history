@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Should We Celebrate Columbus? A DBQ Study</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: #042B58;
+            background: #F8F3EC;
+        }
+
+        .back-link {
+            display: block;
+            padding: 14px 24px;
+            font-family: Georgia, serif;
+            font-size: 0.9rem;
+            color: #8A6F52;
+            text-decoration: none;
+        }
+
+        .back-link:hover { color: #042B58; }
+
+        .header {
+            background: linear-gradient(135deg, #042B58 0%, #B83A26 100%);
+            color: #F8F3EC;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #F5C05C;
+        }
+
+        .essential-question {
+            background: rgba(239, 155, 12, 0.1);
+            border-left: 5px solid #EF9B0C;
+            padding: 1.5rem;
+            margin: 2rem auto;
+            max-width: 1400px;
+            box-shadow: 0 2px 4px rgba(4,43,88,0.08);
+        }
+
+        .essential-question h2 {
+            color: #B8790A;
+            margin-bottom: 0.5rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 2rem;
+        }
+
+        .section {
+            background: #FDFBF5;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(4,43,88,0.08);
+        }
+
+        .section-header {
+            background: #042B58;
+            color: #F8F3EC;
+            padding: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .column {
+            padding: 2rem;
+        }
+
+        .left-column {
+            border-right: 3px solid #042B58;
+            background: #F2EAD9;
+        }
+
+        .right-column {
+            background: #FDF6E8;
+        }
+
+        .column-label {
+            background: #042B58;
+            color: #F8F3EC;
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            text-align: center;
+            margin: -2rem -2rem 1.5rem -2rem;
+        }
+
+        .right-column .column-label {
+            background: #B8790A;
+        }
+
+        .primary-source {
+            background: rgba(239, 155, 12, 0.08);
+            border-left: 4px solid #B8790A;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            box-shadow: 0 2px 4px rgba(4,43,88,0.08);
+        }
+
+        .primary-source .source-title {
+            font-weight: bold;
+            font-style: normal;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+
+        .evidence-collection {
+            background: rgba(4, 43, 88, 0.05);
+            border: 2px solid #042B58;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .evidence-collection h3 {
+            color: #042B58;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .evidence-collection h3::before {
+            content: "📝";
+            font-size: 1.5rem;
+        }
+
+        .evidence-prompt {
+            font-weight: bold;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            color: #042B58;
+        }
+
+        .help-me-btn {
+            background: #B8790A;
+            color: #F8F3EC;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(4,43,88,0.2);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .help-me-btn::before {
+            content: "💡";
+        }
+
+        .help-me-btn:hover {
+            background: #96620A;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(4,43,88,0.3);
+        }
+
+        .help-me-btn:active {
+            transform: translateY(0);
+        }
+
+        .highlighted {
+            background: #ffeb3b !important;
+            padding: 1rem;
+            border-radius: 5px;
+            animation: pulse 1s ease-in-out 3;
+            box-shadow: 0 0 10px rgba(255, 235, 59, 0.8);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .vocab {
+            position: relative;
+            display: inline;
+            color: #B8790A;
+            font-weight: 600;
+            cursor: help;
+            border-bottom: 2px dotted #B8790A;
+        }
+
+        .vocab .tooltip {
+            visibility: hidden;
+            width: 250px;
+            background-color: #042B58;
+            color: #F8F3EC;
+            text-align: left;
+            border-radius: 8px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1000;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            font-weight: normal;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .vocab .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #042B58 transparent transparent transparent;
+        }
+
+        .vocab:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .essay-section {
+            margin-top: 3rem;
+            background: #FDFBF5;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(4,43,88,0.08);
+        }
+
+        .essay-header {
+            background: linear-gradient(135deg, #B83A26 0%, #8A2A1A 100%);
+            color: #F8F3EC;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .essay-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-inner {
+            padding: 2rem;
+        }
+
+        .step {
+            background: #FDFBF5;
+            border-left: 4px solid #042B58;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(4,43,88,0.08);
+        }
+
+        .step h3 {
+            color: #042B58;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-number {
+            background: #042B58;
+            color: #F8F3EC;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .sentence-starter {
+            background: rgba(239, 155, 12, 0.08);
+            border-left: 3px solid #B8790A;
+            padding: 1rem;
+            margin: 0.75rem 0;
+            font-style: italic;
+            border-radius: 5px;
+        }
+
+        .example-box {
+            background: rgba(4, 43, 88, 0.05);
+            border: 1px solid rgba(4,43,88,0.15);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .final-task {
+            background: rgba(184, 58, 38, 0.06);
+            border: 2px solid #B83A26;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 2rem 2rem;
+        }
+
+        .final-task h3 {
+            color: #B83A26;
+            margin-bottom: 0.75rem;
+        }
+
+        ul, ol { margin-left: 1.5rem; margin-top: 0.5rem; }
+
+        @media (max-width: 800px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            .left-column {
+                border-right: none;
+                border-bottom: 3px solid #042B58;
+            }
+            .header h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="../resources.html" class="back-link">&larr; Back to Resources</a>
+
+    <div class="header">
+        <h1>Should We Celebrate Columbus?</h1>
+        <p>A Document-Based Question Study</p>
+    </div>
+
+    <div class="essential-question">
+        <h2>📌 Essential Question:</h2>
+        <p><strong>Should Christopher Columbus's 1492 voyage and arrival in the Americas be celebrated? Use evidence to support your position.</strong></p>
+        <p style="margin-top: 1rem; font-style: italic;"><strong>YOUR ASSIGNMENT:</strong> As you read each section, find and write down ONE sentence that supports your position — whether you think Columbus should be celebrated, criticized, or something in between. Use the "Help Me" button if you need guidance finding a strong sentence! At the end, you'll write ONE paragraph that cites TWO of your collected sentences as evidence.</p>
+    </div>
+
+    <div class="container">
+
+        <!-- Section 1: Who Was Columbus? -->
+        <div class="section">
+            <div class="section-header">1. Who Was Christopher Columbus?</div>
+            <div class="two-column">
+                <div class="column left-column">
+                    <div class="column-label">Core Text</div>
+
+                    <p>Christopher Columbus was born in the Republic of Genoa, in present-day Italy, in 1451, and went to sea as a teenager. Convinced that a westward route across the Atlantic Ocean would be a faster path to the wealth of Asia than the long overland routes controlled by Muslim traders, he spent nearly a decade seeking a monarch willing to fund the voyage. Portugal rejected him twice. It was Spain's King Ferdinand and Queen Isabella who finally agreed in 1492, shortly after completing their own conquest of Granada.</p>
+
+                    <p id="help-1-1">On August 3, 1492, Columbus set sail from the port of Palos with three ships — the Niña, the Pinta, and the Santa María. After thirty-six days at sea, he and his crew reached an island in the present-day Bahamas, which he claimed for Spain. The <span class="vocab">Taíno<span class="tooltip">The Taíno were the Indigenous people who lived on the island Columbus landed on in 1492, and across much of the Caribbean.</span></span> people who already lived there greeted the sailors and traded goods with them, including cotton and small amounts of gold jewelry.</p>
+
+                    <p id="help-1-2">Columbus made four voyages to the Americas between 1492 and 1504. Believing he had reached the outer edge of Asia, he called the people he encountered "Indians" — a mistaken label that stuck for centuries. On Hispaniola, the island now shared by Haiti and the Dominican Republic, Columbus established a <span class="vocab">forced labor policy<span class="tooltip">A system requiring people to work against their will, often under threat of punishment.</span></span> over the Taíno population in search of gold, despite Queen Isabella's own objections to slavery. In 1500, a royal investigator arrested Columbus for his brutal and chaotic governing of the colony and sent him back to Spain in chains. He died in 1506, still believing he had found a new route to Asia.</p>
+
+                    <div class="primary-source">
+                        <div class="source-title">Primary Source: Columbus's Journal (October 1492)</div>
+                        "They... brought us parrots and balls of cotton... and many other things... They willingly traded everything they owned... They do not bear arms, and do not know them... They would make fine servants... With fifty men we could subjugate them all and make them do whatever we want."
+                    </div>
+                </div>
+
+                <div class="column right-column">
+                    <div class="column-label">Accessible Text</div>
+
+                    <p>Christopher Columbus was born in Genoa, Italy, in 1451. He started sailing as a teenager. He believed that sailing west across the Atlantic Ocean would be a faster way to reach Asia than the long land routes traders used. For almost ten years, he asked kings and queens to pay for his trip. Portugal said no two times. Finally, Spain's King Ferdinand and Queen Isabella said yes in 1492.</p>
+
+                    <p id="help-1-1-easy">On August 3, 1492, Columbus left Spain with three ships called the Niña, the Pinta, and the Santa María. After thirty-six days at sea, he reached an island in the Bahamas. He claimed the island for Spain. The <span class="vocab">Taíno<span class="tooltip">The Native people who lived on the island where Columbus landed.</span></span> people already lived there. They welcomed the sailors and traded goods like cotton and small amounts of gold jewelry.</p>
+
+                    <p id="help-1-2-easy">Columbus made four trips to the Americas between 1492 and 1504. He thought he had reached Asia, so he called the people he met "Indians." This was a mistake, but the name stuck for hundreds of years. On the island of Hispaniola (now Haiti and the Dominican Republic), Columbus forced the Taíno people to work for him so he could find gold. Queen Isabella did not like slavery, but Columbus did it anyway. In 1500, a Spanish official arrested Columbus for how badly he ran the colony. Columbus was sent back to Spain in chains. He died in 1506. He still believed he had found a new way to reach Asia.</p>
+
+                    <div class="primary-source">
+                        <div class="source-title">Primary Source: Columbus's Journal (October 1492) — Simplified</div>
+                        "They brought us parrots, cotton, and other things to trade. They gave us everything they had. They do not carry weapons and don't even know what weapons are. They would make good servants. With just fifty men, we could take control of all of them and make them do what we want."
+                    </div>
+                </div>
+            </div>
+
+            <div class="evidence-collection">
+                <h3>Evidence Collection</h3>
+                <p class="evidence-prompt">Find ONE sentence from this section that helps you answer the essential question — whether Columbus should be celebrated.</p>
+                <button class="help-me-btn" onclick="highlightHelp('help-1-2', 'help-1-2-easy')">Help Me Find a Good Sentence</button>
+            </div>
+        </div>
+
+        <!-- Section 2: The Case For Celebrating Columbus -->
+        <div class="section">
+            <div class="section-header">2. The Case for Celebrating Columbus</div>
+            <div class="two-column">
+                <div class="column left-column">
+                    <div class="column-label">Core Text</div>
+
+                    <p id="help-2-1">Supporters of Columbus Day argue that Columbus should be understood within the context of his own era rather than judged entirely by today's standards. Nearly every civilization in world history, they point out — including the Aztec, Maya, and Inca empires that Spanish conquistadors later encountered — practiced warfare, conquest, and even human sacrifice long before 1492. Some historians argue that holding one individual personally responsible for the deaths caused by disease, which spread gradually over decades and which no one at the time understood scientifically, oversimplifies a far more complicated history.</p>
+
+                    <p id="help-2-2">Beyond the historical debate, supporters also point to Columbus's undeniable impact and symbolism. His voyage connected two hemispheres that had developed separately for thousands of years, launching an exchange of crops, animals, and ideas that reshaped the modern world. Columbus also holds deep cultural meaning for many Italian-American and Hispanic-American communities, who have celebrated Columbus Day with parades for generations as a way of claiming their own place in American history, especially after facing discrimination themselves in the late 1800s and early 1900s.</p>
+
+                    <div class="evidence-collection" style="margin-top: 0;">
+                        <h3>Evidence Collection</h3>
+                        <p class="evidence-prompt">Find ONE sentence from this section that supports the argument that Columbus should be celebrated.</p>
+                        <button class="help-me-btn" onclick="highlightHelp('help-2-2', 'help-2-2-easy')">Help Me Find a Good Sentence</button>
+                    </div>
+                </div>
+
+                <div class="column right-column">
+                    <div class="column-label">Accessible Text</div>
+
+                    <p id="help-2-1-easy">People who support Columbus Day say we should judge Columbus based on his own time period, not today's rules. Almost every civilization in history — even the Aztec, Maya, and Inca empires that Spanish explorers met later — had wars, conquered other groups, and even practiced human sacrifice before 1492. Some historians say it is not fair to blame one person for deaths caused by disease. These diseases spread slowly over many years, and no one back then understood germs or how sickness spread.</p>
+
+                    <p id="help-2-2-easy">Supporters also point out how much Columbus's voyage changed the world. His trip connected two halves of the world that had been separate for thousands of years. This started a huge exchange of crops, animals, and ideas. Columbus also means a lot to many Italian-American and Hispanic-American families. For many years, they have celebrated Columbus Day with parades. This helped them feel proud of their history in America, especially since these groups faced unfair treatment in the late 1800s and early 1900s.</p>
+
+                    <div class="evidence-collection" style="margin-top: 0;">
+                        <h3>Evidence Collection</h3>
+                        <p class="evidence-prompt">Find ONE sentence from this section that supports the argument that Columbus should be celebrated.</p>
+                        <button class="help-me-btn" onclick="highlightHelp('help-2-2', 'help-2-2-easy')">Help Me Find a Good Sentence</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: The Case Against Celebrating Columbus -->
+        <div class="section">
+            <div class="section-header">3. The Case Against Celebrating Columbus</div>
+            <div class="two-column">
+                <div class="column left-column">
+                    <div class="column-label">Core Text</div>
+
+                    <p id="help-3-1">Critics argue that celebrating Columbus overlooks the direct and devastating consequences of his actions. Columbus personally established the forced labor system on Hispaniola, and colonists under his command used violence to control the Taíno population and extract gold. Within a few decades of Columbus's arrival, the Taíno population of Hispaniola had collapsed catastrophically due to a combination of forced labor, violence, and disease — one of the earliest chapters in a much longer history of harm done to Indigenous peoples across the Americas.</p>
+
+                    <p id="help-3-2">Critics also argue that treating Columbus Day and Indigenous Peoples Day as an either-or choice misses the larger point: that American history includes both remarkable achievement and serious injustice, and a full account should hold space for both rather than erasing one to protect the other. Some cities, including Los Angeles, have replaced Columbus Day with Indigenous Peoples Day specifically to center the experiences of Native peoples that traditional celebrations often left out entirely.</p>
+
+                    <div class="primary-source">
+                        <div class="source-title">Primary Source: Bartolomé de las Casas, on Spanish treatment of the Taíno (1552)</div>
+                        "Of all the infinite universe of humanity, these people are the most guileless, the most devoid of wickedness... Yet into this sheepfold... there came some Spaniards who immediately behaved like ravening wild beasts."
+                    </div>
+
+                    <div class="evidence-collection" style="margin-top: 1.5rem;">
+                        <h3>Evidence Collection</h3>
+                        <p class="evidence-prompt">Find ONE sentence from this section that supports the argument that Columbus should NOT be celebrated, or that his legacy is more complicated than a celebration suggests.</p>
+                        <button class="help-me-btn" onclick="highlightHelp('help-3-1', 'help-3-1-easy')">Help Me Find a Good Sentence</button>
+                    </div>
+                </div>
+
+                <div class="column right-column">
+                    <div class="column-label">Accessible Text</div>
+
+                    <p id="help-3-1-easy">People who disagree with celebrating Columbus say it ignores the harm he directly caused. Columbus himself set up the forced labor system on Hispaniola. The colonists working for him used violence to control the Taíno people and force them to find gold. Within a few decades after Columbus arrived, the Taíno population of Hispaniola nearly disappeared. This happened because of forced labor, violence, and disease. This was one of the first examples of a much longer pattern of harm done to Native peoples across the Americas.</p>
+
+                    <p id="help-3-2-easy">Critics also say it shouldn't have to be one holiday or the other. American history includes amazing achievements AND serious injustice. A true telling of history should include both, instead of hiding one to protect the other. Some cities, like Los Angeles, have replaced Columbus Day with Indigenous Peoples Day. They did this to focus on Native peoples' experiences, which older celebrations often left out completely.</p>
+
+                    <div class="primary-source">
+                        <div class="source-title">Primary Source: Bartolomé de las Casas, on Spanish treatment of the Taíno (1552) — Simplified</div>
+                        "Of all the people in the world, these people are the gentlest and kindest... But some Spaniards came among these peaceful people and acted like wild, dangerous animals."
+                    </div>
+
+                    <div class="evidence-collection" style="margin-top: 1.5rem;">
+                        <h3>Evidence Collection</h3>
+                        <p class="evidence-prompt">Find ONE sentence from this section that supports the argument that Columbus should NOT be celebrated, or that his legacy is more complicated than a celebration suggests.</p>
+                        <button class="help-me-btn" onclick="highlightHelp('help-3-1', 'help-3-1-easy')">Help Me Find a Good Sentence</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Paragraph Writing Guide -->
+    <div class="essay-section">
+        <div class="essay-header">
+            <h2>📝 DBQ Paragraph Writing Guide</h2>
+            <p style="margin-top: 0.5rem;">Now write ONE paragraph answering the essential question.</p>
+            <p style="margin-top: 0.5rem; font-size: 1rem;"><strong>Essential Question:</strong> Should Christopher Columbus's 1492 voyage and arrival in the Americas be celebrated?</p>
+        </div>
+
+        <div class="content-inner">
+
+            <div class="step">
+                <h3><span class="step-number">1</span> State Your Claim</h3>
+                <p><strong>Start your paragraph with one clear sentence that answers the essential question.</strong> This is your argument — your position on whether Columbus should be celebrated.</p>
+
+                <div class="sentence-starter">
+                    Christopher Columbus's arrival in the Americas should / should not be celebrated because...
+                </div>
+                <div class="sentence-starter">
+                    While Columbus's voyage changed world history, his legacy should be remembered as...
+                </div>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">2</span> Give Your First Piece of Evidence</h3>
+                <p><strong>Use ONE of the sentences you collected while reading.</strong> Introduce it, then explain in your own words what it means and how it supports your claim.</p>
+
+                <div class="sentence-starter">
+                    According to the text, "..." This shows that...
+                </div>
+                <div class="sentence-starter">
+                    One piece of evidence for this is that "..." This proves that...
+                </div>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">3</span> Give Your Second Piece of Evidence</h3>
+                <p><strong>Use a SECOND sentence you collected — this can support the same side, or acknowledge the other side before you respond to it.</strong> Explain what it means and connect it back to your claim.</p>
+
+                <div class="sentence-starter">
+                    Additionally, the text states, "..." This further supports the idea that...
+                </div>
+                <div class="sentence-starter">
+                    Some people might point out that "..." However, this does not change the fact that...
+                </div>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">4</span> Write a Concluding Sentence</h3>
+                <p><strong>End with one sentence that restates your claim in new words.</strong></p>
+
+                <div class="sentence-starter">
+                    For these reasons, Columbus's legacy should be remembered as...
+                </div>
+
+                <div class="example-box">
+                    <strong>Example Paragraph:</strong><br>
+                    "Christopher Columbus's arrival in the Americas should not be celebrated without acknowledging the harm it caused. According to the text, colonists under Columbus's command 'used violence to control the Taíno population and extract gold.' This shows that Columbus's actions directly led to suffering, not just accidental disease. Additionally, Columbus's own journal describes the Taíno as people who 'would make fine servants,' revealing that he saw them as a resource to control rather than as people to respect. For these reasons, any celebration of Columbus should also make space for the true, difficult history of what his arrival meant for the people who were already here."
+                </div>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">5</span> Check Your Work</h3>
+                <ul>
+                    <li>✓ A clear claim that answers the essential question</li>
+                    <li>✓ TWO pieces of evidence, each in quotation marks</li>
+                    <li>✓ An explanation after each piece of evidence — don't just drop in a quote!</li>
+                    <li>✓ A concluding sentence</li>
+                    <li>✓ Correct spelling and punctuation</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="final-task">
+        <h3>✅ Final Task</h3>
+        <p>Write your paragraph on a separate sheet of paper or in your notebook. It should cite <strong>exactly two sentences</strong> from the readings above, in quotation marks, with an explanation after each one.</p>
+    </div>
+
+    <script>
+        function highlightHelp(coreId, easyId) {
+            const highlighted = document.querySelectorAll('.highlighted');
+            highlighted.forEach(el => el.classList.remove('highlighted'));
+
+            const coreElement = document.getElementById(coreId);
+            const easyElement = document.getElementById(easyId);
+
+            if (coreElement) coreElement.classList.add('highlighted');
+            if (easyElement) easyElement.classList.add('highlighted');
+
+            if (coreElement) {
+                coreElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+    </script>
+
+</body>
+</html>
