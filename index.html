@@ -101,15 +101,17 @@
     .star {
       position: absolute;
       background: var(--ice-blue);
-      clip-path: polygon(50% 0%, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0% 50%, 38% 38%);
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
       opacity: 0;
-      animation: twinkle var(--dur) ease-in-out infinite;
+      animation: rise var(--dur) ease-in infinite;
       animation-delay: var(--delay);
     }
 
-    @keyframes twinkle {
-      0%, 100% { opacity: 0; transform: translate(0, 0) scale(0.6) rotate(0deg); }
-      50% { opacity: var(--peak); transform: translate(var(--dx), var(--dy)) scale(1) rotate(25deg); }
+    @keyframes rise {
+      0% { opacity: 0; transform: translate(0, 0) scale(0.6) rotate(0deg); }
+      12% { opacity: var(--peak); }
+      80% { opacity: var(--peak); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1) rotate(12deg); }
     }
 
     .hero-fade {
@@ -317,21 +319,21 @@
 
 <script src="js/main.js"></script>
 <script>
-  /* Stars — quiet twinkling points, replacing the old rising bubbles */
+  /* Stars — five-pointed sparkles drifting upward like slow bubbles */
   const sc = document.getElementById('stars');
   for (let i = 0; i < 34; i++) {
     const s = document.createElement('div');
     s.classList.add('star');
     s.style.left = Math.random() * 100 + '%';
-    s.style.top = 6 + Math.random() * 60 + '%';
+    s.style.top = 20 + Math.random() * 70 + '%';
     const size = 2.5 + Math.random() * 3.5;
     s.style.width = size + 'px';
     s.style.height = size + 'px';
-    s.style.setProperty('--dur', (4 + Math.random() * 5) + 's');
-    s.style.setProperty('--delay', (Math.random() * 5) + 's');
+    s.style.setProperty('--dur', (7 + Math.random() * 8) + 's');
+    s.style.setProperty('--delay', (Math.random() * 10) + 's');
     s.style.setProperty('--peak', (0.3 + Math.random() * 0.4).toString());
-    s.style.setProperty('--dx', (Math.random() * 16 - 8).toFixed(1) + 'px');
-    s.style.setProperty('--dy', (-6 - Math.random() * 14).toFixed(1) + 'px');
+    s.style.setProperty('--dx', (Math.random() * 20 - 10).toFixed(1) + 'px');
+    s.style.setProperty('--dy', (-70 - Math.random() * 90).toFixed(1) + 'px');
     sc.appendChild(s);
   }
 
