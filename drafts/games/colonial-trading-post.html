@@ -1,0 +1,694 @@
+<!--
+  DRAFT GAME — not linked from the live site.
+  To publish: git-mv this file into /games/, add its card to games.html,
+  and it's live. See drafts/README.md for the full workflow.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Colonial Trading Post — U.S. History</title>
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --parchment: #F8F3EC;
+    --parchment-dark: #EFE3CE;
+    --card: #FDFBF5;
+    --ink: #042B58;
+    --ink-dim: rgba(4,43,88,0.62);
+    --ink-faint: rgba(4,43,88,0.35);
+    --gold: #EF9B0C;
+    --gold-dim: rgba(239,155,12,0.15);
+    --green: #3E7A45;
+    --red: #B83A26;
+    --border: rgba(4,43,88,0.12);
+    --font-head: 'Playfair Display', Georgia, serif;
+    --font-body: 'Inter', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: var(--font-body);
+    background: var(--parchment);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+  h1, h2, h3 { font-family: var(--font-head); }
+  button { font-family: var(--font-body); cursor: pointer; }
+
+  /* ===== SPLASH ===== */
+  #splash {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+  .splash-kicker {
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  #splash h1 {
+    text-align: center;
+    font-size: clamp(2rem, 6vw, 3rem);
+    margin-bottom: 12px;
+  }
+  #splash h1 em { color: var(--gold); font-style: italic; }
+  .splash-sub {
+    text-align: center;
+    color: var(--ink-dim);
+    max-width: 540px;
+    margin: 0 auto 36px;
+    line-height: 1.6;
+  }
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+  .rule-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .rule-card h3 { font-size: 0.95rem; margin-bottom: 6px; color: var(--ink); }
+  .rule-card p { font-size: 0.85rem; color: var(--ink-dim); line-height: 1.5; }
+  .rule-icon { font-size: 1.3rem; margin-bottom: 6px; display: block; }
+  #start-btn {
+    display: block;
+    margin: 0 auto;
+    background: var(--gold);
+    color: #fff;
+    border: none;
+    padding: 14px 40px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(239,155,12,0.35);
+    transition: transform 0.15s ease;
+  }
+  #start-btn:hover { transform: translateY(-2px); }
+
+  /* ===== GAME ===== */
+  #game { display: none; max-width: 1100px; margin: 0 auto; padding: 20px 16px 80px; }
+
+  .topbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 20px;
+    margin-bottom: 18px;
+  }
+  .topbar-title { font-family: var(--font-head); font-size: 1.15rem; }
+  .stat-row { display: flex; gap: 22px; flex-wrap: wrap; }
+  .stat { text-align: center; }
+  .stat-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); font-weight: 700; }
+  .stat-value { font-size: 1.1rem; font-weight: 700; }
+  .stat-value.gold { color: var(--gold); }
+  .meter-track { width: 90px; height: 6px; background: var(--parchment-dark); border-radius: 4px; overflow: hidden; margin-top: 4px; }
+  .meter-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+  .meter-fill.rep { background: var(--green); }
+  .meter-fill.warehouse { background: var(--gold); }
+
+  .event-banner {
+    background: var(--gold-dim);
+    border: 1px solid rgba(239,155,12,0.3);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    margin-bottom: 18px;
+    color: var(--ink);
+  }
+  .event-banner strong { color: var(--gold); }
+
+  .partners-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .partner-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+  }
+  .partner-card.illegal { border-color: rgba(184,58,38,0.35); background: linear-gradient(180deg, rgba(184,58,38,0.04), var(--card)); }
+  .partner-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .partner-icon { font-size: 1.4rem; }
+  .partner-name { font-family: var(--font-head); font-size: 1.05rem; }
+  .partner-tag {
+    font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 2px 8px; border-radius: 100px; margin-left: auto;
+  }
+  .tag-legal { background: rgba(62,122,69,0.12); color: var(--green); }
+  .tag-illegal { background: rgba(184,58,38,0.12); color: var(--red); }
+  .tag-domestic { background: var(--gold-dim); color: var(--gold); }
+  .partner-note { font-size: 0.78rem; color: var(--ink-dim); margin-bottom: 12px; line-height: 1.4; }
+
+  .offer-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 0;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+  .offer-row:first-of-type { border-top: none; }
+  .offer-good { flex: 1; display: flex; align-items: center; gap: 6px; }
+  .offer-price { font-weight: 700; min-width: 54px; text-align: right; }
+  .offer-cap { font-size: 0.68rem; color: var(--ink-faint); min-width: 46px; text-align: right; }
+  .qty-input {
+    width: 42px; text-align: center; border: 1px solid var(--border); border-radius: 6px;
+    padding: 3px; font-size: 0.8rem; font-family: var(--font-body);
+  }
+  .trade-btn {
+    background: var(--ink); color: #fff; border: none; border-radius: 6px;
+    padding: 5px 10px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .trade-btn:hover { background: var(--gold); }
+  .trade-btn:disabled { background: var(--ink-faint); cursor: not-allowed; }
+
+  .stance-row { display: flex; gap: 6px; margin-bottom: 12px; }
+  .stance-btn {
+    flex: 1; border: 1px solid var(--border); background: var(--parchment); border-radius: 8px;
+    padding: 6px 4px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ink-dim);
+  }
+  .stance-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  .bottom-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 14px; align-items: start; }
+  @media (max-width: 720px) { .bottom-grid { grid-template-columns: 1fr; } }
+
+  .panel { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
+  .panel h3 { font-size: 0.95rem; margin-bottom: 10px; }
+  .inventory-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; font-size: 0.82rem; }
+  .inventory-list div { display: flex; justify-content: space-between; }
+  .log-list { max-height: 160px; overflow-y: auto; font-size: 0.8rem; color: var(--ink-dim); }
+  .log-list li { list-style: none; padding: 5px 0; border-top: 1px solid var(--border); }
+  .log-list li:first-child { border-top: none; }
+
+  .end-turn-bar { text-align: center; margin-top: 20px; }
+  #end-turn-btn {
+    background: var(--ink); color: #fff; border: none; padding: 13px 36px;
+    font-size: 1rem; font-weight: 700; border-radius: 10px;
+  }
+  #end-turn-btn:hover { background: var(--gold); }
+
+  /* ===== END SCREEN ===== */
+  #end-screen { display: none; max-width: 640px; margin: 60px auto; padding: 0 24px; text-align: center; }
+  #end-screen h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); margin-bottom: 8px; }
+  #end-title { color: var(--gold); }
+  #end-screen p.flavor { color: var(--ink-dim); margin-bottom: 28px; line-height: 1.6; }
+  .final-stats { display: flex; justify-content: center; gap: 40px; margin-bottom: 32px; }
+  .final-stat-value { font-size: 1.8rem; font-weight: 700; font-family: var(--font-head); }
+  .end-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .end-actions a, .end-actions button {
+    display: inline-block; padding: 12px 26px; border-radius: 10px; font-weight: 700; font-size: 0.9rem;
+    text-decoration: none; border: none;
+  }
+  .btn-primary { background: var(--gold); color: #fff; }
+  .btn-secondary { background: transparent; color: var(--ink); border: 2px solid var(--ink) !important; }
+</style>
+</head>
+<body>
+
+<!-- ============ SPLASH ============ -->
+<div id="splash">
+  <div class="splash-kicker">Quarter 1 &middot; Founding a Nation</div>
+  <h1>The Colonial <em>Trading Post</em></h1>
+  <p class="splash-sub">
+    It's 1750-something in a bustling colonial port. You run the trading
+    post. Buy furs, lumber, fish, and grain from local suppliers, then
+    decide where to sell — the legal English ship, or a faster-paying
+    Dutch smuggler who technically isn't supposed to be here at all.
+    Stock English cloth, tools, and tea to resell to the townsfolk.
+    Survive 8 turns and build the most respected (or most feared) trading
+    post in the colonies.
+  </p>
+  <div class="rules-grid">
+    <div class="rule-card">
+      <span class="rule-icon">🧭</span>
+      <h3>Two kinds of goods</h3>
+      <p><strong>Exports</strong> (furs, lumber, fish, grain) you buy locally and sell to ships. <strong>Imports</strong> (cloth, tools, tea) you buy from ships and resell to townsfolk.</p>
+    </div>
+    <div class="rule-card">
+      <span class="rule-icon">⚖️</span>
+      <h3>The Navigation Acts</h3>
+      <p>Officially, exports are supposed to go to England first. The English ship pays fair, legal prices. A Dutch ship might show up and pay much better — if you're willing to risk it.</p>
+    </div>
+    <div class="rule-card">
+      <span class="rule-icon">🕵️</span>
+      <h3>Smuggling has a cost</h3>
+      <p>Every trade with the Dutch ship raises your odds of a customs inspection. Get away with it and the town treats you like a folk hero. Get caught, and you'll pay for it.</p>
+    </div>
+    <div class="rule-card">
+      <span class="rule-icon">📦</span>
+      <h3>Limited warehouse</h3>
+      <p>You can only hold so much stock at once, and each supplier only has so much to trade each turn. Plan ahead.</p>
+    </div>
+  </div>
+  <button id="start-btn">Open the Trading Post</button>
+</div>
+
+<!-- ============ GAME ============ -->
+<div id="game">
+  <div class="topbar">
+    <div class="topbar-title" id="turn-label">Spring, Year 1 &middot; Turn 1 of 8</div>
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-label">Cash</div>
+        <div class="stat-value gold" id="stat-cash">£50</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Reputation</div>
+        <div class="stat-value" id="stat-rep">50</div>
+        <div class="meter-track"><div class="meter-fill rep" id="rep-fill" style="width:50%"></div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Warehouse</div>
+        <div class="stat-value" id="stat-warehouse">0 / 60</div>
+        <div class="meter-track"><div class="meter-fill warehouse" id="warehouse-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="event-banner" id="event-banner" style="display:none;"></div>
+
+  <div class="partners-grid" id="partners-grid"></div>
+
+  <div class="bottom-grid">
+    <div class="panel">
+      <h3>Warehouse Inventory</h3>
+      <div class="inventory-list" id="inventory-list"></div>
+    </div>
+    <div class="panel">
+      <h3>Ledger</h3>
+      <ul class="log-list" id="log-list"></ul>
+    </div>
+  </div>
+
+  <div class="end-turn-bar">
+    <button id="end-turn-btn">End Turn &rarr;</button>
+  </div>
+</div>
+
+<!-- ============ END SCREEN ============ -->
+<div id="end-screen">
+  <h1>Eight Turns Later<br><span id="end-title"></span></h1>
+  <p class="flavor" id="end-flavor"></p>
+  <div class="final-stats">
+    <div>
+      <div class="stat-label">Final Cash</div>
+      <div class="final-stat-value" id="final-cash">£0</div>
+    </div>
+    <div>
+      <div class="stat-label">Final Reputation</div>
+      <div class="final-stat-value" id="final-rep">0</div>
+    </div>
+  </div>
+  <div class="end-actions">
+    <button class="btn-primary" onclick="location.reload()">Play Again</button>
+    <a class="btn-secondary" href="../../games.html">&larr; Back to Games</a>
+  </div>
+</div>
+
+<script>
+/* ============================================
+   THE COLONIAL TRADING POST — game logic
+   ============================================ */
+
+const GOODS = {
+  furs:   { name: 'Beaver Pelts', icon: '🦫', type: 'export', base: 4 },
+  lumber: { name: 'Lumber',       icon: '🪵', type: 'export', base: 2 },
+  fish:   { name: 'Salted Cod',   icon: '🐟', type: 'export', base: 3 },
+  grain:  { name: 'Grain',        icon: '🌾', type: 'export', base: 3 },
+  cloth:  { name: 'English Cloth',icon: '🧵', type: 'import', base: 6 },
+  tools:  { name: 'Ironware',     icon: '🔨', type: 'import', base: 8 },
+  tea:    { name: 'Tea',          icon: '🍵', type: 'import', base: 10 },
+};
+const EXPORTS = Object.keys(GOODS).filter(g => GOODS[g].type === 'export');
+const IMPORTS = Object.keys(GOODS).filter(g => GOODS[g].type === 'import');
+const SEASONS = ['Spring', 'Summer', 'Autumn', 'Winter'];
+const TOTAL_TURNS = 8;
+const WAREHOUSE_CAP = 60;
+
+const STANCES = {
+  fair:     { label: 'Fair Prices',   priceMult: 1.35, demandMult: 1.3, repPerTurn: 2 },
+  standard: { label: 'Standard',      priceMult: 1.65, demandMult: 1.0, repPerTurn: 0 },
+  steep:    { label: 'Steep Markup',  priceMult: 2.1,  demandMult: 0.6, repPerTurn: -2 },
+};
+
+const EVENTS = [
+  { text: 'A quiet week at the docks. Business as usual.', apply: m => {} },
+  { text: 'Bountiful harvest inland — grain and lumber are cheap from local suppliers this turn.', apply: m => { m.localDiscount.grain = 0.6; m.localDiscount.lumber = 0.6; } },
+  { text: 'A storm battered the coast. The Dutch ship won’t risk coming in this turn, and other ships bring less cargo.', apply: m => { m.noDutch = true; m.capBonus = -2; } },
+  { text: 'The town is hosting a harvest fair — townsfolk are eager to buy, demand is way up.', apply: m => { m.townDemandMult = 1.6; } },
+  { text: 'A rival trader undercut your prices around town. Retail prices are soft this turn.', apply: m => { m.townPriceMult = 0.8; } },
+  { text: 'Rats got into the warehouse overnight.', apply: m => { m.pest = true; } },
+  { text: 'Good winds brought extra ships in — every partner can trade more than usual.', apply: m => { m.capBonus = 3; } },
+  { text: 'Word is a customs officer is sniffing around the harbor. Smuggling feels riskier this turn.', apply: m => { m.inspectionRiskMult = 1.8; } },
+];
+
+let state;
+
+function newGame() {
+  state = {
+    turn: 1,
+    cash: 50,
+    reputation: 50,
+    inventory: Object.fromEntries(Object.keys(GOODS).map(g => [g, 0])),
+    stance: 'standard',
+    smuggledThisTurn: false,
+    consecutiveSmuggle: 0,
+    log: [],
+    modifiers: {},
+    partners: [],
+  };
+  setupTurn();
+}
+
+function warehouseTotal() {
+  return Object.values(state.inventory).reduce((a, b) => a + b, 0);
+}
+
+function addLog(text) {
+  state.log.unshift(`Turn ${state.turn} — ${text}`);
+  state.log = state.log.slice(0, 30);
+}
+
+function setupTurn() {
+  const season = SEASONS[(state.turn - 1) % 4];
+  const year = Math.floor((state.turn - 1) / 4) + 1;
+  state.season = season;
+  state.year = year;
+  state.smuggledThisTurn = false;
+
+  const m = {
+    localDiscount: {},
+    noDutch: false,
+    capBonus: 0,
+    townDemandMult: 1,
+    townPriceMult: 1,
+    inspectionRiskMult: 1,
+    pest: false,
+  };
+
+  // seasonal effects baked in before the random event
+  if (season === 'Winter') m.townDemandMult *= 1.2;
+  if (season === 'Autumn') { m.localDiscount.grain = (m.localDiscount.grain || 1) * 0.75; }
+  if (season === 'Summer') { m.localDiscount.fish = (m.localDiscount.fish || 1) * 0.8; }
+
+  const ev = EVENTS[Math.floor(Math.random() * EVENTS.length)];
+  ev.apply(m);
+  state.currentEvent = ev.text;
+  state.modifiers = m;
+
+  // local buy price per export good
+  const local = {};
+  EXPORTS.forEach(g => {
+    const noise = 0.9 + Math.random() * 0.2;
+    const discount = m.localDiscount[g] || 1;
+    local[g] = Math.max(1, Math.round(GOODS[g].base * noise * discount));
+  });
+  state.localPrice = local;
+
+  // base market price per import good (what ships charge before partner multiplier)
+  const importBase = {};
+  IMPORTS.forEach(g => {
+    const noise = 0.9 + Math.random() * 0.2;
+    importBase[g] = Math.max(1, Math.round(GOODS[g].base * noise));
+  });
+  state.importBase = importBase;
+
+  const baseCap = Math.max(2, 10 + m.capBonus);
+  const smallCap = Math.max(1, 4 + m.capBonus);
+
+  const partners = [];
+
+  partners.push({
+    id: 'producers', name: 'Local Suppliers', icon: '🧑‍🌾', tag: 'domestic',
+    note: 'Trappers, loggers, fishermen, and farmers selling what they’ve got.',
+    offers: EXPORTS.map(g => ({ good: g, direction: 'buy', price: local[g], cap: 15, remaining: 15 })),
+  });
+
+  partners.push({
+    id: 'english', name: 'English Merchantman', icon: '⛵', tag: 'legal',
+    note: 'Legal trade under the Navigation Acts. Fair, unexciting prices.',
+    offers: [
+      ...EXPORTS.map(g => ({ good: g, direction: 'sell', price: Math.round(local[g] * 1.7), cap: baseCap, remaining: baseCap })),
+      ...IMPORTS.map(g => ({ good: g, direction: 'buy', price: importBase[g], cap: baseCap, remaining: baseCap })),
+    ],
+  });
+
+  partners.push({
+    id: 'coaster', name: 'Colonial Coaster', icon: '🚤', tag: 'legal',
+    note: 'A small boat running goods between colonial ports. Modest prices, modest volume.',
+    offers: [
+      ...EXPORTS.map(g => ({ good: g, direction: 'sell', price: Math.round(local[g] * 1.35), cap: smallCap, remaining: smallCap })),
+      ...IMPORTS.map(g => ({ good: g, direction: 'buy', price: Math.round(importBase[g] * 1.15), cap: smallCap, remaining: smallCap })),
+    ],
+  });
+
+  if (!m.noDutch && Math.random() < 0.55) {
+    partners.push({
+      id: 'dutch', name: 'Dutch Trader', icon: '🏴', tag: 'illegal',
+      note: 'Not supposed to be here. Pays better on everything — if you’re willing to risk a customs raid.',
+      offers: [
+        ...EXPORTS.map(g => ({ good: g, direction: 'sell', price: Math.round(local[g] * 2.2), cap: baseCap, remaining: baseCap })),
+        ...IMPORTS.map(g => ({ good: g, direction: 'buy', price: Math.max(1, Math.round(importBase[g] * 0.6)), cap: baseCap, remaining: baseCap })),
+      ],
+    });
+  }
+
+  const stance = STANCES[state.stance];
+  const townCap = Math.max(1, Math.round(6 * stance.demandMult * m.townDemandMult));
+  partners.push({
+    id: 'town', name: 'Townsfolk', icon: '🏘️', tag: 'domestic',
+    note: 'Local customers buying imported goods off your shelves.',
+    isTown: true,
+    offers: IMPORTS.map(g => ({
+      good: g, direction: 'sell',
+      price: Math.max(1, Math.round(importBase[g] * stance.priceMult * m.townPriceMult)),
+      cap: townCap, remaining: townCap,
+    })),
+  });
+
+  state.partners = partners;
+
+  if (m.pest) {
+    const held = Object.keys(state.inventory).filter(g => state.inventory[g] > 0);
+    if (held.length) {
+      const g = held[Math.floor(Math.random() * held.length)];
+      const lost = Math.max(1, Math.round(state.inventory[g] * 0.25));
+      state.inventory[g] -= lost;
+      state.currentEvent += ` You lost ${lost} ${GOODS[g].name.toLowerCase()} to spoilage.`;
+    }
+  }
+
+  addLog(`${season}, Year ${year} begins. ${state.currentEvent}`);
+}
+
+function doTrade(partnerId, good, direction, qty) {
+  const partner = state.partners.find(p => p.id === partnerId);
+  const offer = partner.offers.find(o => o.good === good && o.direction === direction);
+  if (!offer || qty <= 0) return;
+  qty = Math.min(qty, offer.remaining);
+
+  if (direction === 'buy') {
+    // player buys FROM this partner (partner sells to player)
+    const cost = offer.price * qty;
+    const space = WAREHOUSE_CAP - warehouseTotal();
+    qty = Math.min(qty, space, Math.floor(state.cash / offer.price));
+    if (qty <= 0) return;
+    const finalCost = offer.price * qty;
+    state.cash -= finalCost;
+    state.inventory[good] += qty;
+    offer.remaining -= qty;
+    addLog(`Bought ${qty} ${GOODS[good].name.toLowerCase()} from ${partner.name} for £${finalCost}.`);
+  } else {
+    // player sells TO this partner
+    qty = Math.min(qty, state.inventory[good]);
+    if (qty <= 0) return;
+    const earned = offer.price * qty;
+    state.cash += earned;
+    state.inventory[good] -= qty;
+    offer.remaining -= qty;
+    addLog(`Sold ${qty} ${GOODS[good].name.toLowerCase()} to ${partner.name} for £${earned}.`);
+  }
+
+  if (partner.id === 'dutch') state.smuggledThisTurn = true;
+  render();
+}
+
+function setStance(stance) {
+  state.stance = stance;
+  const townPartner = state.partners.find(p => p.isTown);
+  const m = state.modifiers;
+  const s = STANCES[stance];
+  const townCap = Math.max(1, Math.round(6 * s.demandMult * m.townDemandMult));
+  townPartner.offers.forEach(o => {
+    const alreadyTraded = o.cap - o.remaining;
+    o.price = Math.max(1, Math.round(state.importBase[o.good] * s.priceMult * m.townPriceMult));
+    o.cap = townCap;
+    o.remaining = Math.max(0, townCap - alreadyTraded);
+  });
+  render();
+}
+
+function endTurn() {
+  if (state.smuggledThisTurn) {
+    const risk = Math.min(0.75, (0.2 + 0.08 * state.consecutiveSmuggle) * state.modifiers.inspectionRiskMult);
+    if (Math.random() < risk) {
+      const fine = Math.max(5, Math.round(state.cash * 0.25));
+      state.cash = Math.max(0, state.cash - fine);
+      state.reputation = Math.max(0, state.reputation - 8);
+      state.consecutiveSmuggle = 0;
+      addLog(`Customs officers raided the post! Fined £${fine}.`);
+    } else {
+      state.reputation = Math.min(100, state.reputation + 3);
+      state.consecutiveSmuggle += 1;
+      addLog('You got away with it. Word spreads that you’re not afraid of the Crown.');
+    }
+  } else {
+    state.consecutiveSmuggle = 0;
+  }
+
+  const stanceRep = STANCES[state.stance].repPerTurn;
+  if (stanceRep !== 0) {
+    state.reputation = Math.max(0, Math.min(100, state.reputation + stanceRep));
+  }
+
+  if (state.turn >= TOTAL_TURNS) {
+    showEndScreen();
+    return;
+  }
+  state.turn += 1;
+  setupTurn();
+  render();
+}
+
+function showEndScreen() {
+  document.getElementById('game').style.display = 'none';
+  const endScreen = document.getElementById('end-screen');
+  endScreen.style.display = 'block';
+  document.getElementById('final-cash').textContent = `£${state.cash}`;
+  document.getElementById('final-rep').textContent = state.reputation;
+
+  let title, flavor;
+  if (state.cash >= 120 && state.reputation >= 60) {
+    title = 'Merchant Prince of the Harbor';
+    flavor = 'You built real wealth without burning bridges with the town. Whether you got there playing it straight or smuggling smart, folks respect you either way.';
+  } else if (state.cash >= 120 && state.reputation < 40) {
+    title = 'The Crown’s Most Wanted';
+    flavor = 'You made your fortune, but you made it fast and loose. Customs officers know your name, and not fondly.';
+  } else if (state.cash < 60 && state.reputation >= 60) {
+    title = 'Honest, but Broke';
+    flavor = 'The town loves you. Your ledger, less so. There’s a lesson in here about playing it too safe.';
+  } else if (state.cash < 60 && state.reputation < 40) {
+    title = 'Ruined Merchant';
+    flavor = 'Between the fines and the bad reputation, the trading post barely survived. Tough season.';
+  } else {
+    title = 'A Steady Trading Post';
+    flavor = 'Not a fortune, not a scandal — just a colonial merchant getting by, one shipment at a time.';
+  }
+  document.getElementById('end-title').textContent = title;
+  document.getElementById('end-flavor').textContent = flavor;
+}
+
+/* ===== RENDER ===== */
+function render() {
+  document.getElementById('turn-label').textContent =
+    `${state.season}, Year ${state.year} · Turn ${state.turn} of ${TOTAL_TURNS}`;
+  document.getElementById('stat-cash').textContent = `£${state.cash}`;
+  document.getElementById('stat-rep').textContent = state.reputation;
+  document.getElementById('rep-fill').style.width = state.reputation + '%';
+  const wh = warehouseTotal();
+  document.getElementById('stat-warehouse').textContent = `${wh} / ${WAREHOUSE_CAP}`;
+  document.getElementById('warehouse-fill').style.width = Math.min(100, (wh / WAREHOUSE_CAP) * 100) + '%';
+
+  const banner = document.getElementById('event-banner');
+  banner.style.display = 'block';
+  banner.innerHTML = `<strong>This turn:</strong> ${state.currentEvent}`;
+
+  const grid = document.getElementById('partners-grid');
+  grid.innerHTML = '';
+  state.partners.forEach(partner => {
+    const card = document.createElement('div');
+    card.className = 'partner-card' + (partner.tag === 'illegal' ? ' illegal' : '');
+    const tagClass = partner.tag === 'illegal' ? 'tag-illegal' : (partner.tag === 'legal' ? 'tag-legal' : 'tag-domestic');
+    const tagText = partner.tag === 'illegal' ? 'Smuggling' : (partner.tag === 'legal' ? 'Legal' : 'Domestic');
+
+    let stanceHtml = '';
+    if (partner.isTown) {
+      stanceHtml = `<div class="stance-row">${Object.keys(STANCES).map(s =>
+        `<button class="stance-btn${state.stance === s ? ' active' : ''}" onclick="setStance('${s}')">${STANCES[s].label}</button>`
+      ).join('')}</div>`;
+    }
+
+    const offersHtml = partner.offers.map(o => {
+      const g = GOODS[o.good];
+      const disabled = o.remaining <= 0 ||
+        (o.direction === 'buy' && state.cash < o.price) ||
+        (o.direction === 'sell' && state.inventory[o.good] <= 0);
+      const verb = o.direction === 'buy' ? 'Buy' : 'Sell';
+      return `
+        <div class="offer-row">
+          <div class="offer-good">${g.icon} ${g.name}</div>
+          <div class="offer-price">£${o.price}</div>
+          <div class="offer-cap">${o.remaining} left</div>
+          <input type="number" class="qty-input" id="qty-${partner.id}-${o.good}" value="1" min="1" max="${Math.max(1, o.remaining)}">
+          <button class="trade-btn" ${disabled ? 'disabled' : ''} onclick="submitTrade('${partner.id}','${o.good}','${o.direction}')">${verb}</button>
+        </div>`;
+    }).join('');
+
+    card.innerHTML = `
+      <div class="partner-head">
+        <span class="partner-icon">${partner.icon}</span>
+        <span class="partner-name">${partner.name}</span>
+        <span class="partner-tag ${tagClass}">${tagText}</span>
+      </div>
+      <div class="partner-note">${partner.note}</div>
+      ${stanceHtml}
+      ${offersHtml}
+    `;
+    grid.appendChild(card);
+  });
+
+  const invList = document.getElementById('inventory-list');
+  invList.innerHTML = Object.keys(GOODS).map(g =>
+    `<div><span>${GOODS[g].icon} ${GOODS[g].name}</span><span>${state.inventory[g]}</span></div>`
+  ).join('');
+
+  document.getElementById('log-list').innerHTML =
+    state.log.map(l => `<li>${l}</li>`).join('');
+}
+
+function submitTrade(partnerId, good, direction) {
+  const input = document.getElementById(`qty-${partnerId}-${good}`);
+  const qty = Math.max(1, parseInt(input.value, 10) || 1);
+  doTrade(partnerId, good, direction, qty);
+}
+
+document.getElementById('start-btn').addEventListener('click', () => {
+  document.getElementById('splash').style.display = 'none';
+  document.getElementById('game').style.display = 'block';
+  newGame();
+  render();
+});
+
+document.getElementById('end-turn-btn').addEventListener('click', endTurn);
+</script>
+</body>
+</html>
