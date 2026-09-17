@@ -338,29 +338,21 @@
 <div class="terms-grid" id="termsGrid"></div>
 
 <footer class="site-footer">
-  <p>&copy; 2025&ndash;2026 US History &middot; [Grade Level]</p>
+  <p>&copy; 2026&ndash;2027 U.S. History &middot; 8th Grade</p>
 </footer>
 
 <script src="js/main.js"></script>
 <script>
-/* === VOCAB DATA (placeholder — swap in real terms per unit) === */
-const vocabData = {
-  "Unit 1: [Title]": [
-    { term: "[Term]", def: "[Definition]" },
-    { term: "[Term]", def: "[Definition]" },
-    { term: "[Term]", def: "[Definition]" },
-  ],
-  "Unit 2: [Title]": [
-    { term: "[Term]", def: "[Definition]" },
-    { term: "[Term]", def: "[Definition]" },
-    { term: "[Term]", def: "[Definition]" },
-  ],
-  "Unit 3: [Title]": [
-    { term: "[Term]", def: "[Definition]" },
-    { term: "[Term]", def: "[Definition]" },
-    { term: "[Term]", def: "[Definition]" },
-  ],
-};
+/* === VOCAB DATA ===
+   Add one entry per unit once its vocab set is ready, e.g.:
+   const vocabData = {
+     "Unit 1: Exploration & Colonization": [
+       { term: "Colony", def: "A settlement controlled by a distant country." },
+       { term: "Charter", def: "A document granting rights to start a colony." },
+     ],
+   };
+*/
+const vocabData = {};
 
 /* === STATE === */
 let currentUnit = Object.keys(vocabData)[0];
@@ -449,9 +441,16 @@ document.addEventListener('keydown', e => {
 });
 
 /* === INIT === */
-renderTabs();
-renderCard();
-renderGrid();
+if (Object.keys(vocabData).length === 0) {
+  document.querySelector('.unit-tabs').style.display = 'none';
+  document.querySelector('.flashcard-area').style.display = 'none';
+  document.querySelector('.shuffle-bar').style.display = 'none';
+  document.querySelector('.terms-header').innerHTML = '<h2>No vocab sets yet</h2><p>Check back once a unit\'s terms are posted.</p>';
+} else {
+  renderTabs();
+  renderCard();
+  renderGrid();
+}
 </script>
 </body>
 </html>

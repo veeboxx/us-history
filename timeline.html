@@ -218,6 +218,13 @@
     .tag-politics { color: #3E6478; background: rgba(62,100,120,0.12); }
     .tag-culture { color: #6E3A52; background: rgba(110,58,82,0.12); }
 
+    .empty-note {
+      text-align: center;
+      padding: 20px 24px 40px;
+      color: var(--boundless);
+      font-size: 0.85rem;
+    }
+
     @media (max-width: 580px) {
       .timeline::before { left: 18px; }
       .era-dot { left: 10px; width: 14px; height: 14px; }
@@ -247,92 +254,32 @@
 
 <header class="page-hero">
   <h1>US <em>Timeline</em></h1>
-  <p>Key events from [starting point] to the present day.</p>
+  <p>Key events from Roanoke to the eve of the Civil War, all in one scroll.</p>
 </header>
 
-<nav class="era-nav" id="eraNav">
-  <a href="#era-1" class="era-link">[Era 1]</a>
-  <a href="#era-2" class="era-link">[Era 2]</a>
-  <a href="#era-3" class="era-link">[Era 3]</a>
-  <a href="#era-4" class="era-link">[Era 4]</a>
-  <a href="#era-5" class="era-link">[Era 5]</a>
-  <a href="#era-6" class="era-link">[Era 6]</a>
-  <a href="#era-7" class="era-link">[Era 7]</a>
-</nav>
+<!--
+  TIMELINE TEMPLATE — not built out yet. Once eras/events are ready:
+  1. Add one <a class="era-link" href="#era-N"> per era to an era-nav
+     block like the one this page used to have, right below the hero.
+  2. Add one <div class="era" id="era-N"> per era inside .timeline,
+     each holding one or more .event blocks, following this pattern:
+
+  <div class="era" id="era-1">
+    <div class="era-title"><div class="era-dot"></div><span class="era-label">[Era Label]</span></div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
+      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-people">People</span></div>
+    </div>
+  </div>
+
+  event-tag options: tag-people, tag-conflict, tag-economy, tag-politics, tag-culture
+-->
 
 <div class="timeline">
-
-  <!-- ERA 1 -->
-  <div class="era" id="era-1">
-    <div class="era-title"><div class="era-dot"></div><span class="era-label">[Era 1 Label]</span></div>
-
-    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
-      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-people">People</span></div>
-    </div>
-
-    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
-      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-culture">Culture</span></div>
-    </div>
-  </div>
-
-  <!-- ERA 2 -->
-  <div class="era" id="era-2">
-    <div class="era-title"><div class="era-dot"></div><span class="era-label">[Era 2 Label]</span></div>
-
-    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
-      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-politics">Politics</span></div>
-    </div>
-  </div>
-
-  <!-- ERA 3 -->
-  <div class="era" id="era-3">
-    <div class="era-title"><div class="era-dot"></div><span class="era-label">[Era 3 Label]</span></div>
-
-    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
-      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-economy">Economy</span></div>
-    </div>
-  </div>
-
-  <!-- ERA 4 -->
-  <div class="era" id="era-4">
-    <div class="era-title"><div class="era-dot"></div><span class="era-label">[Era 4 Label]</span></div>
-
-    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
-      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-conflict">Conflict</span></div>
-    </div>
-  </div>
-
-  <!-- ERA 5 -->
-  <div class="era" id="era-5">
-    <div class="era-title"><div class="era-dot"></div><span class="era-label">[Era 5 Label]</span></div>
-
-    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
-      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-people">People</span></div>
-    </div>
-  </div>
-
-  <!-- ERA 6 -->
-  <div class="era" id="era-6">
-    <div class="era-title"><div class="era-dot"></div><span class="era-label">[Era 6 Label]</span></div>
-
-    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
-      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-conflict">Conflict</span></div>
-    </div>
-  </div>
-
-  <!-- ERA 7 -->
-  <div class="era" id="era-7">
-    <div class="era-title"><div class="era-dot"></div><span class="era-label">[Era 7 Label]</span></div>
-
-    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
-      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-culture">Culture</span></div>
-    </div>
-  </div>
-
+  <p class="empty-note">The timeline hasn't been built out yet — check back as units are added.</p>
 </div>
 
 <footer class="site-footer">
-  <p>&copy; 2025&ndash;2026 US History &middot; [Grade Level]</p>
+  <p>&copy; 2026&ndash;2027 U.S. History &middot; 8th Grade</p>
 </footer>
 
 <script src="js/main.js"></script>

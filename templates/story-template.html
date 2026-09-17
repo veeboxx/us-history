@@ -1,10 +1,17 @@
+<!--
+  STORY PAGE TEMPLATE — not linked from the live site.
+  To use: copy this file into /stories/, rename it to the new story's
+  slug (e.g. salem.html), fill in every [bracketed] placeholder below,
+  then add a real card for it on stories/index.html and wire up the
+  story-footer Previous/Next links to its actual neighbors.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
-  <title>The Lost Colony of Roanoke — U.S. History</title>
+  <title>[Story Title] — U.S. History</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/story.css">
 </head>
@@ -17,7 +24,7 @@
     <button class="nav-toggle" aria-label="Menu" aria-expanded="false">&#9776;</button>
     <ul class="nav-links">
       <li><a href="../index.html">Home</a></li>
-      <li><a href="./">Stories</a></li>
+      <li><a href="../stories/">Stories</a></li>
       <li><a href="../games.html">Games</a></li>
       <li><a href="../resources.html">Resources</a></li>
       <li><a href="../vocab.html">Vocab</a></li>
@@ -29,7 +36,7 @@
 <div class="story-nav">
   <a href="../stories/">All Stories</a>
   <span class="nav-sep">/</span>
-  <span class="current-title">The Lost Colony of Roanoke</span>
+  <span class="current-title">[Story Title]</span>
   <div class="tools-dd" id="toolsDD">
     <button class="tools-btn" onclick="toggleTools()">⚙ Tools ▾</button>
     <div class="tools-menu">
@@ -51,11 +58,11 @@
 </div>
 
 <header class="story-header">
-  <span class="story-era-tag">Colonization</span>
-  <h1>The Lost Colony of <em>Roanoke</em></h1>
-  <p class="story-subtitle">In 1587, over 100 English colonists settled Roanoke Island. Three years later, they were gone.</p>
+  <span class="story-era-tag">[Era Tag]</span>
+  <h1>[Story <em>Title</em>]</h1>
+  <p class="story-subtitle">[One or two sentences that hook the reader — this is the preview blurb, shown here and on the Stories index.]</p>
   <div class="story-info">
-    <span>Colonization</span>
+    <span>[Era Tag]</span>
     <span>[Read Time]</span>
   </div>
   <div class="story-divider"></div>
@@ -86,8 +93,11 @@
 <p class="story-sources">Sources: [citation / further reading]</p>
 
 <div class="story-footer">
-  <a href="de-soto.html">&larr; Previous</a>
-  <a href="../stories/">More Stories &rarr;</a>
+  <a href="../stories/">&larr; All Stories</a>
+  <!-- If this story sits between two others, swap this in:
+  <a href="[previous-slug].html">&larr; Previous</a>
+  <a href="[next-slug].html">Next &rarr;</a>
+  -->
 </div>
 
 <footer class="site-footer">
