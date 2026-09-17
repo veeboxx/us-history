@@ -100,16 +100,16 @@
 
     .star {
       position: absolute;
-      border-radius: 50%;
       background: var(--ice-blue);
+      clip-path: polygon(50% 0%, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0% 50%, 38% 38%);
       opacity: 0;
       animation: twinkle var(--dur) ease-in-out infinite;
       animation-delay: var(--delay);
     }
 
     @keyframes twinkle {
-      0%, 100% { opacity: 0; transform: scale(0.7); }
-      50% { opacity: var(--peak); transform: scale(1); }
+      0%, 100% { opacity: 0; transform: translate(0, 0) scale(0.6) rotate(0deg); }
+      50% { opacity: var(--peak); transform: translate(var(--dx), var(--dy)) scale(1) rotate(25deg); }
     }
 
     .hero-fade {
@@ -324,12 +324,14 @@
     s.classList.add('star');
     s.style.left = Math.random() * 100 + '%';
     s.style.top = 6 + Math.random() * 60 + '%';
-    const size = 2 + Math.random() * 2.8;
+    const size = 2.5 + Math.random() * 3.5;
     s.style.width = size + 'px';
     s.style.height = size + 'px';
-    s.style.setProperty('--dur', (2.5 + Math.random() * 4) + 's');
+    s.style.setProperty('--dur', (4 + Math.random() * 5) + 's');
     s.style.setProperty('--delay', (Math.random() * 5) + 's');
-    s.style.setProperty('--peak', (0.4 + Math.random() * 0.45).toString());
+    s.style.setProperty('--peak', (0.3 + Math.random() * 0.4).toString());
+    s.style.setProperty('--dx', (Math.random() * 16 - 8).toFixed(1) + 'px');
+    s.style.setProperty('--dy', (-6 - Math.random() * 14).toFixed(1) + 'px');
     sc.appendChild(s);
   }
 
