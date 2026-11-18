@@ -56,10 +56,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* --- Active nav highlight --- */
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  // Map any path to a nav section: everything under /stories/ counts as "stories";
+  // otherwise use the filename (a bare directory or "/" means the home page).
+  const navKey = (pathname) => {
+    const parts = pathname.split('/').filter(Boolean);
+    if (parts.includes('stories')) return 'stories';
+    const last = parts[parts.length - 1] || 'index.html';
+    return last.includes('.') ? last : 'index.html';
+  };
+  const currentKey = navKey(window.location.pathname);
   document.querySelectorAll('.nav-links a').forEach(a => {
-    const href = a.getAttribute('href').split('/').pop();
-    if (href === currentPage) a.classList.add('active');
+    if (navKey(a.pathname) === currentKey) a.classList.add('active');
   });
 
   /* --- Page exit transition on internal links --- */

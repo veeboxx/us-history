@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patriots or Terrorists? Evidence Sort</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #17324A;
+    --teal: #266B72;
+    --teal-dark: #1C555B;
+    --ink: #042B58;
+    --muted: #55656E;
+    --cream: #F8F3EC;
+    --col-bg: #F0F4F5;
+    --col-border: #A9B8BE;
+    --card-border: #C9D3D7;
+    --gold: #EF9B0C;
+    --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+    --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); background: var(--cream); color: var(--ink); line-height: 1.5; }
+
+  .back-link { display: block; padding: 12px 24px; font-size: 0.85rem; color: #8A6F52; text-decoration: none; }
+  .back-link:hover { color: var(--ink); }
+
+  .banner { background: var(--navy); color: #fff; padding: 22px 32px; }
+  .banner h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.5rem, 3.4vw, 2.2rem); letter-spacing: 0.02em; text-transform: uppercase; }
+  .wrap { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+  .intro { padding: 16px 0 6px; color: var(--muted); font-size: 0.95rem; }
+
+  .meta { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; padding: 8px 0 14px; }
+  .meta label { font-size: 0.78rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; display: flex; align-items: center; gap: 8px; }
+  .meta input[type=text] { font: inherit; font-size: 0.95rem; color: var(--ink); padding: 6px 10px; border: 1px solid var(--col-border); border-radius: 6px; background: #fff; width: 220px; max-width: 100%; }
+  .progress { margin-left: auto; font-size: 0.9rem; font-weight: 600; color: var(--teal-dark); }
+
+  .board { display: grid; grid-template-columns: minmax(250px, 310px) 1fr; gap: 20px; align-items: start; }
+
+  /* ---- Evidence bank ---- */
+  .bank { position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; background: #fff; border: 1px solid var(--col-border); border-radius: 12px; padding: 14px; }
+  .bank h2 { font-family: var(--font-display); font-size: 1.15rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--navy); }
+  .bank .note { font-size: 0.78rem; color: var(--muted); margin: 2px 0 10px; }
+  .bank-tools { display: flex; gap: 8px; margin-bottom: 10px; }
+
+  /* ---- Columns ---- */
+  .columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .zone { border: 1px solid var(--col-border); border-radius: 12px; background: var(--col-bg); overflow: hidden; display: flex; flex-direction: column; transition: box-shadow .15s, border-color .15s; }
+  .zone-head { background: var(--teal); color: #fff; text-align: center; padding: 14px 8px; font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; letter-spacing: 0.04em; text-transform: uppercase; }
+  .zone-desc { padding: 10px 14px 4px; font-size: 0.82rem; color: var(--muted); }
+  .zone-list { padding: 10px; display: flex; flex-direction: column; gap: 8px; min-height: 380px; flex: 1; }
+  .bank .zone-list { padding: 0; min-height: 60px; }
+  .zone.over { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(38,107,114,.28); }
+  .bank.over { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(38,107,114,.28); }
+  .empty-hint { font-size: 0.8rem; color: #8B9AA1; text-align: center; padding: 18px 8px; border: 1.5px dashed var(--card-border); border-radius: 8px; }
+  .zone-list:not(:empty) + .empty-hint { display: none; }
+
+  .place-here { display: none; margin: 0 10px 0; padding: 8px; font: inherit; font-size: 0.8rem; font-weight: 600; color: var(--teal-dark); background: #fff; border: 1.5px dashed var(--teal); border-radius: 8px; cursor: pointer; }
+  .bank .place-here { margin: 0 0 10px; width: 100%; }
+  body.has-selection .place-here { display: block; }
+  .place-here:hover { background: #E4F0F1; }
+
+  /* ---- Cards ---- */
+  .ecard { background: #fff; border: 1px solid var(--card-border); border-radius: 10px; padding: 8px; cursor: grab; user-select: none; -webkit-user-select: none; box-shadow: 0 1px 2px rgba(23,50,74,.08); outline-offset: 2px; }
+  .ecard:hover { border-color: var(--teal); }
+  .ecard:focus-visible { outline: 3px solid var(--gold); }
+  .ecard.selected { outline: 3px solid var(--gold); border-color: var(--gold); }
+  .ecard .card-head { background: var(--teal); color: #fff; font-weight: 600; font-size: 0.8rem; padding: 6px 10px; border-radius: 6px; touch-action: none; display: flex; gap: 6px; }
+  .ecard .num { opacity: .8; font-variant-numeric: tabular-nums; }
+  .ecard .card-body { font-size: 0.85rem; color: #3D4C55; padding: 8px 4px 2px; line-height: 1.45; }
+  .ecard.dragging { display: none; }
+  .ecard.ghost { position: fixed; top: 0; left: 0; z-index: 1000; pointer-events: none; cursor: grabbing; box-shadow: 0 14px 30px rgba(4,43,88,.28); opacity: .96; }
+  .placeholder { border: 2px dashed var(--teal); background: rgba(38,107,114,.08); border-radius: 10px; min-height: 56px; }
+  body.is-dragging, body.is-dragging * { cursor: grabbing !important; }
+
+  /* ---- Reflection + tools ---- */
+  .reflect { margin: 26px 0 8px; background: #fff; border: 1px solid var(--col-border); border-radius: 12px; padding: 18px 20px; }
+  .reflect h2 { font-family: var(--font-display); font-size: 1.2rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--navy); margin-bottom: 4px; }
+  .reflect p { font-size: 0.9rem; color: var(--muted); margin-bottom: 12px; }
+  .reflect select, .reflect textarea { width: 100%; font: inherit; font-size: 0.95rem; color: var(--ink); padding: 8px 10px; border: 1px solid var(--col-border); border-radius: 6px; background: #fff; margin-bottom: 10px; }
+  .reflect textarea { min-height: 96px; resize: vertical; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 10px 0 40px; }
+  .btn { font: inherit; font-size: 0.85rem; font-weight: 600; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--teal); background: var(--teal); color: #fff; cursor: pointer; }
+  .btn:hover { background: var(--teal-dark); }
+  .btn.ghost-btn { background: #fff; color: var(--teal-dark); }
+  .btn.ghost-btn:hover { background: #E4F0F1; }
+  .btn.danger { background: #B83A26; border-color: #B83A26; }
+  .btn.small { padding: 5px 12px; font-size: 0.78rem; }
+  .status { font-size: 0.85rem; color: var(--teal-dark); min-height: 1.2em; }
+  .saved-note { font-size: 0.78rem; color: var(--muted); margin-left: auto; }
+  #copyBox { display: none; width: 100%; min-height: 140px; font: 0.85rem/1.4 ui-monospace, Menlo, Consolas, monospace; padding: 10px; border: 1px solid var(--col-border); border-radius: 6px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  @media (max-width: 1000px) {
+    .board { grid-template-columns: 1fr; }
+    .bank { position: static; max-height: none; }
+    .bank .zone-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  }
+  @media (max-width: 720px) {
+    .columns { grid-template-columns: 1fr; }
+    .zone-list { min-height: 140px; }
+    .banner { padding: 18px 20px; }
+    .wrap { padding: 0 14px; }
+    .progress { margin-left: 0; width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<a class="back-link" href="../resources.html">&larr; Resources</a>
+
+<header class="banner">
+  <h1>Patriots or Terrorists? &nbsp;|&nbsp; Evidence Sort</h1>
+</header>
+
+<main class="wrap">
+  <p class="intro">Place each evidence card in the category your group can best defend. There may be more than one reasonable placement.</p>
+
+  <div class="meta">
+    <label>Name <input type="text" id="studentName" autocomplete="off" maxlength="60"></label>
+    <label>Group <input type="text" id="groupName" autocomplete="off" maxlength="60"></label>
+    <div class="progress" id="progress" aria-live="polite"></div>
+  </div>
+
+  <div class="board">
+    <aside class="bank zone-wrap" data-zone="bank" id="bankZone" aria-label="Evidence bank">
+      <h2>Evidence Bank</h2>
+      <p class="note">Every card is evidence from the assigned reading (paraphrased). Drag a card into a column &mdash; or tap a card, then tap &ldquo;Place here&rdquo;. Keyboard: focus a card, then press 1, 2, 3 (columns) or 0 (back to the bank).</p>
+      <div class="bank-tools">
+        <button class="btn ghost-btn small" id="shuffleBtn" type="button">Shuffle bank</button>
+      </div>
+      <button class="place-here" type="button" data-place="bank">Return selected card to bank</button>
+      <div class="zone-list" data-list="bank"></div>
+      <div class="empty-hint">All cards are sorted.</div>
+    </aside>
+
+    <section class="columns" aria-label="Sorting mat">
+      <div class="zone zone-wrap" data-zone="patriots">
+        <div class="zone-head">Patriots</div>
+        <div class="zone-desc">Evidence of defending rights or resisting unfair government</div>
+        <button class="place-here" type="button" data-place="patriots">Place selected card here</button>
+        <div class="zone-list" data-list="patriots"></div>
+        <div class="empty-hint">Drop cards here</div>
+      </div>
+      <div class="zone zone-wrap" data-zone="terrorists">
+        <div class="zone-head">Terrorists</div>
+        <div class="zone-desc">Evidence of intimidation, threats, or political violence</div>
+        <button class="place-here" type="button" data-place="terrorists">Place selected card here</button>
+        <div class="zone-list" data-list="terrorists"></div>
+        <div class="empty-hint">Drop cards here</div>
+      </div>
+      <div class="zone zone-wrap" data-zone="both">
+        <div class="zone-head">Both / Not Sure</div>
+        <div class="zone-desc">Mixed evidence, unclear connection, or competing interpretations</div>
+        <button class="place-here" type="button" data-place="both">Place selected card here</button>
+        <div class="zone-list" data-list="both"></div>
+        <div class="empty-hint">Drop cards here</div>
+      </div>
+    </section>
+  </div>
+
+  <section class="reflect">
+    <h2>Before moving on</h2>
+    <p>Choose one card another group might reasonably place differently.</p>
+    <select id="reflectCard" aria-label="Card another group might place differently"></select>
+    <textarea id="reflectWhy" placeholder="Which column might another group choose, and why?"></textarea>
+  </section>
+
+  <div class="actions">
+    <button class="btn" id="copyBtn" type="button">Copy my sort</button>
+    <button class="btn ghost-btn" id="resetBtn" type="button">Start over</button>
+    <span id="resetConfirm" style="display:none">
+      <span style="font-size:.85rem;margin-right:6px">Clear every card and answer?</span>
+      <button class="btn danger small" id="resetYes" type="button">Yes, clear</button>
+      <button class="btn ghost-btn small" id="resetNo" type="button">Cancel</button>
+    </span>
+    <span class="status" id="status" role="status" aria-live="polite"></span>
+    <span class="saved-note">Your work saves automatically in this browser.</span>
+  </div>
+  <textarea id="copyBox" readonly aria-label="Your sort, ready to copy"></textarea>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var CARDS = [
+    { id: 1,  title: 'The Stamp Act',         text: 'In 1765, Parliament put a tax on printed items, including newspapers, legal papers, and licenses.' },
+    { id: 2,  title: 'No Vote in Parliament', text: 'The colonists had no elected representatives in Parliament, which approved the Stamp Act.' },
+    { id: 3,  title: 'A Group Forms',         text: 'Sons of Liberty groups formed in 1765 to organize opposition to the Stamp Act.' },
+    { id: 4,  title: 'Secret Meetings',       text: 'For safety and secrecy, some Sons of Liberty groups met at night, away from British officials.' },
+    { id: 5,  title: 'A Growing Network',     text: 'Sons of Liberty groups communicated with one another across several colonies to organize resistance.' },
+    { id: 6,  title: 'Loyal to the King?',    text: 'Early Sons of Liberty groups publicly claimed loyalty to King George III while criticizing Parliament.' },
+    { id: 7,  title: 'Ordinary Resistance',   text: 'Some colonial merchants, printers, lawyers, and shopkeepers refused or ignored the stamp tax.' },
+    { id: 8,  title: 'A Threat of Violence',  text: 'In New York, a Sons of Liberty declaration pledged to resist the Stamp Act even if violence was necessary.' },
+    { id: 9,  title: 'Burned Tax Paper',      text: 'New York resisters seized boxes of stamped paper in 1766 and burned them instead of paying the tax.' },
+    { id: 10, title: "The Governor's Coach",  text: "In a New York protest, a mob burned the acting royal governor's expensive coach." },
+    { id: 11, title: 'A Home Attacked',       text: "The same New York mob broke windows and entered a military commander's home and wine cellar." },
+    { id: 12, title: 'Tar and Feathers',      text: 'Some radical protesters connected with the movement tarred and feathered Loyalists and tax officials.' },
+    { id: 13, title: "Hutchinson's House",    text: "During protests linked to the Sons of Liberty, a mob attacked and looted Lt. Gov. Thomas Hutchinson's house." },
+    { id: 14, title: 'Tea in the Harbor',     text: "In 1773, protesters linked to Boston's resistance network dumped 342 chests of tea into the harbor." },
+    { id: 15, title: 'Broad Public Support',  text: 'The movement tried to build public support and encourage colonial citizens to take political action.' },
+    { id: 16, title: 'Taxes Repealed',        text: 'After Parliament repealed the Stamp Act in 1766, the early Sons of Liberty movement largely broke up.' },
+    { id: 17, title: 'Resistance Returns',    text: 'Sons of Liberty networks organized again in 1768 to oppose new Townshend taxes.' },
+    { id: 18, title: 'Different Viewpoints',  text: 'British officials saw the resistance as a threat to government; many supporters saw it as defending colonial rights.' }
+  ];
+  var BY_ID = {};
+  CARDS.forEach(function (c) { BY_ID[c.id] = c; });
+
+  var ZONES = ['bank', 'patriots', 'terrorists', 'both'];
+  var ZONE_LABEL = { bank: 'the bank', patriots: 'Patriots', terrorists: 'Terrorists', both: 'Both / Not Sure' };
+  var KEY = 'ushistory:patriots-terrorists-sort:v1';
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function freshState() {
+    return { zones: { bank: CARDS.map(function (c) { return c.id; }), patriots: [], terrorists: [], both: [] },
+             name: '', group: '', reflectCard: '', reflectWhy: '' };
+  }
+
+  /* ---------- storage (always wrapped: may be blocked or empty) ---------- */
+  function loadState() {
+    var s = freshState();
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (!raw) return s;
+      var d = JSON.parse(raw);
+      var seen = {};
+      var zones = { bank: [], patriots: [], terrorists: [], both: [] };
+      ZONES.forEach(function (z) {
+        ((d.zones && d.zones[z]) || []).forEach(function (id) {
+          if (BY_ID[id] && !seen[id]) { seen[id] = true; zones[z].push(id); }
+        });
+      });
+      CARDS.forEach(function (c) { if (!seen[c.id]) zones.bank.push(c.id); });
+      s.zones = zones;
+      ['name', 'group', 'reflectCard', 'reflectWhy'].forEach(function (k) { if (typeof d[k] === 'string') s[k] = d[k]; });
+    } catch (e) { /* fall back to a fresh sort */ }
+    return s;
+  }
+  var storageOK = true;
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); }
+    catch (e) {
+      if (storageOK) { storageOK = false; say('This browser is blocking saving, so your work will be lost if you close the page. Use "Copy my sort" to keep it.'); }
+    }
+  }
+
+  var state = loadState();
+  var selectedId = null;
+  var focusId = null;
+
+  /* ---------- DOM helpers ---------- */
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var statusEl = $('#status');
+  function say(msg) { statusEl.textContent = msg; }
+
+  function zoneOf(id) {
+    for (var i = 0; i < ZONES.length; i++) if (state.zones[ZONES[i]].indexOf(id) !== -1) return ZONES[i];
+    return 'bank';
+  }
+
+  function cardEl(c) {
+    var el = document.createElement('div');
+    el.className = 'ecard' + (c.id === selectedId ? ' selected' : '');
+    el.dataset.id = c.id;
+    el.tabIndex = 0;
+    el.setAttribute('role', 'button');
+    el.setAttribute('aria-pressed', c.id === selectedId ? 'true' : 'false');
+    el.setAttribute('aria-label', 'Card ' + pad(c.id) + ', ' + c.title + '. ' + c.text + ' Currently in ' + ZONE_LABEL[zoneOf(c.id)] + '.');
+    var head = document.createElement('div');
+    head.className = 'card-head';
+    var num = document.createElement('span'); num.className = 'num'; num.textContent = pad(c.id);
+    var t = document.createElement('span'); t.textContent = c.title;
+    head.appendChild(num); head.appendChild(t);
+    var body = document.createElement('div');
+    body.className = 'card-body';
+    body.textContent = c.text;
+    el.appendChild(head); el.appendChild(body);
+    return el;
+  }
+
+  function render() {
+    ZONES.forEach(function (z) {
+      var list = $('[data-list="' + z + '"]');
+      list.textContent = '';
+      state.zones[z].forEach(function (id) { list.appendChild(cardEl(BY_ID[id])); });
+    });
+    document.body.classList.toggle('has-selection', selectedId !== null);
+
+    var sorted = CARDS.length - state.zones.bank.length;
+    $('#progress').textContent = sorted === CARDS.length
+      ? 'All ' + CARDS.length + ' cards sorted — now answer the question at the bottom.'
+      : sorted + ' of ' + CARDS.length + ' cards sorted';
+
+    // reflection select
+    var sel = $('#reflectCard');
+    if (!sel.options.length) {
+      var o0 = document.createElement('option'); o0.value = ''; o0.textContent = '— choose a card —'; sel.appendChild(o0);
+      CARDS.forEach(function (c) { var o = document.createElement('option'); o.value = String(c.id); o.textContent = pad(c.id) + '  ' + c.title; sel.appendChild(o); });
+    }
+    sel.value = state.reflectCard;
+    if (document.activeElement !== $('#reflectWhy')) $('#reflectWhy').value = state.reflectWhy;
+    if (document.activeElement !== $('#studentName')) $('#studentName').value = state.name;
+    if (document.activeElement !== $('#groupName')) $('#groupName').value = state.group;
+
+    if (focusId !== null) {
+      var f = $('.ecard[data-id="' + focusId + '"]');
+      if (f) f.focus({ preventScroll: true });
+      focusId = null;
+    }
+  }
+
+  /* ---------- moving cards ---------- */
+  function moveCard(id, zone, index) {
+    ZONES.forEach(function (z) {
+      var i = state.zones[z].indexOf(id);
+      if (i !== -1) state.zones[z].splice(i, 1);
+    });
+    var list = state.zones[zone];
+    if (index === undefined || index > list.length) index = list.length;
+    list.splice(index, 0, id);
+    save();
+  }
+
+  /* ---------- pointer drag (mouse, pen, touch) ---------- */
+  var drag = null;
+  var suppressClick = false;
+  var scrollRAF = null;
+
+  document.addEventListener('pointerdown', function (e) {
+    var el = e.target.closest && e.target.closest('.ecard');
+    if (!el || el.classList.contains('ghost')) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    // On touch, only the colored title bar starts a drag so the lists can still scroll.
+    if (e.pointerType === 'touch' && !e.target.closest('.card-head')) return;
+    drag = { id: Number(el.dataset.id), el: el, x: e.clientX, y: e.clientY, started: false,
+             ghost: null, placeholder: null, zone: null, index: 0, offX: 0, offY: 0, lastX: e.clientX, lastY: e.clientY };
+  });
+
+  document.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    drag.lastX = e.clientX; drag.lastY = e.clientY;
+    if (!drag.started) {
+      if (Math.hypot(e.clientX - drag.x, e.clientY - drag.y) < 6) return;
+      startDrag();
+    }
+    e.preventDefault();
+    updateDrag(e.clientX, e.clientY);
+  }, { passive: false });
+
+  function startDrag() {
+    var r = drag.el.getBoundingClientRect();
+    drag.started = true;
+    drag.offX = drag.x - r.left; drag.offY = drag.y - r.top;
+    var g = drag.el.cloneNode(true);
+    g.classList.add('ghost'); g.classList.remove('selected');
+    g.removeAttribute('tabindex'); g.style.width = r.width + 'px';
+    document.body.appendChild(g);
+    drag.ghost = g;
+    var p = document.createElement('div');
+    p.className = 'placeholder'; p.style.height = r.height + 'px';
+    drag.placeholder = p;
+    drag.el.classList.add('dragging');
+    document.body.classList.add('is-dragging');
+    if (window.getSelection) window.getSelection().removeAllRanges();
+    autoScroll();
+  }
+
+  function updateDrag(x, y) {
+    drag.ghost.style.transform = 'translate(' + (x - drag.offX) + 'px,' + (y - drag.offY) + 'px) rotate(2deg)';
+    var under = document.elementFromPoint(x, y);
+    var wrap = under && under.closest ? under.closest('.zone-wrap') : null;
+    document.querySelectorAll('.zone-wrap.over').forEach(function (w) { if (w !== wrap) w.classList.remove('over'); });
+    if (!wrap) { drag.zone = null; if (drag.placeholder.parentNode) drag.placeholder.remove(); return; }
+    wrap.classList.add('over');
+    var zone = wrap.dataset.zone;
+    var list = $('[data-list="' + zone + '"]');
+    var kids = Array.prototype.slice.call(list.querySelectorAll('.ecard:not(.dragging)'));
+    var idx = kids.length;
+    for (var i = 0; i < kids.length; i++) {
+      var r = kids[i].getBoundingClientRect();
+      var below = y > r.bottom, sameRow = y >= r.top;
+      // two-column bank grid on narrow screens: compare horizontally within a row
+      if (!below && (y < r.top + r.height / 2 || (sameRow && x < r.left + r.width / 2))) { idx = i; break; }
+    }
+    drag.zone = zone; drag.index = idx;
+    var ref = kids[idx] || null;
+    if (drag.placeholder.parentNode !== list || drag.placeholder.nextElementSibling !== ref) list.insertBefore(drag.placeholder, ref);
+  }
+
+  function autoScroll() {
+    if (!drag || !drag.started) return;
+    var y = drag.lastY, edge = 70, speed = 0;
+    if (y < edge) speed = -Math.ceil((edge - y) / 6);
+    else if (y > window.innerHeight - edge) speed = Math.ceil((y - (window.innerHeight - edge)) / 6);
+    if (speed) { window.scrollBy(0, speed); updateDrag(drag.lastX, drag.lastY); }
+    scrollRAF = requestAnimationFrame(autoScroll);
+  }
+
+  function endDrag(commit) {
+    if (!drag) return;
+    var d = drag; drag = null;
+    cancelAnimationFrame(scrollRAF);
+    if (!d.started) return;
+    d.ghost.remove();
+    if (d.placeholder.parentNode) d.placeholder.remove();
+    document.body.classList.remove('is-dragging');
+    document.querySelectorAll('.zone-wrap.over').forEach(function (w) { w.classList.remove('over'); });
+    suppressClick = true; setTimeout(function () { suppressClick = false; }, 0);
+    if (commit && d.zone) {
+      moveCard(d.id, d.zone, d.index);
+      selectedId = null; focusId = d.id;
+      say('Moved ' + pad(d.id) + ' ' + BY_ID[d.id].title + ' to ' + ZONE_LABEL[d.zone] + '.');
+    }
+    render();
+  }
+  document.addEventListener('pointerup', function () { endDrag(true); });
+  document.addEventListener('pointercancel', function () { endDrag(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && drag) endDrag(false); });
+
+  /* ---------- tap / keyboard alternative ---------- */
+  document.addEventListener('click', function (e) {
+    if (suppressClick) return;
+    var place = e.target.closest('[data-place]');
+    if (place && selectedId !== null) {
+      var id = selectedId, z = place.dataset.place;
+      moveCard(id, z); selectedId = null; focusId = id;
+      say('Moved ' + pad(id) + ' ' + BY_ID[id].title + ' to ' + ZONE_LABEL[z] + '.');
+      render(); return;
+    }
+    var el = e.target.closest('.ecard');
+    if (el) {
+      var cid = Number(el.dataset.id);
+      selectedId = selectedId === cid ? null : cid; focusId = cid;
+      say(selectedId ? 'Selected ' + pad(cid) + '. Tap "Place here" on a column.' : '');
+      render();
+    } else if (selectedId !== null && !e.target.closest('button, input, select, textarea, .reflect')) {
+      selectedId = null; render();
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    var el = e.target.closest && e.target.closest('.ecard');
+    if (!el || drag) return;
+    var id = Number(el.dataset.id);
+    var map = { '1': 'patriots', '2': 'terrorists', '3': 'both', '0': 'bank' };
+    if (map[e.key]) {
+      e.preventDefault();
+      moveCard(id, map[e.key]); selectedId = null; focusId = id;
+      say('Moved ' + pad(id) + ' ' + BY_ID[id].title + ' to ' + ZONE_LABEL[map[e.key]] + '.');
+      render();
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      selectedId = selectedId === id ? null : id; focusId = id; render();
+    }
+  });
+
+  /* ---------- fields ---------- */
+  $('#studentName').addEventListener('input', function (e) { state.name = e.target.value; save(); });
+  $('#groupName').addEventListener('input', function (e) { state.group = e.target.value; save(); });
+  $('#reflectCard').addEventListener('change', function (e) { state.reflectCard = e.target.value; save(); });
+  $('#reflectWhy').addEventListener('input', function (e) { state.reflectWhy = e.target.value; save(); });
+
+  $('#shuffleBtn').addEventListener('click', function () {
+    var a = state.zones.bank;
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    save(); render(); say('Bank shuffled.');
+  });
+
+  /* ---------- copy results ---------- */
+  function summary() {
+    var out = ['PATRIOTS OR TERRORISTS? | EVIDENCE SORT'];
+    if (state.name || state.group) out.push('Name: ' + state.name + '   Group: ' + state.group);
+    out.push('');
+    [['patriots', 'PATRIOTS'], ['terrorists', 'TERRORISTS'], ['both', 'BOTH / NOT SURE'], ['bank', 'NOT SORTED YET']].forEach(function (p) {
+      if (p[0] === 'bank' && !state.zones.bank.length) return;
+      out.push(p[1] + ':');
+      if (!state.zones[p[0]].length) out.push('  (none)');
+      state.zones[p[0]].forEach(function (id) { out.push('  ' + pad(id) + ' ' + BY_ID[id].title); });
+      out.push('');
+    });
+    out.push('A card another group might place differently: ' + (state.reflectCard ? pad(Number(state.reflectCard)) + ' ' + BY_ID[state.reflectCard].title : '(not chosen)'));
+    out.push('Why: ' + (state.reflectWhy || '(blank)'));
+    return out.join('\n');
+  }
+  $('#copyBtn').addEventListener('click', function () {
+    var text = summary(), box = $('#copyBox');
+    function fallback() { box.value = text; box.style.display = 'block'; box.focus(); box.select(); say('Select the text below and copy it (Ctrl/Cmd + C).'); }
+    try {
+      navigator.clipboard.writeText(text).then(function () { box.style.display = 'none'; say('Copied! Paste it into your assignment.'); }, fallback);
+    } catch (err) { fallback(); }
+  });
+
+  /* ---------- start over (in-page confirm; browser dialogs are blocked in some frames) ---------- */
+  $('#resetBtn').addEventListener('click', function () { $('#resetBtn').style.display = 'none'; $('#resetConfirm').style.display = 'inline'; });
+  $('#resetNo').addEventListener('click', function () { $('#resetConfirm').style.display = 'none'; $('#resetBtn').style.display = ''; });
+  $('#resetYes').addEventListener('click', function () {
+    state = freshState(); selectedId = null; save(); render();
+    $('#resetConfirm').style.display = 'none'; $('#resetBtn').style.display = ''; $('#copyBox').style.display = 'none';
+    say('Cleared. Fresh start.');
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
