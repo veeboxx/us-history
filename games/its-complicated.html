@@ -16,6 +16,10 @@
     --sent: #042B58;
     --recv: #EDE8F3;
     --line: #E6DFEE;
+    --alert: #E5322D;
+    --calm: #2E8BA6;
+    --sarc: #8A5CC7;
+    --firm: #D9532C;
     --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
     --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
   }
@@ -61,9 +65,33 @@
   .g-card.dragging { opacity: .35; }
 
   /* ---------- Phone ---------- */
-  .phone { display: flex; flex-direction: column; height: min(80vh, 740px); min-height: 540px; background: #fff; border-radius: 30px; overflow: hidden; box-shadow: 0 24px 60px rgba(60,30,90,.22), 0 0 0 8px #fff, 0 0 0 9px var(--line); }
-  .p-head { display: flex; align-items: center; gap: 12px; padding: 14px 18px 10px; border-bottom: 1px solid var(--line); background: #fff; }
-  .avatar { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-size: 1.4rem; background: linear-gradient(135deg, #FFE08A, #EF9B0C); box-shadow: 0 0 0 3px #FFF1CC; flex: none; }
+  .phone { display: flex; flex-direction: column; height: min(82vh, 760px); min-height: 560px; background: #fff; border-radius: 30px; overflow: hidden; box-shadow: 0 24px 60px rgba(60,30,90,.22), 0 0 0 8px #fff, 0 0 0 9px var(--line); }
+
+  /* chat tabs (two "bubbles") */
+  .tabs { display: flex; gap: 8px; padding: 12px 14px 0; background: #fff; }
+  .tab { position: relative; flex: 1; display: flex; align-items: center; gap: 9px; font: inherit; font-weight: 700; font-size: .82rem; color: var(--ink-dim); background: #F6F2FA; border: 1.5px solid transparent; border-radius: 999px; padding: 6px 12px 6px 6px; cursor: pointer; transition: background .25s, color .25s, border-color .25s, transform .15s; }
+  .tab:hover { background: #EFE8F6; }
+  .tab.active { background: #fff; color: var(--ink); border-color: var(--ink); }
+  .tab:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  .tab .av { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-size: 1.05rem; flex: none; }
+  .tab .av.king { background: linear-gradient(135deg, #FFE08A, #EF9B0C); }
+  .tab .av.grp { background: #EFE8F6; display: grid; grid-template-columns: 1fr 1fr; font-size: .62rem; line-height: 1; place-items: center; padding: 4px; }
+  .tab .lbl { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .badge { position: absolute; top: -6px; right: -2px; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; background: var(--alert); color: #fff; font-size: .72rem; font-weight: 800; display: none; place-items: center; box-shadow: 0 0 0 2px #fff; }
+  .badge.on { display: grid; animation: badgePop .45s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes badgePop { from { transform: scale(0); } to { transform: scale(1); } }
+  .tab.ring { animation: ring .7s; }
+  @keyframes ring { 15% { transform: rotate(-6deg) scale(1.05); } 30% { transform: rotate(6deg) scale(1.05); } 45% { transform: rotate(-4deg); } 60% { transform: rotate(3deg); } }
+
+  /* sliding panes */
+  .viewport { flex: 1; min-height: 0; overflow: hidden; }
+  .slider { display: flex; width: 100%; height: 100%; transition: transform .45s cubic-bezier(.22,1,.36,1); }
+  .slider.group { transform: translateX(-100%); }
+  .slide { flex: 0 0 100%; min-width: 0; display: flex; flex-direction: column; min-height: 0; }
+
+  .p-head { display: flex; align-items: center; gap: 12px; padding: 12px 18px 10px; border-bottom: 1px solid var(--line); background: #fff; }
+  .avatar { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-size: 1.35rem; background: linear-gradient(135deg, #FFE08A, #EF9B0C); box-shadow: 0 0 0 3px #FFF1CC; flex: none; }
+  .avatar.grp { background: #EFE8F6; box-shadow: 0 0 0 3px #F6F2FA; display: grid; grid-template-columns: 1fr 1fr; font-size: .8rem; line-height: 1; padding: 7px; place-items: center; }
   .who { min-width: 0; }
   .who .name { font-weight: 700; }
   .who .state { font-size: .78rem; color: var(--ink-dim); transition: color .3s; }
@@ -76,12 +104,21 @@
   .heart.bump { animation: bump .5s; }
   @keyframes bump { 30% { transform: scale(1.5) rotate(-12deg); } 60% { transform: scale(.8) rotate(8deg); } }
 
-  .chat { flex: 1; overflow-y: auto; padding: 16px 16px 8px; display: flex; flex-direction: column; gap: 6px; background: linear-gradient(180deg, #FFFFFF, #FDFAFE); scroll-behavior: smooth; }
+  /* mood strip (group) */
+  .moods { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 10px 12px 12px; background: #fff; border-bottom: 1px solid var(--line); }
+  .mood { text-align: center; font-size: .66rem; font-weight: 700; color: var(--ink-dim); }
+  .mood .face { position: relative; width: 40px; height: 40px; margin: 0 auto 3px; border-radius: 50%; display: grid; place-items: center; font-size: 1.15rem; box-shadow: 0 0 0 3px var(--ring); transition: box-shadow .4s; }
+  .mood .face i { position: absolute; right: -8px; bottom: -6px; font-style: normal; font-size: .95rem; background: #fff; border-radius: 50%; line-height: 1; padding: 1px; }
+  .mood .mbar { height: 5px; border-radius: 99px; background: #EFE8F3; overflow: hidden; margin: 5px 6px 0; }
+  .mood .mbar b { display: block; height: 100%; border-radius: 99px; width: 50%; background: #B9AEC9; transition: width .6s cubic-bezier(.22,1,.36,1), background-color .6s; }
+
+  .chat { flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 8px; display: flex; flex-direction: column; gap: 6px; background: linear-gradient(180deg, #FFFFFF, #FDFAFE); scroll-behavior: smooth; }
   .divider { align-self: center; font-size: .72rem; font-weight: 600; color: #9A8FB0; margin: 6px 0 8px; text-align: center; }
   .msg { max-width: 82%; padding: 9px 14px; border-radius: 20px; font-size: .93rem; animation: pop .22s ease-out; word-wrap: break-word; }
   @keyframes pop { from { transform: scale(.85); opacity: 0; } to { transform: none; opacity: 1; } }
   .msg.c { align-self: flex-end; background: var(--sent); color: #fff; border-bottom-right-radius: 6px; }
   .msg.k { align-self: flex-start; background: var(--recv); border-bottom-left-radius: 6px; }
+  .msg.win { background: #DDF3E4; }
   .time { align-self: center; font-size: .66rem; color: #A99FBC; margin-top: 4px; }
   .receipt { align-self: flex-end; font-size: .68rem; color: #A99FBC; margin: -2px 6px 2px; }
   .typing { display: inline-flex; gap: 4px; align-items: center; padding: 13px 16px; }
@@ -90,10 +127,36 @@
   .typing span:nth-child(3) { animation-delay: .36s; }
   @keyframes dot { 0%, 60%, 100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-5px); opacity: 1; } }
 
-  .composer { display: flex; gap: 10px; align-items: flex-end; padding: 10px 14px 14px; background: #fff; border-top: 1px solid var(--line); }
+  /* group messages */
+  .gmsg { display: flex; gap: 8px; align-items: flex-end; max-width: 92%; animation: pop .22s ease-out; }
+  .gmsg .gav { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: .95rem; flex: none; box-shadow: 0 0 0 2px var(--ring); background: var(--bg); }
+  .gmsg .gcol { min-width: 0; }
+  .gmsg .gname { font-size: .68rem; font-weight: 700; color: var(--ink-dim); margin: 0 0 2px 6px; }
+  .gmsg .gb { background: var(--bg); padding: 8px 13px; border-radius: 18px; border-bottom-left-radius: 6px; font-size: .9rem; word-wrap: break-word; }
+  .gmsg.typing-row .gb { display: inline-flex; gap: 4px; padding: 12px 15px; }
+  .gmsg.typing-row .gb span { width: 7px; height: 7px; border-radius: 50%; background: #9A8FB0; animation: dot 1.1s infinite; }
+  .gmsg.typing-row .gb span:nth-child(2) { animation-delay: .18s; }
+  .gmsg.typing-row .gb span:nth-child(3) { animation-delay: .36s; }
+  .g-foot { padding: 12px 16px 16px; border-top: 1px solid var(--line); font-size: .8rem; color: var(--ink-dim); text-align: center; background: #fff; }
+  .g-foot button { font: inherit; font-weight: 700; color: var(--rose); background: none; border: 0; cursor: pointer; text-decoration: underline; }
+
+  /* tones */
+  .tones { display: none; gap: 8px; padding: 10px 14px 0; background: #fff; border-top: 1px solid var(--line); }
+  .tones.show { display: flex; animation: slideUp .25s ease-out; }
+  @keyframes slideUp { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .tone { flex: 1; font: inherit; font-weight: 700; font-size: .8rem; padding: 8px 6px; border-radius: 12px; border: 2px solid var(--tc); background: #fff; color: var(--tc); cursor: pointer; transition: background .15s, color .15s, transform .1s; }
+  .tone:hover:not(:disabled) { transform: translateY(-1px); }
+  .tone[aria-pressed="true"] { background: var(--tc); color: #fff; }
+  .tone:disabled { opacity: .5; cursor: not-allowed; }
+  .tone:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  .tone.calm { --tc: var(--calm); } .tone.sarc { --tc: var(--sarc); } .tone.firm { --tc: var(--firm); }
+
+  .composer { display: flex; gap: 10px; align-items: flex-end; padding: 10px 14px 14px; background: #fff; }
+  .composer.withtones { border-top: 0; }
   .bar { flex: 1; min-height: 46px; border: 1.5px solid var(--line); border-radius: 24px; padding: 10px 14px; font-size: .9rem; display: flex; align-items: center; gap: 8px; background: #FCFAFD; transition: border-color .15s, box-shadow .15s, background .15s; }
   .bar .ph { color: #A99FBC; font-style: italic; }
   .bar .loaded { flex: 1; color: var(--ink); }
+  .bar .loaded.waiting { color: var(--ink-dim); font-style: italic; }
   .bar .clear { border: 0; background: #EFE8F3; color: var(--ink-dim); width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: .8rem; flex: none; }
   .composer.over .bar { border-color: var(--rose); box-shadow: 0 0 0 4px rgba(232,85,122,.22); background: #FFF5F8; }
   .composer.has .bar { border-color: var(--ink); background: #fff; }
@@ -106,30 +169,36 @@
   .linkbtn { font: inherit; background: none; border: 0; color: var(--rose); font-weight: 600; cursor: pointer; text-decoration: underline; }
   .btn { font: inherit; font-weight: 700; font-size: .9rem; padding: 10px 20px; border-radius: 12px; border: 0; background: var(--ink); color: #fff; cursor: pointer; text-decoration: none; display: inline-block; }
   .btn.alt { background: #fff; color: var(--ink); border: 1.5px solid var(--line); }
-  .btn.danger { background: #B83A26; }
 
-  /* ---------- Break-up overlay ---------- */
+  /* ---------- Result overlay ---------- */
   .overlay { position: fixed; inset: 0; z-index: 2000; background: rgba(30,15,50,.55); display: none; align-items: center; justify-content: center; padding: 18px; backdrop-filter: blur(4px); }
   .overlay.show { display: flex; animation: fade .4s; }
   @keyframes fade { from { opacity: 0; } }
-  .result { background: var(--cream); border-radius: 22px; max-width: 640px; width: 100%; max-height: 92vh; overflow-y: auto; padding: 26px 26px 22px; box-shadow: 0 30px 80px rgba(0,0,0,.35); }
+  .result { background: var(--cream); border-radius: 22px; max-width: 660px; width: 100%; max-height: 92vh; overflow-y: auto; padding: 26px 26px 22px; box-shadow: 0 30px 80px rgba(0,0,0,.35); }
   .result .status { text-align: center; font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim); }
   .result h2 { font-family: var(--font-display); font-size: clamp(2rem, 6vw, 2.9rem); text-align: center; line-height: 1; margin: 4px 0 6px; }
   .result h2 em { color: var(--rose); font-style: normal; }
-  .result .date { text-align: center; font-weight: 600; color: var(--ink-dim); margin-bottom: 14px; }
-  .result h3 { font-family: var(--font-display); font-size: 1.15rem; letter-spacing: .06em; text-transform: uppercase; margin: 14px 0 6px; }
+  .result .date { text-align: center; font-weight: 600; color: var(--ink-dim); margin-bottom: 8px; }
+  .result .style { display: table; margin: 0 auto 10px; font-size: .78rem; font-weight: 800; letter-spacing: .04em; padding: 4px 12px; border-radius: 99px; background: #fff; border: 1.5px solid var(--rose); color: var(--rose); }
+  .result .lede { text-align: center; font-size: .92rem; }
+  .result .tally { text-align: center; font-size: .85rem; font-weight: 700; margin: 8px 0 0; color: var(--ink-dim); }
+  .result h3 { font-family: var(--font-display); font-size: 1.15rem; letter-spacing: .06em; text-transform: uppercase; margin: 16px 0 6px; }
+  .verdicts { list-style: none; display: grid; gap: 8px; }
+  .verdicts li { display: flex; gap: 10px; align-items: center; background: var(--bg); border-radius: 14px; padding: 8px 12px; font-size: .86rem; }
+  .verdicts .gav { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; flex: none; box-shadow: 0 0 0 2px var(--ring); background: #fff; }
   .receipts { list-style: none; display: flex; flex-direction: column; gap: 8px; }
   .receipts li { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 9px 12px; font-size: .84rem; }
   .receipts li b { display: block; font-size: .88rem; }
   .receipts li .yr { color: var(--rose); font-weight: 700; font-size: .72rem; letter-spacing: .05em; }
+  .receipts li .chip { display: inline-block; font-size: .7rem; font-weight: 700; padding: 1px 8px; border-radius: 99px; color: #fff; margin-left: 6px; }
+  .receipts li .chip.calm { background: var(--calm); } .receipts li .chip.sarcastic { background: var(--sarc); } .receipts li .chip.firm { background: var(--firm); }
+  .receipts li .whatif { display: block; margin-top: 4px; font-size: .78rem; color: #2A7B49; font-weight: 600; }
   .result .note { font-size: .84rem; color: var(--ink-dim); margin-top: 12px; }
   .result .acts { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
 
-  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-
   @media (max-width: 880px) {
     .game { grid-template-columns: 1fr; max-width: 480px; }
-    .phone { order: 1; height: 72vh; }
+    .phone { order: 1; height: 78vh; }
     .bank { order: 2; }
     .g-list { max-height: none; overflow: visible; }
   }
@@ -142,32 +211,70 @@
 
 <header class="top">
   <h1>It's <em>Complicated</em></h1>
-  <p>The Colonies &times; King George III. Drag a grievance into the text bar, hit send, and see how he takes it. How many does it take before the relationship is over?</p>
+  <p>The Colonies &times; King George III. Pick a grievance, pick a tone, and see how he takes it. Your friends in the group chat have opinions. How long until the relationship is over?</p>
 </header>
 
 <main class="game">
-  <section class="phone" aria-label="Text conversation with King George III">
-    <div class="p-head">
-      <div class="avatar" aria-hidden="true">👑</div>
-      <div class="who">
-        <div class="name">King George III</div>
-        <div class="state" id="state">Happily Colonized 💕</div>
+  <section class="phone" aria-label="Messages">
+    <div class="tabs" role="group" aria-label="Chats">
+      <button class="tab active" id="tabKing" type="button" data-thread="king" aria-pressed="true">
+        <span class="av king" aria-hidden="true">👑</span><span class="lbl">King George</span><span class="badge" id="badgeKing" aria-hidden="true"></span>
+      </button>
+      <button class="tab" id="tabGroup" type="button" data-thread="group" aria-pressed="false">
+        <span class="av grp" aria-hidden="true"><span>🪁</span><span>📚</span><span>📣</span><span>✒️</span></span><span class="lbl">Colonies Group Chat</span><span class="badge" id="badgeGroup" aria-hidden="true"></span>
+      </button>
+    </div>
+    <span class="sr-only" id="unreadSr" role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></span>
+
+    <div class="viewport">
+      <div class="slider" id="slider">
+
+        <!-- King thread -->
+        <div class="slide" id="slideKing">
+          <div class="p-head">
+            <div class="avatar" aria-hidden="true">👑</div>
+            <div class="who">
+              <div class="name">King George III</div>
+              <div class="state" id="state">Happily Colonized 💕</div>
+            </div>
+          </div>
+          <div class="meter">
+            <div class="row"><span><span class="heart" id="heart">💗</span> England &amp; Colonies</span><span class="pct" id="pct">100%</span></div>
+            <div class="track" role="progressbar" aria-label="Relationship" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" id="track"><div class="fill" id="fill"></div></div>
+          </div>
+          <div class="chat" id="chat" role="log" aria-live="polite"></div>
+          <div class="tones" id="tones" role="group" aria-label="Choose a tone">
+            <button class="tone calm" type="button" data-tone="calm" aria-pressed="false">😌 Calm</button>
+            <button class="tone sarc" type="button" data-tone="sarcastic" aria-pressed="false">😏 Sarcastic</button>
+            <button class="tone firm" type="button" data-tone="firm" aria-pressed="false">💪 Firm</button>
+          </div>
+          <div class="composer" id="composer">
+            <div class="bar" id="bar"><span class="ph">Drag a grievance here&hellip;</span></div>
+            <button class="send" id="send" type="button" aria-label="Send message" disabled>&#10148;</button>
+          </div>
+        </div>
+
+        <!-- Group thread -->
+        <div class="slide" id="slideGroup">
+          <div class="p-head">
+            <div class="avatar grp" aria-hidden="true"><span>🪁</span><span>📚</span><span>📣</span><span>✒️</span></div>
+            <div class="who">
+              <div class="name">Colonies Group Chat</div>
+              <div class="state">Ben, John, Sam, Thomas &amp; you</div>
+            </div>
+          </div>
+          <div class="moods" id="moods" aria-label="How your friends feel about you"></div>
+          <div class="chat" id="gchat" role="log" aria-live="polite"></div>
+          <div class="g-foot">Read-only. Pick a grievance in the King's chat and your friends will weigh in.<br><button type="button" id="toKing">Back to King George &rarr;</button></div>
+        </div>
+
       </div>
-    </div>
-    <div class="meter">
-      <div class="row"><span><span class="heart" id="heart">💗</span> England &amp; Colonies</span><span class="pct" id="pct">100%</span></div>
-      <div class="track" role="progressbar" aria-label="Relationship" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" id="track"><div class="fill" id="fill"></div></div>
-    </div>
-    <div class="chat" id="chat" role="log" aria-live="polite"></div>
-    <div class="composer" id="composer">
-      <div class="bar" id="bar"><span class="ph">Drag a grievance here&hellip;</span></div>
-      <button class="send" id="send" type="button" aria-label="Send message" disabled>&#10148;</button>
     </div>
   </section>
 
   <aside class="bank" aria-label="Grievance bank">
     <h2>Grievance Bank</h2>
-    <p class="sub">Drag a card into the text bar (or tap a card), then press send. Each one is based on a real complaint from the colonists.</p>
+    <p class="sub">Drag a card into the text bar (or tap it), choose <b>Calm</b>, <b>Sarcastic</b> or <b>Firm</b>, then send. Each one is based on a real complaint from the colonists.</p>
     <div class="count" id="count"></div>
     <div class="g-list" id="gList"></div>
     <div class="tools">
@@ -181,12 +288,16 @@
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
   <div class="result">
     <div class="status">Relationship status</div>
-    <h2 id="resultTitle"><em>Independent</em> 🇺🇸</h2>
-    <div class="date">It's official: July 4, 1776</div>
-    <p style="text-align:center;font-size:.92rem">You sent <b id="sentCount">0</b> grievances before the Colonies broke up with the King. Here are your receipts:</p>
+    <h2 id="resultTitle"></h2>
+    <div class="date" id="resultDate"></div>
+    <div class="style" id="resultStyle"></div>
+    <p class="lede" id="resultLede"></p>
+    <p class="tally" id="resultTally"></p>
+    <h3>What your friends think</h3>
+    <ul class="verdicts" id="verdicts"></ul>
     <h3>The real history behind your texts</h3>
     <ul class="receipts" id="receipts"></ul>
-    <p class="note">The real Declaration of Independence lists about 27 grievances. Which ones did you <em>not</em> use? Which one do you think hurt the relationship most?</p>
+    <p class="note" id="resultNote"></p>
     <div class="acts">
       <button class="btn" id="again" type="button">Play again</button>
       <a class="btn alt" href="https://www.archives.gov/founding-docs/declaration-transcript" target="_blank" rel="noopener">Read the real Declaration</a>
@@ -199,79 +310,297 @@
 (function () {
   'use strict';
 
-  /* ================= CONTENT ================= */
+  /* ================= PEOPLE ================= */
+  var ADV = {
+    ben:   { name: 'Ben Franklin',  short: 'Ben',    emoji: '🪁', bg: '#DCF0F6', ring: '#2E8BA6' },
+    john:  { name: 'John Adams',    short: 'John',   emoji: '📚', bg: '#E8E4F8', ring: '#6A5ACD' },
+    sam:   { name: 'Sam Adams',     short: 'Sam',    emoji: '📣', bg: '#FCE3DA', ring: '#D9532C' },
+    paine: { name: 'Thomas Paine',  short: 'Thomas', emoji: '✒️', bg: '#FFF1CE', ring: '#C9910A' }
+  };
+  var ADV_IDS = ['ben', 'john', 'sam', 'paine'];
+
+  /* ================= GRIEVANCES =================
+     base  = how much a FIRM text drops the relationship (sarcastic = x1.3, calm = x0.35 unless calmDrop is set)
+     calm.conc = the King gives in (only if the relationship is still 35% or higher) */
   var GRIEVANCES = [
-    { id: 'tax', icon: '💸', title: 'Taxes without a vote', when: '1765 and 1767', delta: 15,
-      text: "You keep taxing us, but we don't even get a vote in Parliament. How is that fair?? 😤",
-      reply: "Parliament passed those taxes, not me. And my navy keeps you safe. You're welcome. 💅",
-      fact: "The Stamp Act (1765) and the Townshend taxes (1767) taxed colonists who had no elected representatives in Parliament." },
-    { id: 'quarter', icon: '🏠', title: 'Soldiers in our homes', when: '1765 and 1774', delta: 12,
-      text: "Why do your soldiers get to live in our houses and eat our food?? 🏠",
-      reply: "They need somewhere to sleep. It's called sharing. Teamwork! 🤝",
-      fact: "The Quartering Acts made colonists provide housing and supplies for British soldiers." },
-    { id: 'petition', icon: '✉️', title: 'Ignoring our petitions', when: '1775', delta: 18,
-      text: "We begged you to fix things. We sent the Olive Branch Petition and you wouldn't even read it. ✉️",
-      reply: "I didn't need to read it. I just called you all rebels instead. 🙃",
-      fact: "In 1775 Congress sent the Olive Branch Petition. King George refused to receive it and declared the colonies in rebellion." },
-    { id: 'assembly', icon: '🔇', title: 'Shutting down our assemblies', when: '1768 and 1769', delta: 10,
-      text: "Every time our colonial assemblies disagree with you, you shut them down. 🔇",
-      reply: "If you'd stop arguing with me, I wouldn't have to. Honestly, this is on you.",
-      fact: "Royal governors dissolved colonial assemblies, like Massachusetts in 1768 and Virginia in 1769, after they protested British policies." },
-    { id: 'burn', icon: '🔥', title: 'Burning our towns', when: '1775 and 1776', delta: 16,
-      text: "Your ships attacked our coast and burned our towns. People lost their homes. 🔥",
-      reply: "Rebellion has consequences. Maybe don't rebel? 🤷",
-      fact: "British ships shelled and burned Falmouth (now Portland, Maine) in 1775 and attacked Norfolk, Virginia in 1776." },
-    { id: 'trade', icon: '🚢', title: 'Only trade with England', when: '1600s to 1760s', delta: 10,
-      text: "You say we can only trade with England. Why can't we sell our stuff to anyone else? 🚢",
-      reply: "Because we're exclusive! I thought that's what a relationship was. 😘",
-      fact: "The Navigation Acts forced colonists to ship many goods through England. The Declaration complains about 'cutting off our Trade with all parts of the world.'" },
-    { id: 'port', icon: '⚓', title: 'Closing Boston Harbor', when: '1774', delta: 14,
-      text: "You shut down Boston's harbor until we pay for the tea. That punishes the whole city! ⚓",
-      reply: "You dumped 342 chests of my tea into the ocean. Do you know what that cost?",
-      fact: "After the Boston Tea Party (1773), the Boston Port Act (1774) closed the harbor until the tea was paid for." },
-    { id: 'hessians', icon: '💂', title: 'Hiring foreign soldiers', when: '1776', delta: 13,
-      text: "You hired thousands of German soldiers to fight us. We're supposed to be family!! 💂",
-      reply: "They're professionals, and they have great reviews. ⭐⭐⭐⭐",
-      fact: "Britain hired about 30,000 German soldiers, often called Hessians, to fight in the war." },
-    { id: 'jury', icon: '⚖️', title: 'No jury of our neighbors', when: '1760s and 1770s', delta: 11,
-      text: "You move our trials far away, or to courts with no jury, so we can't be judged by our neighbors. ⚖️",
-      reply: "England has excellent courts. I would know. I'm the king.",
-      fact: "Smuggling cases went to admiralty courts with no jury, and some trials were moved to England. The Declaration lists this as a grievance." },
-    { id: 'charter', icon: '📜', title: 'Rewriting our charter', when: '1774', delta: 11,
-      text: "You changed Massachusetts's government without asking us. That was our charter! 📜",
-      reply: "My colony, my rules. Read the fine print, sweetie.",
-      fact: "The Massachusetts Government Act (1774) cut the power of the colony's elected government after the Boston Tea Party." },
-    { id: 'army', icon: '🪖', title: 'Army in peacetime', when: 'After 1763', delta: 9,
-      text: "You keep a big army here even when there's no war, and nobody asked us. 🪖",
-      reply: "I'm protecting you! From France! And from yourselves, apparently.",
-      fact: "After the French and Indian War, Britain kept thousands of soldiers in the colonies. The Declaration objects to armies kept in peacetime without the legislatures' consent." },
-    { id: 'judges', icon: '👨‍⚖️', title: 'Judges who work for you', when: '1772', delta: 8,
-      text: "You control how much our judges get paid, so they have to do what you say. 👨‍⚖️",
-      reply: "Loyal judges are good judges. I don't see the problem.",
-      fact: "In 1772 the Crown began paying Massachusetts judges directly, so they depended on the King. The Declaration says he made judges dependent on his will alone." },
-    { id: 'west', icon: '🗺️', title: 'No moving west', when: '1763', delta: 8,
-      text: "You drew a line and said we can't settle west of the mountains. 🗺️",
-      reply: "That land belongs to Native nations I made peace with. Also, wars are expensive. 💸",
-      fact: "The Proclamation of 1763 banned colonial settlement west of the Appalachian Mountains to keep peace with Native nations and avoid costly wars." }
+    { id: 'tax', icon: '💸', title: 'Taxes without a vote', when: '1765 and 1767', base: 15,
+      fact: "The Stamp Act (1765) and the Townshend taxes (1767) taxed colonists who had no elected representatives in Parliament.",
+      tones: {
+        calm: { c: "We understand the war cost money, but we have no vote in Parliament. Could we help decide the taxes?",
+                k: "I hear you, but Parliament makes the laws for the whole empire. That includes you.",
+                conc: { k: "Fair point. I'll ask Parliament to cancel the Stamp Act. (The tea tax stays.)", gain: 10,
+                        real: "Real history: Parliament did repeal the Stamp Act in 1766, but it also passed the Declaratory Act and new taxes in 1767." } },
+        sarcastic: { c: "Oh sure, tax us more. We LOVE paying for decisions we weren't invited to make. 🙃",
+                     k: "Wow, the sarcasm. Maybe if you paid your share I wouldn't need to tax you. 💅" },
+        firm: { c: "We will not accept taxes from a Parliament we don't get to vote in. No taxation without representation.",
+                k: "Parliament passed those taxes, not me. And my navy keeps you safe. You're welcome." } } },
+    { id: 'quarter', icon: '🏠', title: 'Soldiers in our homes', when: '1765 and 1774', base: 12,
+      fact: "The Quartering Acts made colonists provide housing and supplies for British soldiers.",
+      tones: {
+        calm: { c: "Could your soldiers stay in barracks instead of our homes? Our families are crowded and worried.",
+                k: "Soldiers need somewhere to stay. It's a small ask for the protection you get.",
+                conc: { k: "Fine. I'll have them use barracks and rented buildings where I can.", gain: 8 } },
+        sarcastic: { c: "Great, thanks for the new roommates. They eat everything. 🍽️ Five stars.",
+                     k: "Roommate jokes? They're doing a job. Which you could thank them for. 🙄" },
+        firm: { c: "Your soldiers cannot live in our houses without our permission. That is not your right.",
+                k: "They need somewhere to sleep. It's called sharing. Teamwork! 🤝" } } },
+    { id: 'petition', icon: '✉️', title: 'Ignoring our petitions', when: '1775', base: 18, calmDrop: 14,
+      fact: "In 1775 Congress sent the Olive Branch Petition. King George refused to receive it and declared the colonies in rebellion.",
+      tones: {
+        calm: { c: "We are still loyal to you. Please read our Olive Branch Petition and help us find peace.",
+                k: "I won't even read it. I'm declaring you all rebels. Sorry." },
+        sarcastic: { c: "We sent a whole petition. But I guess reading is hard when you're a king. 📜🙄",
+                     k: "Cute petition. I used it as a coaster. ☕" },
+        firm: { c: "We have asked politely for years. If you ignore this petition, you are choosing war.",
+                k: "Threatening me? Now I'm SURE you're rebels. 😤" } } },
+    { id: 'assembly', icon: '🔇', title: 'Shutting down our assemblies', when: '1768 and 1769', base: 10,
+      fact: "Royal governors dissolved colonial assemblies, like Massachusetts in 1768 and Virginia in 1769, after they protested British policies.",
+      tones: {
+        calm: { c: "When our assemblies disagree with you, could you let them keep meeting? We just want a voice.",
+                k: "I'll think about it. Assemblies are a privilege, not a right.",
+                conc: { k: "Alright, I'll tell the governors to let them meet. Try to be nicer.", gain: 7 } },
+        sarcastic: { c: "Wow, shutting down our assemblies again? Democracy is so inconvenient for you. 🔇",
+                     k: "You can't talk to a king like that. Meeting adjourned. Forever. 🔇" },
+        firm: { c: "Our assemblies were elected by us. You cannot shut them down just because you disagree.",
+                k: "If you'd stop arguing with me, I wouldn't have to. Honestly, this is on you." } } },
+    { id: 'burn', icon: '🔥', title: 'Burning our towns', when: '1775 and 1776', base: 16, calmDrop: 10,
+      fact: "British ships shelled and burned Falmouth (now Portland, Maine) in 1775 and attacked Norfolk, Virginia in 1776.",
+      tones: {
+        calm: { c: "Please stop attacking our towns. People are losing their homes, and we don't want a war.",
+                k: "Then stop rebelling and it'll stop. Simple." },
+        sarcastic: { c: "Wow, burning towns is such a great way to show you care. 🔥👏",
+                     k: "Dramatic much? Rebellion has consequences, darling." },
+        firm: { c: "Stop attacking our towns, or the whole continent will stand against you.",
+                k: "Rebellion has consequences. Maybe don't rebel? 🤷" } } },
+    { id: 'trade', icon: '🚢', title: 'Only trade with England', when: '1600s to 1760s', base: 10,
+      fact: "The Navigation Acts forced colonists to ship many goods through England. The Declaration complains about 'cutting off our Trade with all parts of the world.'",
+      tones: {
+        calm: { c: "Could we trade with other countries, too? It would help our farmers and merchants, and England would still benefit.",
+                k: "England needs your goods first. Those are the rules.",
+                conc: { k: "Alright, I'll loosen a few trade rules. Don't get used to it.", gain: 8 } },
+        sarcastic: { c: "Sure, only trade with England. It's not like there's a whole world out there. 🌎",
+                     k: "The whole world? You couldn't handle it. Stay with me. 😏" },
+        firm: { c: "We have the right to trade with anyone. These trade limits must end.",
+                k: "Because we're exclusive! I thought that's what a relationship was. 😘" } } },
+    { id: 'port', icon: '⚓', title: 'Closing Boston Harbor', when: '1774', base: 14,
+      fact: "After the Boston Tea Party (1773), the Boston Port Act (1774) closed the harbor until the tea was paid for.",
+      tones: {
+        calm: { c: "Boston's harbor is closed and families can't earn a living. Could we work out a deal?",
+                k: "Pay for the tea, and we'll talk. Until then, it stays closed." },
+        sarcastic: { c: "Closing a whole harbor over some tea? Totally proportional. ⚓🙃",
+                     k: "Some tea? 342 chests of my tea are at the bottom of the ocean. 🫖" },
+        firm: { c: "Closing Boston's harbor punishes thousands of people who did nothing. Reopen it.",
+                k: "You dumped my tea in the ocean. Do you know what that cost?" } } },
+    { id: 'hessians', icon: '💂', title: 'Hiring foreign soldiers', when: '1776', base: 13, calmDrop: 9,
+      fact: "Britain hired about 30,000 German soldiers, often called Hessians, to fight in the war.",
+      tones: {
+        calm: { c: "Please don't send German soldiers against us. We are your own people.",
+                k: "I need enough soldiers to protect the empire. It's business." },
+        sarcastic: { c: "Hiring a foreign army to fight your own family. Very romantic. 💂💐",
+                     k: "They have great reviews. ⭐⭐⭐⭐ Better than yours." },
+        firm: { c: "Hiring foreign soldiers against your own people is a betrayal. We won't forget it.",
+                k: "They're professionals, and they have great reviews. ⭐⭐⭐⭐" } } },
+    { id: 'jury', icon: '⚖️', title: 'No jury of our neighbors', when: '1760s and 1770s', base: 11,
+      fact: "Smuggling cases went to admiralty courts with no jury, and some trials were moved to England. The Declaration lists this as a grievance.",
+      tones: {
+        calm: { c: "Could our trials stay here, with juries of our neighbors? It's an old English right.",
+                k: "England has excellent courts. I would know. I'm the king.",
+                conc: { k: "Hmm. A local jury is old English law. I'll look into it.", gain: 6 } },
+        sarcastic: { c: "Trials across the ocean? Great, I'll just swim to my court date. 🏊",
+                     k: "Swim faster. Court starts in London. ⚖️" },
+        firm: { c: "Every English subject has the right to a jury of neighbors. You cannot take that from us.",
+                k: "Courts in England are fair. I'm the king. I'd know." } } },
+    { id: 'charter', icon: '📜', title: 'Rewriting our charter', when: '1774', base: 11,
+      fact: "The Massachusetts Government Act (1774) cut the power of the colony's elected government after the Boston Tea Party.",
+      tones: {
+        calm: { c: "Massachusetts's charter was a promise. Could we keep our local government?",
+                k: "Charters are royal gifts. I can change them. That's how it works." },
+        sarcastic: { c: "You rewrote our government from across the ocean. Hope you didn't strain anything. 📜🙄",
+                     k: "I'm the king. I rewrite things. It's called a hobby. ✍️" },
+        firm: { c: "Our charter is a promise. You can't tear it up whenever you feel like it.",
+                k: "My colony, my rules. Read the fine print, sweetie." } } },
+    { id: 'army', icon: '🪖', title: 'Army in peacetime', when: 'After 1763', base: 9,
+      fact: "After the French and Indian War, Britain kept thousands of soldiers in the colonies. The Declaration objects to armies kept in peacetime without the legislatures' consent.",
+      tones: {
+        calm: { c: "Could the army go home while there's no war? We feel safe enough.",
+                k: "I'm protecting you from France and others. Please be grateful." },
+        sarcastic: { c: "Thanks for the soldiers. We were worried about being too peaceful. 🪖😒",
+                     k: "Peaceful? You? I've read your newspapers. 📰" },
+        firm: { c: "No army in peacetime without our consent. That is not negotiable.",
+                k: "I'm protecting you! From France! And from yourselves, apparently." } } },
+    { id: 'judges', icon: '👨‍⚖️', title: 'Judges who work for you', when: '1772', base: 8,
+      fact: "In 1772 the Crown began paying Massachusetts judges directly, so they depended on the King. The Declaration says he made judges dependent on his will alone.",
+      tones: {
+        calm: { c: "Judges should answer to the law, not just you. Could our assemblies pay them like before?",
+                k: "Loyal judges are good judges. I don't see the problem.",
+                conc: { k: "Fine. I'll think about letting colonial assemblies pay some of them again.", gain: 6 } },
+        sarcastic: { c: "Judges paid by the King judge in favor of the King? What a shocker. 👨‍⚖️",
+                     k: "I'm sure the judges are very unbiased. Totally. 😇" },
+        firm: { c: "Judges must be independent. We refuse to accept judges who work only for you.",
+                k: "Loyal judges are good judges. I don't see the problem." } } },
+    { id: 'west', icon: '🗺️', title: 'No moving west', when: '1763', base: 8,
+      fact: "The Proclamation of 1763 banned colonial settlement west of the Appalachian Mountains to keep peace with Native nations and avoid costly wars.",
+      tones: {
+        calm: { c: "Could we settle a little west of the mountains, while respecting Native nations' treaties?",
+                k: "That land belongs to Native nations I made peace with. Wars are expensive." },
+        sarcastic: { c: "Cool, so a line on a map is our new fence? How welcoming. 🏔️",
+                     k: "A line on a map is all that stands between us and another war. 🗺️" },
+        firm: { c: "We have the right to settle new land. That line must go.",
+                k: "That land belongs to Native nations I made peace with. Also, wars are expensive. 💸" } } }
   ];
   var BY_ID = {}; GRIEVANCES.forEach(function (g) { BY_ID[g.id] = g; });
 
+  var TONE_LABEL = { calm: '😌 Calm', sarcastic: '😏 Sarcastic', firm: '💪 Firm' };
+
   var FOLLOW = {
+    win: ["see? we can work this out 🥰", "that wasn't so hard 💕", "thank you for being reasonable 🥺"],
     hi:  ["we're good though, right? 🥺", "anyway, love you 💕", "miss you 😘"],
     mid: ["i'm not mad. 🙂", "we're fine. 🙂", "k. whatever you say."],
     lo:  ["…", "fine.", "do what you want."],
     end: ["k.", "…", "wow."]
   };
 
-  var BREAKUP = [
-    { w: 'c', t: "We need to talk." },
-    { w: 'k', t: "Is this about the tea? 🫖" },
-    { w: 'c', t: "It's about everything." },
-    { w: 'k', t: "You can't just leave. I'm the KING." },
-    { w: 'c', t: "We hold these truths to be self-evident, that all men are created equal." },
-    { w: 'c', t: "Governments get their power from the consent of the governed. And we don't consent anymore." },
-    { w: 'c', t: "We're breaking up with you. 💔  — The United States of America, July 4, 1776" },
-    { w: 'k', t: "k." }
+  /* ================= ADVISORS ================= */
+  var ADVICE = {
+    ben:   ["About \"{t}\": honey catches more flies than vinegar. Be calm and see what he offers. 🍯",
+            "On \"{t}\", I'd go calm. Even kings like being asked nicely.",
+            "Patience with \"{t}\"! If he gives an inch, we may gain a mile. 🪁",
+            "Go calm on \"{t}\". Save the fireworks for when we need them. ⚡"],
+    john:  ["On \"{t}\", cite the law, not your feelings. Stay calm and make the case. 📚",
+            "Be reasonable about \"{t}\". Good arguments don't need shouting.",
+            "Calm and principled, please. We want the law on our side. 📜",
+            "Keep \"{t}\" polite and logical. Reason first, always."],
+    sam:   ["\"{t}\"?! Don't back down. Be FIRM. He only respects pressure. 💪",
+            "Stay firm on \"{t}\". Every concession makes us look weak. 📣",
+            "The King doesn't listen to polite. Firm. Always firm.",
+            "Tell him \"{t}\" is NOT okay. Firm. Loud. Clear."],
+    paine: ["\"{t}\"? Absurd. Roast him a little. Sarcasm works. 😏",
+            "Be sarcastic about \"{t}\". Make him feel as silly as he looks. 🔥",
+            "A little sarcasm never hurt anyone. Except kings. 😈",
+            "He's a king by accident of birth. Mocking him about \"{t}\" is just common sense. ✒️"]
+  };
+
+  var MOOD_CHANGE = {
+    calm_win:  { ben: 2, john: 2, sam: -2, paine: -2 },
+    calm_fail: { ben: 0, john: 0, sam: 1,  paine: 1 },
+    sarcastic: { ben: -1, john: -1, sam: 1, paine: 2 },
+    firm:      { ben: -1, john: 0, sam: 2,  paine: 1 },
+    renege:    { ben: -1, john: -1, sam: 1, paine: 1 }
+  };
+
+  var REACT = {
+    ben: {
+      calm_win:  ["See? Honey beats vinegar! 🍯 He actually gave a little.", "Politeness worked! Every inch counts. 🪁"],
+      calm_fail: ["Hm. He didn't budge, but we showed we're reasonable. That matters.", "Not what we hoped, but history is watching how we behave. 🪁"],
+      sarcastic: ["Witty, but careful. Kings don't forgive being laughed at.", "I admire the wit. I fear the consequences. 😬"],
+      firm:      ["Firm is fine. Just don't let it turn into a fight.", "I would have gone softer, but I see your point."]
+    },
+    john: {
+      calm_win:  ["Reason and law. This is how disputes should be settled. 📚", "A fair argument earned a fair answer. Well done."],
+      calm_fail: ["Our case was sound. The refusal says more about him than us.", "We made our argument properly. Let it be on the record. 📜"],
+      sarcastic: ["Sarcasm weakens a good legal argument. Let's stay serious.", "A clever line, perhaps. But we must win minds, not laughs. 📚"],
+      firm:      ["Firm on principle is acceptable. Cite the law next time.", "A principled stand. I can support that. 📚"]
+    },
+    sam: {
+      calm_win:  ["A concession?! He's STALLING. Don't fall for it. 📣😠", "Soft talk, soft results. Don't get comfortable."],
+      calm_fail: ["Told you! He doesn't listen to polite. 📣", "See? Politeness gets us nowhere. Time to push harder."],
+      sarcastic: ["Ha! That's the spirit! Keep the pressure on. 📣", "He deserved that. Keep going."],
+      firm:      ["THAT'S how you do it! Never back down! 📣🔥", "Strong. Clear. Exactly what the King needs to hear."]
+    },
+    paine: {
+      calm_win:  ["Oh sure, he gave an inch. For now. Wake up. ✒️🙄", "Don't be fooled. A king's promise is wet paper."],
+      calm_fail: ["And once again he ignores you. Shocking. ✒️😏", "Sweet words, no results. As predicted."],
+      sarcastic: ["HA. Framing this one. ✒️🔥", "Now THAT'S common sense with a little spice. 😈"],
+      firm:      ["Solid. A bit dry, but solid. ✒️", "Good. Now add a joke next time. 😏"]
+    }
+  };
+
+  var PLEASED = { ben: "You're really getting the hang of diplomacy. 🪁💛", john: "Reason and law. This is how we win respect. 📚👏",
+                  sam: "THAT'S the spirit! Liberty or nothing! 📣🔥", paine: "Finally, someone with a backbone. Common sense! ✒️😎" };
+  var UPSET   = { ben: "I'm worried we're burning every bridge. 🪁😟", john: "I will not defend this behavior in Congress. 📚😠",
+                  sam: "You're being soft. The King is laughing at us. 📣😡", paine: "A concession? He's stalling. Wake up. ✒️🙄" };
+
+  var VERDICT = {
+    ben:   { hi: "You made diplomacy look easy. This kite is proud. 🪁💛", mid: "A few good moves, a few risky ones. Not bad, friend.", lo: "I wish you'd given talking a real chance. 🪁😔" },
+    john:  { hi: "Principled and reasonable. I'd happily argue beside you. 📚👏", mid: "Your case was decent. The tone could use some law school.", lo: "I can't defend that approach in front of Congress. 📚😤" },
+    sam:   { hi: "Now THAT'S how you stand up to a king! 📣🔥", mid: "You had some fire. I wanted more.", lo: "You went soft. The King sure didn't. 📣😒" },
+    paine: { hi: "Pure common sense and a few good burns. ✒️😎", mid: "Decent. I would have been meaner.", lo: "You trusted a king to listen. Adorable. ✒️🙄" }
+  };
+
+  var GROUP_INTRO = [
+    { w: 'sam',   t: "Welcome to the group chat, friend. Tell the King what we really think. 📣" },
+    { w: 'ben',   t: "Easy, Sam. A calm word can go a long way. 🪁" },
+    { w: 'paine', t: "Or a sharp one. Sarcasm is underrated. ✒️😏" },
+    { w: 'john',  t: "Let's keep it lawful and reasoned. The law is on our side. 📚" },
+    { w: 'ben',   t: "Tip: pick a grievance in the King's chat and we'll tell you how WE'D say it. 👀" }
+  ];
+
+  /* ================= ENDING (the break-up is always coming; your tone decides HOW) ================= */
+  var DECL_1 = { w: 'c', t: "We hold these truths to be self-evident, that all men are created equal." };
+  var DECL_2 = { w: 'c', t: "Governments get their power from the consent of the governed. And we don't consent anymore." };
+  var ENDING = {
+    scripts: {
+      defiant: [
+        { w: 'c', t: "We need to talk." },
+        { w: 'k', t: "Is this about the tea? 🫖" },
+        { w: 'c', t: "It's about everything." },
+        { w: 'k', t: "You can't just leave. I'm the KING." },
+        DECL_1, DECL_2,
+        { w: 'c', t: "We're breaking up with you. 💔  — The United States of America, July 4, 1776" },
+        { w: 'k', t: "k." }
+      ],
+      reluctant: [
+        { w: 'c', t: "We need to talk." },
+        { w: 'k', t: "Is this about the tea? 🫖" },
+        { w: 'c', t: "It's about everything." },
+        { w: 'k', t: "But you never said anything!" },
+        { w: 'c', t: "We tried. We really tried. We asked nicely, every time." },
+        { w: 'k', t: "Then why stop now?" },
+        { w: 'c', t: "Because you never really listened." },
+        DECL_1, DECL_2,
+        { w: 'c', t: "We're sorry it came to this. But we're breaking up with you. 💔  — The United States of America, July 4, 1776" },
+        { w: 'k', t: "…" }
+      ],
+      micdrop: [
+        { w: 'c', t: "We need to talk." },
+        { w: 'k', t: "Is this about the tea? 🫖" },
+        { w: 'c', t: "It's about everything. 😏" },
+        { w: 'k', t: "You can't just leave. I'm the KING." },
+        { w: 'c', t: "Watch us." },
+        DECL_1, DECL_2,
+        { w: 'c', t: "We're breaking up with you. Please don't text back. 💔  — The United States of America, July 4, 1776" },
+        { w: 'k', t: "k." }
+      ]
+    },
+    styles: {
+      defiant:   { label: 'Defiant Declaration 💪', note: "You stood your ground. Leaders like Sam Adams pushed back hard against British rule and urged colonists not to give in." },
+      reluctant: { label: 'Reluctant Revolutionaries 😔', note: "You tried everything first. Many colonists wanted to stay British until very late. Congress sent the Olive Branch Petition in 1775 and only declared independence a year later." },
+      micdrop:   { label: 'Mic Drop 😏', note: "You used wit as a weapon. Writers like Thomas Paine used sharp, bold language, and his pamphlet Common Sense helped turn public opinion toward independence." }
+    },
+    title: '<em>Independent</em> 🎆', date: "It's official: July 4, 1776",
+    lede: "The Colonies broke up with the King after {n} grievances.",
+    lastStraw: " You ran out of grievances, so the King delivered the last straw himself: the Prohibitory Act (December 1775) put the colonies outside his protection and blockaded their ports.",
+    note: "The real Declaration of Independence lists about 27 grievances. Which ones did you not use? Which one do you think hurt the relationship most?"
+  };
+
+  /* Concessions don't last: the King takes them back two turns later (this really happened a lot). */
+  var RENEGE = {
+    tax:      "Oh, about the Stamp Act… Parliament just passed the Declaratory Act. I can still tax you whenever I want. 😇",
+    quarter:  "About those barracks… budget cuts. The soldiers are back in your houses. 🤷",
+    assembly: "Remember letting your assemblies meet? The governors shut them down again. Not my fault.",
+    trade:    "Those loosened trade rules? Parliament tightened them again. Sorry! 🚢",
+    jury:     "The jury thing? It's \"under review.\" Forever. ⚖️",
+    judges:   "About letting you pay the judges… I changed my mind. 👨‍⚖️"
+  };
+  var REACT_RENEGE = {
+    ben:   ["Hm. That's disappointing. A promise is a promise. 🪁", "I hoped he'd keep his word. I should have known."],
+    john:  ["Breaking an agreement is a violation of good faith. 📚", "He gave his word, then took it back. Write that down."],
+    sam:   ["TOLD YOU. He was stalling the whole time. 📣", "CALLED IT. Never trust a king's promise."],
+    paine: ["Shocking. A king broke a promise. Alert the newspapers. ✒️😏", "Wet paper. I said it. Wet. Paper."]
+  };
+  var LAST_STRAW_GROUP = [
+    { w: 'sam',  t: "He declared us out of his protection. That's it. We're done. 📣" },
+    { w: 'john', t: "A king who withdraws his protection has abandoned his duty. The law is on our side now. 📚" }
   ];
 
   function statusFor(m) {
@@ -282,10 +611,15 @@
     if (m < 80)  return "It's... fine 🙂";
     return 'Happily Colonized 💕';
   }
+  function faceFor(v) { return v >= 3 ? '😄' : v >= 1 ? '🙂' : v === 0 ? '😐' : v >= -2 ? '😒' : '😠'; }
 
   /* ================= STATE ================= */
-  var KEY = 'ushistory:its-complicated:v1';
-  function fresh() { return { meter: 100, sent: [], msgs: [], pending: null, bstep: 0, over: false }; }
+  var KEY = 'ushistory:its-complicated:v2';
+  function fresh() {
+    return { meter: 100, sent: [], log: {}, msgs: [], gmsgs: [], unread: { king: 0, group: 0 },
+             mood: { ben: 0, john: 0, sam: 0, paine: 0 }, advised: [], flags: {}, pending: null,
+             bstep: 0, ending: null, style: null, lastStraw: false, reneges: [], over: false, thread: 'king', introDone: false };
+  }
   function load() {
     var s = fresh();
     try {
@@ -293,10 +627,22 @@
       if (d && typeof d.meter === 'number') {
         s.meter = Math.max(0, Math.min(100, d.meter));
         s.sent = (d.sent || []).filter(function (id) { return BY_ID[id]; });
+        s.log = d.log && typeof d.log === 'object' ? d.log : {};
         s.msgs = (d.msgs || []).filter(function (m) { return m && (m.w === 'c' || m.w === 'k') && typeof m.t === 'string'; });
-        s.pending = BY_ID[d.pending] ? d.pending : null;
-        s.bstep = Math.max(0, Math.min(BREAKUP.length, d.bstep | 0));
+        s.gmsgs = (d.gmsgs || []).filter(function (m) { return m && ADV[m.w] && typeof m.t === 'string'; });
+        s.unread = { king: Math.max(0, (d.unread && d.unread.king) | 0), group: Math.max(0, (d.unread && d.unread.group) | 0) };
+        ADV_IDS.forEach(function (id) { var v = d.mood && d.mood[id]; s.mood[id] = typeof v === 'number' ? Math.max(-6, Math.min(6, v)) : 0; });
+        s.advised = (d.advised || []).filter(function (id) { return BY_ID[id]; });
+        s.flags = d.flags && typeof d.flags === 'object' ? d.flags : {};
+        s.pending = d.pending && BY_ID[d.pending.id] && d.pending.tone ? { id: d.pending.id, tone: d.pending.tone } : null;
+        s.bstep = Math.max(0, d.bstep | 0);
+        s.ending = d.ending === 'breakup' ? 'breakup' : null;
+        s.style = ENDING.scripts[d.style] ? d.style : null;
+        s.lastStraw = !!d.lastStraw;
+        s.reneges = (d.reneges || []).filter(function (r) { return r && RENEGE[r.id] && typeof r.due === 'number'; });
         s.over = !!d.over;
+        s.thread = d.thread === 'group' ? 'group' : 'king';
+        s.introDone = !!d.introDone;
       }
     } catch (e) { /* start fresh */ }
     return s;
@@ -304,47 +650,121 @@
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* storage blocked */ } }
 
   var state = load();
-  var busy = false, fast = false, loaded = null;
+  var busy = false, fast = false, loaded = null;   // loaded = { g, tone }
 
   /* ================= DOM ================= */
   var $ = function (id) { return document.getElementById(id); };
-  var chat = $('chat'), bar = $('bar'), composer = $('composer'), sendBtn = $('send');
+  var chat = $('chat'), gchat = $('gchat'), bar = $('bar'), composer = $('composer'), sendBtn = $('send'), tonesEl = $('tones');
 
   function sleep(ms) { return new Promise(function (r) { setTimeout(r, fast ? 0 : ms); }); }
-  function scrollDown() { chat.scrollTop = chat.scrollHeight; }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
   function clock(n) {
     var mins = 9 * 60 + 41 + n * 2, h = Math.floor(mins / 60) % 24, m = mins % 60;
     return ((h % 12) || 12) + ':' + (m < 10 ? '0' : '') + m + (h < 12 ? ' AM' : ' PM');
   }
-  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
+  function scrollDown(c) { c.scrollTop = c.scrollHeight; }
 
+  /* ---------- King thread ---------- */
   function drawMsg(m, idx) {
     if (idx % 4 === 0) chat.appendChild(el('div', 'time', clock(idx)));
-    chat.appendChild(el('div', 'msg ' + m.w, m.t));
+    chat.appendChild(el('div', 'msg ' + m.w + (m.win ? ' win' : ''), m.t));
   }
   function setReceipt(text) {
     var old = chat.querySelector('.receipt'); if (old) old.remove();
-    var last = null, kids = chat.querySelectorAll('.msg.c');
-    if (kids.length) last = kids[kids.length - 1];
-    if (!last || !text) return;
-    var r = el('div', 'receipt', text);
-    last.insertAdjacentElement('afterend', r);
+    var kids = chat.querySelectorAll('.msg.c');
+    if (!kids.length || !text) return;
+    kids[kids.length - 1].insertAdjacentElement('afterend', el('div', 'receipt', text));
   }
-  function addMsg(w, t) {
-    var m = { w: w, t: t };
+  function addMsg(w, t, win) {
+    var m = { w: w, t: t }; if (win) m.win = true;
     state.msgs.push(m);
     var old = chat.querySelector('.receipt'); if (w === 'c' && old) old.remove();
     drawMsg(m, state.msgs.length - 1);
-    scrollDown(); save();
+    scrollDown(chat);
+    if (w === 'k' && state.thread !== 'king') bumpUnread('king');
+    save();
   }
   function showTyping() {
     hideTyping();
     var t = el('div', 'msg k typing'); t.id = 'typing'; t.setAttribute('aria-label', 'King George is typing');
     t.innerHTML = '<span></span><span></span><span></span>';
-    chat.appendChild(t); scrollDown();
+    chat.appendChild(t); scrollDown(chat);
   }
   function hideTyping() { var t = $('typing'); if (t) t.remove(); }
+  function typingMs(t) { return Math.min(2600, 900 + t.length * 18); }
+  async function kingSays(text, pause, win) {
+    showTyping(); await sleep(pause || typingMs(text)); hideTyping(); addMsg('k', text, win);
+  }
 
+  /* ---------- Group thread ---------- */
+  function gRow(who, text) {
+    var a = ADV[who];
+    var row = el('div', 'gmsg'); row.style.setProperty('--bg', a.bg); row.style.setProperty('--ring', a.ring);
+    var av = el('div', 'gav', a.emoji); av.setAttribute('aria-hidden', 'true');
+    var col = el('div', 'gcol'); col.appendChild(el('div', 'gname', a.name));
+    col.appendChild(el('div', 'gb', text));
+    row.appendChild(av); row.appendChild(col);
+    return row;
+  }
+  function gAdd(who, text) {
+    state.gmsgs.push({ w: who, t: text });
+    gchat.appendChild(gRow(who, text));
+    scrollDown(gchat);
+    if (state.thread !== 'group') bumpUnread('group');
+    save();
+  }
+  function gTyping(who) {
+    gHideTyping();
+    var a = ADV[who];
+    var row = gRow(who, ''); row.classList.add('typing-row'); row.id = 'gtyping';
+    var gb = row.querySelector('.gb'); gb.innerHTML = '<span></span><span></span><span></span>';
+    gchat.appendChild(row); scrollDown(gchat);
+  }
+  function gHideTyping() { var t = $('gtyping'); if (t) t.remove(); }
+  async function gSay(who, text, pause) {
+    gTyping(who); await sleep(pause || Math.min(2200, 800 + text.length * 14)); gHideTyping(); gAdd(who, text);
+  }
+  var gq = Promise.resolve();
+  function enqueueG(fn) { gq = gq.then(fn).catch(function () { /* keep the queue alive */ }); return gq; }
+
+  /* ---------- Unread badges + thread switching ---------- */
+  function paintBadges() {
+    [['king', 'badgeKing', 'tabKing'], ['group', 'badgeGroup', 'tabGroup']].forEach(function (p) {
+      var n = state.unread[p[0]], b = $(p[1]);
+      b.textContent = n > 9 ? '9+' : String(n);
+      b.classList.toggle('on', n > 0);
+    });
+    var gk = state.unread.group, kk = state.unread.king;
+    $('tabGroup').setAttribute('aria-label', 'Colonies Group Chat' + (gk ? ', ' + gk + ' unread' : ''));
+    $('tabKing').setAttribute('aria-label', 'King George' + (kk ? ', ' + kk + ' unread' : ''));
+  }
+  function bumpUnread(which) {
+    state.unread[which]++;
+    paintBadges();
+    var tab = $(which === 'king' ? 'tabKing' : 'tabGroup');
+    tab.classList.remove('ring'); void tab.offsetWidth; tab.classList.add('ring');
+  }
+  function switchThread(name, quiet) {
+    state.thread = name;
+    state.unread[name] = 0;
+    $('slider').classList.toggle('group', name === 'group');
+    $('tabKing').classList.toggle('active', name === 'king');
+    $('tabGroup').classList.toggle('active', name === 'group');
+    $('tabKing').setAttribute('aria-pressed', String(name === 'king'));
+    $('tabGroup').setAttribute('aria-pressed', String(name === 'group'));
+    paintBadges();
+    // keep the hidden pane out of the tab order
+    $('slideKing').inert = name !== 'king';
+    $('slideGroup').inert = name !== 'group';
+    setTimeout(function () { scrollDown(name === 'group' ? gchat : chat); }, quiet ? 0 : 60);
+    save();
+  }
+  $('tabKing').addEventListener('click', function () { switchThread('king'); });
+  $('tabGroup').addEventListener('click', function () { switchThread('group'); });
+  $('toKing').addEventListener('click', function () { switchThread('king'); });
+
+  /* ---------- Meters ---------- */
   function paintMeter(animate) {
     var m = state.meter;
     $('fill').style.width = m + '%';
@@ -355,30 +775,45 @@
     $('heart').textContent = m >= 40 ? '💗' : (m > 0 ? '💔' : '🖤');
     if (animate) { var h = $('heart'); h.classList.remove('bump'); void h.offsetWidth; h.classList.add('bump'); }
   }
+  function paintMoods() {
+    var box = $('moods'); box.textContent = '';
+    ADV_IDS.forEach(function (id) {
+      var a = ADV[id], v = state.mood[id];
+      var d = el('div', 'mood');
+      var face = el('div', 'face', a.emoji); face.style.background = a.bg; face.style.setProperty('--ring', v >= 1 ? '#3FA66B' : v <= -1 ? '#D9453C' : '#CFC7DA');
+      var f = el('i', null, faceFor(v)); face.appendChild(f);
+      d.appendChild(face); d.appendChild(el('div', null, a.short));
+      var bar = el('div', 'mbar'), b = el('b'); b.style.width = Math.round(((v + 6) / 12) * 100) + '%';
+      b.style.backgroundColor = v >= 1 ? '#3FA66B' : v <= -1 ? '#D9453C' : '#B9AEC9';
+      bar.appendChild(b); d.appendChild(bar);
+      d.setAttribute('aria-label', a.name + ' feels ' + (v >= 1 ? 'happy' : v <= -1 ? 'upset' : 'neutral') + ' about you');
+      box.appendChild(d);
+    });
+  }
 
+  /* ---------- Bank, bar, tones ---------- */
   function renderBank() {
     var list = $('gList'); list.textContent = '';
     GRIEVANCES.forEach(function (g) {
       var used = state.sent.indexOf(g.id) !== -1;
-      var b = el('button', 'g-card' + (used ? ' used' : '') + (loaded && loaded.id === g.id ? ' selected' : ''));
+      var b = el('button', 'g-card' + (used ? ' used' : '') + (loaded && loaded.g.id === g.id ? ' selected' : ''));
       b.type = 'button'; b.dataset.id = g.id; if (used) b.disabled = true;
-      b.setAttribute('aria-label', g.title + '. ' + g.text);
+      b.setAttribute('aria-label', g.title + '. ' + g.tones.firm.c);
       var grip = el('span', 'grip', '⠿'); grip.setAttribute('aria-hidden', 'true');
       var body = el('span', 'body');
-      var title = el('span', 'title'); var ico = el('span', 'ico', g.icon); title.appendChild(ico); title.appendChild(document.createTextNode(g.title));
-      body.appendChild(title);
-      body.appendChild(el('span', 'when', g.when));
-      body.appendChild(el('span', 'txt', g.text));
+      var title = el('span', 'title'); title.appendChild(el('span', 'ico', g.icon)); title.appendChild(document.createTextNode(g.title));
+      body.appendChild(title); body.appendChild(el('span', 'when', g.when));
       b.appendChild(grip); b.appendChild(body);
       list.appendChild(b);
     });
     $('count').textContent = state.sent.length + ' of ' + GRIEVANCES.length + ' grievances sent';
   }
-
   function renderBar() {
     bar.textContent = '';
     if (loaded) {
-      bar.appendChild(el('span', 'loaded', loaded.text));
+      var tone = loaded.tone;
+      var txt = tone ? loaded.g.tones[tone].c : loaded.g.icon + ' ' + loaded.g.title + ' — now pick a tone';
+      bar.appendChild(el('span', 'loaded' + (tone ? '' : ' waiting'), txt));
       var x = el('button', 'clear', '✕'); x.type = 'button'; x.setAttribute('aria-label', 'Remove grievance from text bar');
       x.addEventListener('click', function () { setLoaded(null); });
       bar.appendChild(x);
@@ -386,40 +821,133 @@
       bar.appendChild(el('span', 'ph', 'Drag a grievance here…'));
     }
     composer.classList.toggle('has', !!loaded);
-    sendBtn.disabled = !loaded || busy || state.over;
+    tonesEl.classList.toggle('show', !!loaded);
+    tonesEl.querySelectorAll('.tone').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(!!loaded && loaded.tone === b.dataset.tone));
+      b.disabled = busy;
+    });
+    sendBtn.disabled = !loaded || !loaded.tone || busy || !!state.ending;
   }
-  function setLoaded(g) { if (busy || state.over) return; loaded = g; renderBar(); renderBank(); }
+  function setLoaded(g) {
+    if (busy || state.ending) return;
+    loaded = g ? { g: g, tone: null } : null;
+    renderBar(); renderBank();
+    if (g) adviseOn(g);
+  }
+  tonesEl.addEventListener('click', function (e) {
+    var b = e.target.closest('.tone'); if (!b || !loaded || busy) return;
+    loaded.tone = b.dataset.tone; renderBar();
+  });
 
-  function renderChat() {
+  function adviseOn(g) {
+    if (state.advised.indexOf(g.id) !== -1) return;
+    state.advised.push(g.id); save();
+    var picks = ADV_IDS.slice().sort(function () { return Math.random() - .5; }).slice(0, 2);
+    picks.forEach(function (who) {
+      enqueueG(function () { return gSay(who, pick(ADVICE[who]).replace(/\{t\}/g, g.title.toLowerCase())); });
+    });
+  }
+
+  function renderChats() {
     chat.textContent = '';
     chat.appendChild(el('div', 'divider', '1763 · The French and Indian War just ended. You and the King are still in the honeymoon phase.'));
     state.msgs.forEach(drawMsg);
     setReceipt(state.msgs.some(function (m) { return m.w === 'c'; }) ? 'Read' : '');
-    scrollDown();
+    gchat.textContent = '';
+    gchat.appendChild(el('div', 'divider', 'Colonies Group Chat · You were added by Sam Adams'));
+    state.gmsgs.forEach(function (m) { gchat.appendChild(gRow(m.w, m.t)); });
+    scrollDown(chat); scrollDown(gchat);
   }
 
   /* ================= GAME FLOW ================= */
-  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-  function typingMs(t) { return Math.min(2600, 900 + t.length * 18); }
-
-  async function kingSays(text, pause) {
-    showTyping(); await sleep(pause || typingMs(text)); hideTyping(); addMsg('k', text);
+  function outcomeFor(g, tone) {
+    if (tone === 'calm') {
+      var cc = g.tones.calm.conc;
+      if (cc && state.meter >= 35) return { key: 'calm_win', k: cc.k, delta: -cc.gain, win: true };
+      return { key: 'calm_fail', k: g.tones.calm.k, delta: g.calmDrop || Math.round(g.base * 0.35) };
+    }
+    if (tone === 'sarcastic') return { key: 'sarcastic', k: g.tones.sarcastic.k, delta: Math.round(g.base * 1.3) };
+    return { key: 'firm', k: g.tones.firm.k, delta: g.base };
   }
 
-  async function replyFor(g) {
-    await kingSays(g.reply);
-    state.meter = Math.max(0, state.meter - g.delta); state.pending = null; save();
+  function applyMood(key) {
+    var ch = MOOD_CHANGE[key], before = {};
+    ADV_IDS.forEach(function (id) { before[id] = state.mood[id]; state.mood[id] = Math.max(-6, Math.min(6, state.mood[id] + ch[id])); });
+    paintMoods();
+    return ch;
+  }
+  function postReactions(key, ch) {
+    var order = ADV_IDS.slice().sort(function (a, b) { return Math.abs(ch[b]) - Math.abs(ch[a]) || Math.random() - .5; }).slice(0, 2);
+    order.forEach(function (who) { enqueueG(function () { return gSay(who, pick(REACT[who][key])); }); });
+    // one-time "pleased" / "upset" moments
+    ADV_IDS.forEach(function (who) {
+      if (state.mood[who] >= 4 && !state.flags['p' + who]) { state.flags['p' + who] = 1; enqueueG(function () { return gSay(who, PLEASED[who]); }); }
+      if (state.mood[who] <= -4 && !state.flags['u' + who]) { state.flags['u' + who] = 1; enqueueG(function () { return gSay(who, UPSET[who]); }); }
+    });
+    save();
+  }
+
+  async function replyFor(g, tone) {
+    var o = outcomeFor(g, tone);
+    await kingSays(o.k, null, o.win);
+    state.meter = Math.max(0, Math.min(100, state.meter - o.delta));
+    state.log[g.id] = { tone: tone, outcome: o.key };
+    if (o.win) state.reneges.push({ id: g.id, due: state.sent.length + 2 });
+    state.pending = null; save();
     paintMeter(true);
-    if (state.meter <= 0) { await runBreakup(); return; }
+    var ch = applyMood(o.key);
+    postReactions(o.key, ch);
+    if (state.meter <= 0) { await runEnding('breakup'); return; }
     await sleep(550);
-    var tier = state.meter >= 70 ? FOLLOW.hi : (state.meter >= 40 ? FOLLOW.mid : (state.meter >= 15 ? FOLLOW.lo : FOLLOW.end));
-    await kingSays(pick(tier), 900);
+    var line = o.win ? pick(FOLLOW.win) : pick(state.meter >= 70 ? FOLLOW.hi : (state.meter >= 40 ? FOLLOW.mid : (state.meter >= 15 ? FOLLOW.lo : FOLLOW.end)));
+    await kingSays(line, 900);
+    if (await maybeRenege(false)) return;
+    if (state.sent.length >= GRIEVANCES.length) {
+      if (await maybeRenege(true)) return;
+      await lastStraw();
+    }
   }
 
-  async function runBreakup() {
+  // The King takes back concessions after a couple of turns (or all at once when the bank runs out).
+  async function maybeRenege(all) {
+    var due = state.reneges.filter(function (r) { return all || state.sent.length >= r.due; });
+    for (var i = 0; i < due.length; i++) {
+      var r = due[i], g = BY_ID[r.id];
+      state.reneges = state.reneges.filter(function (x) { return x !== r && x.id !== r.id; });
+      await sleep(700);
+      await kingSays(RENEGE[r.id], 1400);
+      state.meter = Math.max(0, state.meter - (g.tones.calm.conc.gain + 3));
+      if (state.log[r.id]) state.log[r.id].reneged = true;
+      save(); paintMeter(true);
+      var ch = applyMood('renege');
+      postReactions('renege', ch);
+      if (state.meter <= 0) { await runEnding('breakup'); return true; }
+    }
+    return false;
+  }
+
+  async function lastStraw() {
     await sleep(900);
-    while (state.bstep < BREAKUP.length) {
-      var step = BREAKUP[state.bstep];
+    await kingSays("Okay. I'm done being nice. 😤", 1100);
+    await kingSays("As of today, you're out of my protection. Your ports are blockaded. Enjoy the cold shoulder.", 1700);
+    state.lastStraw = true; state.meter = 0; save(); paintMeter(true);
+    LAST_STRAW_GROUP.forEach(function (m) { enqueueG(function () { return gSay(m.w, m.t, 1000); }); });
+    await runEnding('breakup');
+  }
+
+  function computeStyle() {
+    var c = { calm: 0, sarcastic: 0, firm: 0 };
+    state.sent.forEach(function (id) { var l = state.log[id]; if (l) c[l.tone]++; });
+    if (c.calm > 0 && c.calm >= c.sarcastic && c.calm >= c.firm) return 'reluctant';
+    if (c.sarcastic > c.firm && c.sarcastic > c.calm) return 'micdrop';
+    return 'defiant';
+  }
+  async function runEnding(kind) {
+    state.ending = 'breakup'; if (!state.style) state.style = computeStyle(); save();
+    var script = ENDING.scripts[state.style];
+    await sleep(900);
+    while (state.bstep < script.length) {
+      var step = script[state.bstep];
       if (step.w === 'c') { await sleep(1100); addMsg('c', step.t); setReceipt('Read'); }
       else { await kingSays(step.t, 1100); }
       state.bstep++; save();
@@ -430,59 +958,77 @@
   }
 
   async function send() {
-    if (busy || !loaded || state.over) return;
+    if (busy || !loaded || !loaded.tone || state.ending) return;
     busy = true;
-    var g = loaded; loaded = null;
-    state.sent.push(g.id); state.pending = g.id;
+    var g = loaded.g, tone = loaded.tone; loaded = null;
+    state.sent.push(g.id); state.pending = { id: g.id, tone: tone };
     renderBar(); renderBank();
-    addMsg('c', g.text); setReceipt('Delivered');
+    addMsg('c', g.tones[tone].c); setReceipt('Delivered');
     await sleep(700); setReceipt('Read');
     await sleep(500);
-    await replyFor(g);
+    await replyFor(g, tone);
     busy = false; renderBar();
   }
+  sendBtn.addEventListener('click', send);
 
   /* ================= RESULT ================= */
   function showResult() {
-    $('sentCount').textContent = state.sent.length;
+    var E = ENDING, S = E.styles[state.style || 'defiant'];
+    $('resultTitle').innerHTML = E.title;
+    $('resultDate').textContent = E.date;
+    $('resultStyle').textContent = 'How you broke up: ' + S.label;
+    $('resultLede').textContent = E.lede.replace('{n}', state.sent.length) + (state.lastStraw ? E.lastStraw : '');
+    var counts = { calm: 0, sarcastic: 0, firm: 0 }, wins = 0, taken = 0;
+    state.sent.forEach(function (id) { var l = state.log[id]; if (l) { counts[l.tone]++; if (l.outcome === 'calm_win') { wins++; if (l.reneged) taken++; } } });
+    $('resultTally').textContent = '😌 ' + counts.calm + ' calm · 😏 ' + counts.sarcastic + ' sarcastic · 💪 ' + counts.firm + ' firm · 🤝 ' + wins + ' concession' + (wins === 1 ? '' : 's') + ' won' + (wins ? ' (' + taken + ' taken back)' : '');
+
+    var vs = $('verdicts'); vs.textContent = '';
+    ADV_IDS.forEach(function (id) {
+      var a = ADV[id], v = state.mood[id];
+      var li = el('li'); li.style.setProperty('--bg', a.bg); li.style.setProperty('--ring', a.ring);
+      var av = el('span', 'gav', a.emoji);
+      var tx = el('span'); var nm = el('b', null, a.name + ' ' + faceFor(v) + ': '); tx.appendChild(nm);
+      tx.appendChild(document.createTextNode(VERDICT[id][v >= 3 ? 'hi' : v <= -3 ? 'lo' : 'mid']));
+      li.appendChild(av); li.appendChild(tx); vs.appendChild(li);
+    });
+
     var ul = $('receipts'); ul.textContent = '';
     state.sent.forEach(function (id) {
-      var g = BY_ID[id], li = el('li');
-      var yr = el('span', 'yr', g.when.toUpperCase());
-      var b = el('b', null, g.icon + ' ' + g.title);
-      li.appendChild(yr); li.appendChild(b); li.appendChild(document.createTextNode(g.fact));
+      var g = BY_ID[id], l = state.log[id] || { tone: 'firm', outcome: 'firm' }, li = el('li');
+      li.appendChild(el('span', 'yr', g.when.toUpperCase()));
+      var b = el('b', null, g.icon + ' ' + g.title); b.appendChild(el('span', 'chip ' + l.tone, TONE_LABEL[l.tone]));
+      li.appendChild(b); li.appendChild(document.createTextNode(g.fact));
+      if (l.outcome === 'calm_win') {
+        li.appendChild(el('span', 'whatif', '🤝 The King gave in during the game. ' + (g.tones.calm.conc.real || 'What-if: in real history, he did not agree to this.') + (l.reneged ? ' Then he took it back.' : '')));
+      }
       ul.appendChild(li);
     });
+    $('resultNote').textContent = S.note + ' ' + E.note;
     $('overlay').classList.add('show');
-    $('again').focus();
+    $('overlay').querySelector('.result').scrollTop = 0;
+    $('again').focus({ preventScroll: true });
   }
   $('closeResult').addEventListener('click', function () { $('overlay').classList.remove('show'); });
   $('again').addEventListener('click', reset);
+  function reset() { try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ } location.reload(); }
 
-  function reset() {
-    try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
-    location.reload();
-  }
-
-  /* ================= INPUT: tap, send, drag ================= */
+  /* ================= INPUT: tap + drag ================= */
+  var drag = null, dragMoved = false;
   document.addEventListener('click', function (e) {
     var card = e.target.closest && e.target.closest('.g-card');
     if (card && !dragMoved) {
       var g = BY_ID[card.dataset.id];
-      setLoaded(loaded && loaded.id === g.id ? null : g);
+      setLoaded(loaded && loaded.g.id === g.id ? null : g);
     }
     dragMoved = false;
   });
-  sendBtn.addEventListener('click', send);
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' && loaded && !busy && !(e.target.closest && e.target.closest('.g-card, .clear, button, a'))) { e.preventDefault(); send(); }
+    if (e.key === 'Enter' && loaded && loaded.tone && !busy && !(e.target.closest && e.target.closest('.g-card, .clear, button, a'))) { e.preventDefault(); send(); }
     if (e.key === 'Escape') { if (drag) endDrag(false); else if ($('overlay').classList.contains('show')) $('overlay').classList.remove('show'); }
   });
-
-  var drag = null, dragMoved = false;
   document.addEventListener('pointerdown', function (e) {
     var card = e.target.closest && e.target.closest('.g-card');
-    if (!card || card.classList.contains('ghost') || busy || state.over) return;
+    if (!card || card.classList.contains('ghost') || busy || state.ending) return;
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     if (e.pointerType === 'touch' && !e.target.closest('.grip')) return;   // keep the list scrollable on touch
     drag = { id: card.dataset.id, card: card, x: e.clientX, y: e.clientY, started: false, ghost: null, offX: 0, offY: 0 };
@@ -497,6 +1043,7 @@
       document.body.appendChild(g); drag.ghost = g;
       drag.card.classList.add('dragging'); document.body.classList.add('is-dragging');
       if (window.getSelection) window.getSelection().removeAllRanges();
+      if (state.thread !== 'king') switchThread('king');     // the text bar lives in the King's chat
     }
     e.preventDefault();
     drag.ghost.style.transform = 'translate(' + (e.clientX - drag.offX) + 'px,' + (e.clientY - drag.offY) + 'px) rotate(-2deg)';
@@ -519,20 +1066,30 @@
   /* ================= RESTART ================= */
   $('restart').addEventListener('click', function () { $('restart').style.display = 'none'; $('restartConfirm').style.display = 'inline'; });
   $('restartNo').addEventListener('click', function () { $('restartConfirm').style.display = 'none'; $('restart').style.display = ''; });
-  $('restartYes').addEventListener('click', function () { $('restartConfirm').style.display = 'none'; $('restart').style.display = ''; reset(); });
+  $('restartYes').addEventListener('click', reset);
 
   /* ================= START ================= */
   async function start() {
-    renderChat(); paintMeter(false); renderBank(); renderBar();
+    renderChats(); paintMeter(false); paintMoods(); renderBank(); renderBar();
+    switchThread(state.thread, true);
     busy = true;
     if (!state.msgs.length) {
       await sleep(500); await kingSays('Good morning, my beloved colonies! ☀️💕', 900);
       await sleep(300); await kingSays('Thirteen of you, and I love every single one. Never change!', 1300);
     }
+    if (!state.introDone) {
+      state.introDone = true; save();
+      await sleep(900);
+      GROUP_INTRO.forEach(function (m) { enqueueG(function () { return gSay(m.w, m.t, 1100); }); });
+    }
     // resume anything interrupted by a refresh, instantly
     fast = true;
-    if (state.pending) { var g = BY_ID[state.pending]; if (state.msgs.length && state.msgs[state.msgs.length - 1].t === g.text) await replyFor(g); else { state.pending = null; save(); } }
-    if (state.meter <= 0 && !state.over) { fast = false; await runBreakup(); }
+    if (state.pending) {
+      var p = state.pending, g = BY_ID[p.id];
+      var last = state.msgs[state.msgs.length - 1];
+      if (g && last && last.t === g.tones[p.tone].c) await replyFor(g, p.tone); else { state.pending = null; save(); }
+    }
+    if (state.ending && !state.over) { fast = false; await runEnding(state.ending); }
     fast = false;
     if (state.over) showResult();
     busy = false; renderBar();
