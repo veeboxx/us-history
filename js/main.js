@@ -56,13 +56,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* --- Active nav highlight --- */
-  // Map any path to a nav section: everything under /stories/ counts as "stories";
-  // otherwise use the filename (a bare directory or "/" means the home page).
+  // Map any path to a nav section. Handles both "games.html" and the extensionless
+  // "/games" that Cloudflare Pages redirects to, plus pages inside /stories/ and /resources/.
   const navKey = (pathname) => {
-    const parts = pathname.split('/').filter(Boolean);
+    const parts = pathname.split('/').filter(Boolean).map(p => p.replace(/\.html$/i, '').toLowerCase());
     if (parts.includes('stories')) return 'stories';
-    const last = parts[parts.length - 1] || 'index.html';
-    return last.includes('.') ? last : 'index.html';
+    if (parts.includes('resources')) return 'resources';
+    const last = parts[parts.length - 1];
+    return !last || last === 'index' ? 'home' : last;
   };
   const currentKey = navKey(window.location.pathname);
   document.querySelectorAll('.nav-links a').forEach(a => {

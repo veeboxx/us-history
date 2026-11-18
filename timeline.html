@@ -257,25 +257,75 @@
   <p>Key events from Roanoke to the eve of the Civil War, all in one scroll.</p>
 </header>
 
-<!--
-  TIMELINE TEMPLATE — not built out yet. Once eras/events are ready:
-  1. Add one <a class="era-link" href="#era-N"> per era to an era-nav
-     block like the one this page used to have, right below the hero.
-  2. Add one <div class="era" id="era-N"> per era inside .timeline,
-     each holding one or more .event blocks, following this pattern:
-
-  <div class="era" id="era-1">
-    <div class="era-title"><div class="era-dot"></div><span class="era-label">[Era Label]</span></div>
-    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">[Year]</div></div>
-      <div class="event-content"><h3>[Event Title]</h3><p>[One-line description]</p><span class="event-tag tag-people">People</span></div>
-    </div>
-  </div>
-
-  event-tag options: tag-people, tag-conflict, tag-economy, tag-politics, tag-culture
--->
+<nav class="era-nav" aria-label="Jump to era">
+  <a class="era-link" href="#era-1">Quarter 1: Founding a Nation</a>
+  <a class="era-link" href="#era-2">Quarter 2: Revolution</a>
+</nav>
 
 <div class="timeline">
-  <p class="empty-note">The timeline hasn't been built out yet — check back as units are added.</p>
+  <div class="era" id="era-1">
+    <div class="era-title"><div class="era-dot"></div><span class="era-label">Quarter 1: Founding a Nation</span></div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1587</div></div>
+      <div class="event-content"><h3>Roanoke Colony</h3><p>English settlers land on Roanoke Island. When supply ships return in 1590, the colony is gone.</p><span class="event-tag tag-conflict">Mystery</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1607</div></div>
+      <div class="event-content"><h3>Jamestown Founded</h3><p>The first lasting English settlement in North America begins in Virginia.</p><span class="event-tag tag-economy">Settlement</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1619</div></div>
+      <div class="event-content"><h3>Enslaved Africans Arrive in Virginia</h3><p>The first enslaved Africans are brought to English Virginia, beginning slavery in the colonies.</p><span class="event-tag tag-people">People</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1620</div></div>
+      <div class="event-content"><h3>Mayflower and Plymouth</h3><p>Pilgrims cross the Atlantic and settle Plymouth in Massachusetts.</p><span class="event-tag tag-people">People</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1630</div></div>
+      <div class="event-content"><h3>City on a Hill</h3><p>John Winthrop leads the Puritans to Massachusetts Bay and calls their colony an example to the world.</p><span class="event-tag tag-culture">Culture</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1681</div></div>
+      <div class="event-content"><h3>Pennsylvania Founded</h3><p>William Penn starts a colony open to Quakers and people of many faiths.</p><span class="event-tag tag-politics">Politics</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1692</div></div>
+      <div class="event-content"><h3>Salem Witch Trials</h3><p>Fear and false accusations in Massachusetts lead to the trials and execution of accused witches.</p><span class="event-tag tag-conflict">Conflict</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1735</div></div>
+      <div class="event-content"><h3>Zenger Trial</h3><p>A jury finds printer John Peter Zenger not guilty of libel, a step toward freedom of the press.</p><span class="event-tag tag-politics">Politics</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1754</div></div>
+      <div class="event-content"><h3>French and Indian War</h3><p>Britain and France fight for control of the interior of North America; it ends with the Treaty of Paris in 1763.</p><span class="event-tag tag-conflict">Conflict</span></div>
+    </div>
+  </div>
+  <div class="era" id="era-2">
+    <div class="era-title"><div class="era-dot"></div><span class="era-label">Quarter 2: Revolution</span></div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1765</div></div>
+      <div class="event-content"><h3>Stamp Act</h3><p>Parliament taxes printed paper in the colonies, and the Sons of Liberty form to protest.</p><span class="event-tag tag-politics">Politics</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1766</div></div>
+      <div class="event-content"><h3>Stamp Act Repealed</h3><p>After colonial protests and boycotts, Parliament cancels the Stamp Act.</p><span class="event-tag tag-politics">Politics</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1770</div></div>
+      <div class="event-content"><h3>Boston Massacre</h3><p>British soldiers fire into a crowd in Boston, and five colonists die.</p><span class="event-tag tag-conflict">Conflict</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1773</div></div>
+      <div class="event-content"><h3>Boston Tea Party</h3><p>Colonists dump 342 chests of British tea into Boston Harbor to protest a tea tax.</p><span class="event-tag tag-economy">Economy</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1775</div></div>
+      <div class="event-content"><h3>Lexington and Concord</h3><p>The first battles of the Revolutionary War are fought in Massachusetts.</p><span class="event-tag tag-conflict">Conflict</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1776</div></div>
+      <div class="event-content"><h3>Common Sense and the Declaration</h3><p>Thomas Paine's pamphlet spreads the call for independence, and Congress adopts the Declaration on July 4.</p><span class="event-tag tag-politics">Politics</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1776</div></div>
+      <div class="event-content"><h3>Crossing the Delaware</h3><p>Washington leads his army across the icy river and surprises the enemy at Trenton.</p><span class="event-tag tag-conflict">Conflict</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1777</div></div>
+      <div class="event-content"><h3>Saratoga</h3><p>An American victory convinces France to join the war on the American side.</p><span class="event-tag tag-conflict">Conflict</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1781</div></div>
+      <div class="event-content"><h3>Yorktown</h3><p>Americans and their French allies trap the British army in Virginia, and it surrenders.</p><span class="event-tag tag-conflict">Conflict</span></div>
+    </div>
+    <div class="event"><div class="event-marker"><div class="event-dot"></div><div class="event-year">1783</div></div>
+      <div class="event-content"><h3>Treaty of Paris</h3><p>Britain officially recognizes the United States as an independent country.</p><span class="event-tag tag-politics">Politics</span></div>
+    </div>
+  </div>
 </div>
 
 <footer class="site-footer">
