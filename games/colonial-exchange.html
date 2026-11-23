@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Colonial Exchange - A Merchant's Revolution</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IM+Fell+English:ital@0;1&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#121a2b;--navy2:#1b2640;--navy3:#2a3858;--paper:#f1e6c8;--paper2:#e6d8b0;--ink:#241a10;--ink2:#5b4630;--gold:#d3a94c;--gold2:#8f6f25;
+--pat:#3b6fc4;--pat2:#d6e3f8;--loy:#b5322e;--loy2:#f6d9d6;--neu:#6f685c;--green:#2d7a45;--red:#9a1f1f}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--navy);color:var(--paper);font-family:'IM Fell English',serif;min-height:100vh}
+button{font-family:inherit;cursor:pointer}button:disabled{opacity:.35;cursor:not-allowed}
+/* splash */
+#splash{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:30px 18px;background:radial-gradient(ellipse at 50% 0%,#2c3b66 0%,#121a2b 65%)}
+.sp-k{font-family:'Special Elite',monospace;letter-spacing:4px;font-size:12px;color:var(--gold);text-transform:uppercase;text-align:center}
+.sp-t{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(30px,6vw,54px);text-align:center;margin:8px 0 14px}
+.sp-box{max-width:760px;background:rgba(241,230,200,.08);border:2px solid var(--gold);padding:16px 20px;margin-bottom:16px;font-size:17px;line-height:1.5;text-align:center}
+.sp-box b{color:var(--gold)}
+.sp-how{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:920px;margin-bottom:18px}
+.sp-how div{background:rgba(241,230,200,.07);border:1px solid rgba(211,169,76,.5);padding:11px;font-size:14px;line-height:1.4;text-align:center}
+.sp-how b{display:block;font-family:'Playfair Display',serif;color:var(--gold);margin:3px 0}
+.sp-how span{font-size:28px}
+.sp-form{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:14px}
+.sp-form input{font-family:'Special Elite',monospace;font-size:18px;padding:8px 14px;border:2px solid var(--gold);background:var(--paper);text-align:center;width:300px;max-width:90vw;color:var(--ink)}
+.pace{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.pace label{border:2px solid var(--gold2);padding:7px 14px;cursor:pointer;font-family:'Playfair Display',serif;font-size:14px;text-align:center}
+.pace label small{display:block;font-size:11px;opacity:.8;font-family:'IM Fell English',serif}
+.pace label.sel{border-color:var(--gold);background:rgba(211,169,76,.2);color:var(--gold)}
+.colony{width:min(560px,92vw);background:var(--paper);color:var(--ink);border:4px double var(--ink);padding:14px 18px;text-align:center;margin:6px 0 14px}
+.colony .k{font-family:'Special Elite',monospace;font-size:11px;letter-spacing:3px;color:var(--ink2)}
+.colony .n{font-family:'Playfair Display',serif;font-weight:900;font-size:30px;margin:2px 0}
+.colony .d{font-size:15px;line-height:1.4;margin-bottom:8px}
+.big{font-family:'Playfair Display',serif;font-weight:900;font-size:19px;letter-spacing:3px;text-transform:uppercase;padding:13px 40px;background:var(--gold);color:var(--navy);border:3px solid var(--gold2)}
+.big:hover:not(:disabled){background:#e8c46f}
+.popbar{display:flex;height:22px;border:2px solid var(--ink);font-family:'Special Elite',monospace;font-size:11px;color:#fff}
+.popbar i{display:flex;align-items:center;justify-content:center;font-style:normal;overflow:hidden;white-space:nowrap}
+.popbar .p{background:var(--pat)}.popbar .n{background:var(--neu)}.popbar .l{background:var(--loy)}
+/* game */
+#game{display:none;min-height:100vh;flex-direction:column}
+.hdr{display:flex;align-items:center;gap:14px;padding:8px 16px;background:var(--navy2);border-bottom:3px solid var(--gold2)}
+.brand{font-family:'Playfair Display',serif;font-weight:900;color:var(--gold);font-size:17px;white-space:nowrap}
+.tl{flex:1;display:flex;align-items:flex-start;min-width:0}
+.tn{flex:1;text-align:center;position:relative;font-family:'Special Elite',monospace;font-size:10px;color:#7f8bab;padding-top:24px}
+.tn:before{content:'';position:absolute;top:5px;left:0;right:0;height:3px;background:var(--navy3)}
+.tn:after{content:'';position:absolute;top:0;left:50%;margin-left:-6px;width:12px;height:12px;border-radius:50%;background:var(--navy3);border:2px solid var(--navy2)}
+.tn b{display:block;font-size:12px;color:#a7b2cf}
+.tn.done:before{background:var(--gold2)}.tn.done:after{background:var(--gold2)}
+.tn.now:before{background:var(--gold)}.tn.now:after{background:var(--gold);box-shadow:0 0 0 3px rgba(211,169,76,.35)}
+.tn.now b{color:var(--gold)}.tn.now{color:var(--paper)}
+.tn .tx{display:block;color:#d58b8b}
+.clockbox{display:flex;align-items:center;gap:8px}
+.clock{font-family:'Special Elite',monospace;font-size:28px;background:#000;border:2px solid var(--gold2);padding:1px 10px;min-width:88px;text-align:center}
+.clock.low{color:#ff7a5a;animation:pulse 1s infinite}.clock.plan{font-size:14px;color:var(--gold);padding:9px 10px}
+@keyframes pulse{50%{opacity:.5}}
+.tbtn{background:rgba(211,169,76,.15);color:var(--gold);border:1px solid var(--gold2);padding:7px 12px;font-family:'Special Elite',monospace;text-transform:uppercase}
+.sub{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:7px 16px;background:var(--navy);border-bottom:1px solid var(--navy3);font-size:14px}
+.sub b{color:var(--gold)}
+.prog{height:5px;background:#000}.prog i{display:block;height:100%;background:var(--gold);transition:width .3s linear}
+.ticker{background:var(--paper2);color:var(--ink);padding:5px 16px;font-family:'Playfair Display',serif;font-size:14px;display:flex;gap:10px;align-items:center}
+.ticker .tag{font-family:'Special Elite',monospace;background:var(--ink);color:var(--paper);padding:2px 8px;font-size:11px;letter-spacing:2px}
+.main{flex:1;display:grid;grid-template-columns:1fr 290px;gap:12px;padding:12px;min-height:0}
+.board{background:var(--paper);color:var(--ink);border:4px double var(--ink);padding:10px 12px;display:flex;flex-direction:column}
+.bh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:8px}
+.bh h2{font-family:'Playfair Display',serif;font-size:20px;flex:1}
+.ship{font-family:'Special Elite',monospace;font-size:13px}
+.ship b{font-size:18px}
+.bbtn{padding:7px 14px;font-family:'Playfair Display',serif;font-weight:700;border:2px solid var(--ink);background:var(--paper2);color:var(--ink)}
+.bbtn.go{background:var(--green);color:#fff;border-color:#164a29;font-size:15px;letter-spacing:1px}
+.cols,.row{display:grid;grid-template-columns:1.25fr .75fr 1.55fr 1.7fr 1.05fr;gap:10px;align-items:center}
+.cols{font-family:'Special Elite',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink2);padding:0 8px 4px}
+.row{padding:8px;border-bottom:1px dotted var(--ink2)}
+.row:nth-child(odd){background:rgba(36,26,16,.04)}
+.gname{display:flex;align-items:center;gap:8px}.gname .ic{font-size:28px}
+.gname b{font-family:'Playfair Display',serif;font-size:16px;display:block;line-height:1.1}
+.chip{display:inline-block;font-family:'Special Elite',monospace;font-size:10px;padding:1px 6px;margin-top:2px;border:1px solid}
+.chip.tax{background:var(--loy2);color:var(--loy);border-color:var(--loy)}.chip.free{background:#dfeedd;color:var(--green);border-color:var(--green)}
+.price{font-family:'Special Elite',monospace;font-size:17px}.price small{display:block;font-size:11px;color:var(--ink2)}
+.ap{display:flex;align-items:center;gap:6px;font-family:'Special Elite',monospace;font-size:11px;margin:2px 0}
+.ap span.l{width:14px;font-weight:bold}.ap .trk{flex:1;height:11px;background:rgba(36,26,16,.15);border:1px solid var(--ink)}
+.ap .trk i{display:block;height:100%;transition:width .4s}.ap .p i{background:var(--pat)}.ap .l2 i{background:var(--loy)}.ap .n i{background:var(--neu)}
+.ap .ar{width:14px;text-align:center}.up{color:var(--green)}.dn{color:var(--red)}
+.stk{display:flex;align-items:center;gap:6px}
+.stk .num{font-family:'Special Elite',monospace;font-size:24px;min-width:34px;text-align:right}
+.stk .num.out{color:var(--red)}
+.stk .btns{display:flex;gap:3px}
+.stk button{background:var(--ink);color:var(--paper);border:0;padding:5px 7px;font-family:'Special Elite',monospace;font-size:12px}
+.stk button.m{background:var(--paper2);color:var(--ink);border:1px solid var(--ink)}
+.sbar{height:6px;background:rgba(36,26,16,.15);margin-top:3px}.sbar i{display:block;height:100%;background:var(--gold2)}
+.route{display:flex;border:2px solid var(--ink)}
+.route button{flex:1;border:0;padding:4px 2px;font-family:'Special Elite',monospace;font-size:11px;background:var(--paper2);color:var(--ink)}
+.route button+button{border-left:1px solid var(--ink)}
+.route button.on{background:var(--ink);color:var(--paper)}.route button.on.s{background:#3a2a4a;color:#f0e6ff}
+.sold{font-family:'Special Elite',monospace;font-size:11px;margin-top:3px;color:var(--ink2)}
+.hint2{font-size:13px;color:var(--ink2);padding:8px 4px 0;line-height:1.4}
+.town{display:flex;flex-direction:column;gap:12px}
+.panel{background:var(--navy2);border:2px solid var(--gold2);padding:10px 12px}
+.panel h3{font-family:'Special Elite',monospace;letter-spacing:3px;font-size:12px;color:var(--gold);text-transform:uppercase;border-bottom:1px solid var(--gold2);padding-bottom:4px;margin-bottom:8px}
+.meter{margin-bottom:10px}.meter .lab{display:flex;justify-content:space-between;font-family:'Special Elite',monospace;font-size:12px;margin-bottom:2px}
+.bar{height:13px;background:rgba(255,255,255,.12);border:1px solid var(--gold2)}.bar i{display:block;height:100%;transition:width .4s}
+.bar .p{background:var(--pat)}.bar .l{background:var(--loy)}.bar .h{background:linear-gradient(90deg,#c07a1a,#e0502a)}
+.note{font-size:12px;opacity:.75;line-height:1.35;margin-top:3px}
+.risk{font-size:12px;margin-top:3px;padding:3px 6px;font-family:'Special Elite',monospace}
+.risk.angry{background:#5a3b10;color:#ffd48a}.risk.danger{background:#6a1a1a;color:#ffd0c8;animation:pulse 1s infinite}
+.panel .popbar{margin-bottom:6px}
+.foot{display:grid;grid-template-columns:1fr 330px;gap:12px;padding:0 12px 12px}
+.feed{background:var(--navy2);border:2px solid var(--gold2);padding:8px 12px;height:150px;overflow:hidden}
+.feed h3{font-family:'Special Elite',monospace;letter-spacing:3px;font-size:12px;color:var(--gold);text-transform:uppercase;margin-bottom:5px}
+.fi{font-size:14px;padding:2px 0;border-bottom:1px dotted rgba(211,169,76,.25);animation:fin .4s}.fi.bad{color:#ff9d8f}.fi b{color:var(--gold)}
+@keyframes fin{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+.kpis{background:var(--navy2);border:2px solid var(--gold2);padding:8px 12px;display:flex;flex-direction:column;gap:6px;justify-content:center}
+.kp{display:flex;justify-content:space-between;font-family:'Special Elite',monospace;font-size:13px}.kp b{font-size:20px;color:var(--paper)}
+.gbar{height:12px;background:rgba(255,255,255,.12);border:1px solid var(--gold2)}.gbar i{display:block;height:100%;background:var(--green)}
+.flash{position:fixed;left:50%;top:150px;transform:translateX(-50%);z-index:3000;padding:7px 18px;font-family:'Special Elite',monospace;font-size:15px;border:2px solid;pointer-events:none;animation:flash 1.5s forwards}
+.flash.good{background:#e1f0dc;color:var(--green);border-color:var(--green)}.flash.bad{background:#f7dad6;color:var(--red);border-color:var(--red)}
+@keyframes flash{0%{opacity:0;transform:translate(-50%,10px)}12%{opacity:1;transform:translate(-50%,0)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-14px)}}
+.ov{display:none;position:fixed;inset:0;background:rgba(4,6,12,.88);z-index:2000;align-items:center;justify-content:center;padding:18px;overflow-y:auto}.ov.on{display:flex}
+.paper{background:var(--paper);color:var(--ink);max-width:760px;width:100%;max-height:92vh;overflow-y:auto;padding:24px;border:4px solid var(--ink);box-shadow:8px 8px 0 rgba(0,0,0,.6)}
+.paper.bad{border-color:var(--red)}.paper.rich{border-color:var(--green)}
+.p-head{text-align:center;border-bottom:4px double var(--ink);padding-bottom:8px;margin-bottom:14px}
+.p-title{font-family:'Playfair Display',serif;font-weight:900;font-size:30px}.p-date{font-family:'Special Elite',monospace;font-size:12px;letter-spacing:3px;color:var(--ink2)}
+.news{display:grid;grid-template-columns:1fr 1fr;gap:16px}.news h3{font-family:'Playfair Display',serif;font-size:17px;line-height:1.2;margin-bottom:5px}.news p{font-size:14px;line-height:1.45;color:var(--ink2)}
+.changes{margin-top:14px;background:rgba(36,26,16,.08);border:2px solid var(--ink);padding:10px 12px}
+.changes h4{font-family:'Special Elite',monospace;letter-spacing:2px;font-size:12px;text-transform:uppercase;margin-bottom:6px}.changes li{font-size:14px;margin:3px 0 3px 18px;line-height:1.35}
+.p-btn{display:block;margin:16px auto 0;font-family:'Playfair Display',serif;font-weight:900;font-size:16px;letter-spacing:2px;text-transform:uppercase;padding:11px 38px;background:var(--ink);color:var(--paper);border:2px solid var(--ink)}.p-btn:hover{background:var(--gold2)}
+.dil-text{font-size:17px;line-height:1.5;margin-bottom:14px}
+.dil-opt{display:block;width:100%;text-align:left;background:var(--paper2);border:3px solid var(--ink);padding:11px 14px;margin-bottom:10px;font-family:inherit;color:var(--ink)}
+.dil-opt:hover:not(:disabled){background:#fff;box-shadow:4px 4px 0 var(--ink)}
+.dil-opt b{font-family:'Playfair Display',serif;font-size:16px;display:block}.dil-opt span{font-size:13px;color:var(--ink2)}
+.hints{margin-top:5px;display:flex;gap:6px;flex-wrap:wrap}
+.hint{font-family:'Special Elite',monospace;font-size:11px;padding:2px 7px;border:1px solid}
+.hint.up{background:#e1f0dc;color:var(--green);border-color:var(--green)}.hint.dn{background:#f7dad6;color:var(--red);border-color:var(--red)}.hint.pat{background:var(--pat2);color:var(--pat);border-color:var(--pat)}.hint.loy{background:var(--loy2);color:var(--loy);border-color:var(--loy)}
+.pause-tag{text-align:center;font-family:'Special Elite',monospace;font-size:12px;letter-spacing:2px;color:var(--ink2);margin-bottom:8px}
+.headline{border:3px double var(--ink);padding:10px;margin:12px 0;text-align:center;background:rgba(255,255,255,.55)}.headline b{font-family:'Playfair Display',serif;font-size:22px;display:block;line-height:1.2}.headline small{font-family:'Special Elite',monospace;letter-spacing:2px;color:var(--ink2)}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}.stat{flex:1;min-width:110px;text-align:center;border:2px solid var(--ink);background:rgba(255,255,255,.5);padding:8px}
+.stat small{display:block;font-family:'Special Elite',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink2)}.stat span{font-family:'Special Elite',monospace;font-size:20px}
+.goalcheck{padding:8px 12px;border-left:6px solid;margin-bottom:10px;font-size:15px}.goalcheck.ok{border-color:var(--green);background:#e1f0dc}.goalcheck.no{border-color:var(--red);background:#f7dad6}
+.endblock{margin-bottom:18px}.endblock h2{font-family:'Playfair Display',serif;font-size:18px;border-bottom:2px solid var(--ink);padding-bottom:4px;margin-bottom:8px}
+.endblock p,.endblock li{font-size:15px;line-height:1.5}.endblock li{margin-left:20px;margin-bottom:5px}
+.legacy{text-align:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:900;margin:6px 0}
+.chart{background:rgba(255,255,255,.55);border:2px solid var(--ink);padding:8px}.chart canvas{width:100%;height:210px;display:block}
+.cl{display:flex;gap:14px;justify-content:center;font-size:12px;font-family:'Special Elite',monospace;margin-top:5px;flex-wrap:wrap}.cl i{display:inline-block;width:14px;height:4px;margin-right:4px;vertical-align:middle}
+.pausedtag{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1500;background:rgba(0,0,0,.8);color:var(--gold);font-family:'Playfair Display',serif;font-size:40px;font-weight:900;padding:20px 50px;border:3px solid var(--gold);display:none;letter-spacing:6px}.pausedtag.on{display:block}
+@media(max-width:1000px){.main,.foot{grid-template-columns:1fr}.cols{display:none}.row{grid-template-columns:1fr 1fr}.news,.sp-how{grid-template-columns:1fr 1fr}.tl{display:none}}
+</style>
+</head>
+<body>
+<div id="splash">
+  <div class="sp-k">1763 to 1775 &bull; A Classroom Simulation</div>
+  <div class="sp-t">The Colonial Exchange</div>
+  <div class="sp-box"><b>Your goal:</b> be a merchant in one of the thirteen colonies from 1763 until the war begins in 1775, and finish with the <b>biggest fortune</b> and a <b>good name</b>. Each year you decide what goods to carry and how to get them. Customers buy on their own, and Patriots and Loyalists want different things.</div>
+  <div class="sp-how">
+    <div><span>📦</span><b>Load Your Shipment</b>Each year you can carry only so many goods. Pick which ones.</div>
+    <div><span>⏱️</span><b>Watch the Market</b>Sales happen by themselves while the year runs. Popularity shifts.</div>
+    <div><span>🕯️</span><b>Pick Your Route</b>Taxed goods can be sold legally or smuggled in. Smuggling is risky.</div>
+    <div><span>⚖️</span><b>Choose Sides</b>Big choices stop the clock. Anger a faction and it may come for you.</div>
+  </div>
+  <div class="sp-form">
+    <input type="text" id="pname" maxlength="20" placeholder="Your name, merchant">
+    <div class="pace" id="pace">
+      <label class="sel" data-p="relaxed">Relaxed<small>2 minutes a year</small></label>
+      <label data-p="normal">Normal<small>1.5 minutes a year</small></label>
+      <label data-p="quick">Quick<small>70 seconds a year</small></label>
+    </div>
+  </div>
+  <div id="colonyslot"></div>
+  <button class="big" id="rollbtn" onclick="rollColony()">Cast Your Lot</button>
+  <button class="big" id="beginbtn" style="display:none" onclick="beginGame()">Open for Business</button>
+</div>
+<div id="game">
+  <div class="hdr">
+    <div class="brand">The Colonial Exchange</div>
+    <div class="tl" id="tl"></div>
+    <div class="clockbox"><div class="clock" id="clock">0:00</div><button class="tbtn" id="pausebtn" onclick="togglePause()">Pause</button><button class="tbtn" onclick="showHelp()">?</button></div>
+  </div>
+  <div class="prog"><i id="cprog" style="width:0%"></i></div>
+  <div class="sub"><div id="colonyline"></div><div id="goalline"></div></div>
+  <div class="ticker"><span class="tag">GAZETTE</span><span id="ticker"></span></div>
+  <div class="main">
+    <section class="board">
+      <div class="bh"><h2 id="bt">The Exchange Board</h2><span class="ship" id="shipinfo"></span><button class="bbtn" id="autobtn" onclick="doAuto()">Auto-fill</button><button class="bbtn go" id="openbtn" onclick="doOpen()">Open the Shop</button></div>
+      <div class="cols"><span>Good</span><span>Price</span><span>Who wants it</span><span>Stock this year</span><span>Route</span></div>
+      <div id="rows"></div>
+      <div class="hint2" id="hint2"></div>
+    </section>
+    <aside class="town">
+      <div class="panel"><h3>The Town</h3><div id="popbar"></div><div id="townbox"></div></div>
+      <div class="panel"><h3>Ledger</h3><button class="tbtn" style="width:100%" onclick="showLedger()">📒 Years &amp; Choices</button></div>
+    </aside>
+  </div>
+  <div class="foot">
+    <div class="feed"><h3>Sales at the counter</h3><div id="feed"></div></div>
+    <div class="kpis"><div class="kp"><span>CASH</span><b id="cash">0</b></div><div class="kp"><span>PROFIT THIS YEAR</span><b id="cprofit">0</b></div><div class="gbar"><i id="gfill" style="width:0%"></i></div><div class="kp" style="font-size:11px"><span id="goaltxt"></span></div></div>
+  </div>
+</div>
+<div class="pausedtag" id="pausedtag">PAUSED</div>
+<div class="ov" id="ov"><div class="paper" id="paper"></div></div>
+<script>
+/*==LOGIC-START*/
+const GOODS={
+  tea:   {name:'Tea',           icon:'🫖', w:3.0, ref:5.0},
+  paper: {name:'Paper & Ink',   icon:'📜', w:2.0, ref:3.6},
+  cloth: {name:'Cloth',         icon:'🧵', w:3.5, ref:6.0},
+  glass: {name:'Glass & Paint', icon:'🪟', w:4.0, ref:7.0},
+  powder:{name:'Powder & Shot', icon:'💥', w:5.0, ref:9.0}
+};
+const GK=['tea','paper','cloth','glass','powder'];
+const PACE={relaxed:{sec:120},normal:{sec:90},quick:{sec:70}};
+const NAMES=['Abigail Reed','Josiah Pratt','Hannah Cole','Elias Wren','Mercy Hale','Thomas Gray','Sarah Lowell','Nathan Frost','Ruth Appleton','Caleb Marsh','Lydia Penn','Silas Brooks','Martha Quincy','Ezra Dunn','Prudence Ware','Gideon Hart','Patience Moore','Amos Tuttle','Betsey Ross','Jonas Hull'];
+const COLONIES=[
+ {name:'Massachusetts',pat:.42,loy:.15,d:'Boston is the heart of the protest movement. The Sons of Liberty meet here, and many neighbors will cheer a boycott. Loyalists are few but loud.'},
+ {name:'Rhode Island',pat:.40,loy:.14,d:'Merchants here have smuggled for years and hate customs officers. Patriots are strong, and rebels have already burned a British ship.'},
+ {name:'Virginia',pat:.35,loy:.18,d:'Planters here owe British merchants money, but many resent British control. Patriots are growing, though plenty of neighbors are cautious.'},
+ {name:'Pennsylvania',pat:.30,loy:.25,d:'Philadelphia is rich, busy, and divided. Quaker merchants prefer peace, and neither side has a clear upper hand.'},
+ {name:'South Carolina',pat:.28,loy:.28,d:'Charleston merchants ship rice to the world and are split between rebels and the Crown. Both sides want to be your customer.'},
+ {name:'New York',pat:.25,loy:.36,d:'The royal governor and many wealthy merchants live here, and Loyalists are strong. Patriots are loud, but outnumbered at first.'},
+ {name:'Georgia',pat:.20,loy:.38,d:'Georgia is young and depends on British soldiers for defense. Loyalists are the biggest group, and Patriots are few.'}
+];
+const PD=[0,.03,.07,.10,.14,.18,.22,.26], LD=[0,0,-.01,-.02,-.03,-.05,-.08,-.12];
+const CAPF=[1.1,1.0,.95,.9,.85,.8,.75,.7];
+const GOAL=[30,36,40,40,42,40,48,50];
+const BIAS=[{},{},{paper:[1.2,1]},{tea:[.9,1]},{cloth:[1.3,.9],paper:[1.4,.9],powder:[1.2,.8]},{tea:[1.8,1.3]},{powder:[2,.6],cloth:[1.2,1]},{powder:[3,.5],tea:[.6,.6],glass:[.8,.6]}];
+const CH=[
+ {year:'1763',title:'The Calm Before',split:false,duty:{},mult:{},goal:30,n:22,
+  news:[{h:'The War Is Won, but the Bills Have Come',b:'Britain has beaten France, and Boston harbor is crowded with ships. But the war cost a fortune, and every pamphlet in town says Parliament means to make the colonies pay.'},
+        {h:'Customers Are Grumbling',b:'Nobody is taxed yet, but you can hear the worry across your counter. Your shipment is limited this year, so choose who gets it. Next year could look very different.'}],
+  changes:['No taxes yet. Everything costs its normal price.','Your shipment is limited. When a good runs out, it is gone for the year.','Some customers offer special deals. Read them carefully.'],
+  want:{tea:3,paper:2,cloth:3,glass:2,powder:.3}},
+ {year:'1764',title:'The Sugar Act',split:true,pat:.28,loy:.22,duty:{cloth:1.5},mult:{},goal:36,n:24,
+  news:[{h:'Parliament Taxes Foreign Cloth and Sugar',b:'The Sugar Act lays new duties on cloth, sugar, and other goods, and sends customs officers to the docks to collect them. Boston merchants say the colonies had no voice in the vote.'},
+        {h:'The Town Begins to Divide',b:'Some neighbors call the law just, and others call it tyranny. Patriots will not buy taxed goods, and Loyalists believe in obeying the law. A smuggler is whispering about untaxed cloth at the back door.'}],
+  changes:['🧵 Cloth now carries a 1.5s tax.','👥 Customers are now Patriots, Loyalists, or Neutral.','🔓 Taxed goods get a Legal / Smuggled switch. Smuggled goods carry no tax, but each sale raises Suspicion.'],
+  want:{tea:3,paper:2,cloth:4,glass:2,powder:.3}},
+ {year:'1765',title:'The Stamp Act',split:true,pat:.30,loy:.25,duty:{paper:2,cloth:1},mult:{},goal:42,n:26,
+  news:[{h:'The Stamp Act!',b:'By order of Parliament, every newspaper, legal paper, and deck of cards must carry a stamp that costs money. Colonists cry out: "No taxation without representation!" Crowds gather in the streets.'},
+        {h:'Crowds Grow in the Streets',b:'Patriot crowds are bigger and Loyalists are more defensive. Both sides are watching which shops serve whom, and the smuggler now has untaxed paper at the back door.'}],
+  changes:['📜 Paper now carries a 2s tax, and cloth still carries its 1s tax.','Patriot crowds grow. Loyalists get nervous.','Watch for customers who offer side deals.'],
+  want:{tea:3,paper:3,cloth:3,glass:2,powder:.3}},
+ {year:'1767',title:'The Townshend Duties',split:true,pat:.35,loy:.25,duty:{tea:1.5,glass:2,paper:1},mult:{},goal:42,n:26,
+  news:[{h:'New Taxes on Tea, Glass, and Paper',b:'Parliament tries again with the Townshend Acts. Taxes are collected at the harbor on tea, glass, paint, lead, and paper. The money will pay British officials in the colonies.'},
+        {h:'Merchants Asked to Sign a Pledge',b:'The Sons of Liberty ask every shopkeeper to promise not to import taxed goods until the taxes are gone. Boycotts have worked before, but only when everyone joins in.'}],
+  changes:['🫖 Tea +1.5s tax, 🪟 Glass +2s tax, 📜 Paper +1s tax.','Patriots will only buy tax-free goods.'],
+  want:{tea:3,paper:2,cloth:3,glass:3,powder:.3}},
+ {year:'1770',title:'Blood on King Street',split:true,pat:.40,loy:.20,duty:{tea:1.5},mult:{},goal:44,n:26,startFx:{pat:6,loy:-4},
+  news:[{h:'Massacre in Boston!',b:'On the night of March 5, British soldiers fired into an angry crowd on King Street. Five colonists were killed. Engravings of the "Bloody Massacre" are printed and passed around town.'},
+        {h:'Most Taxes Repealed, but Tea Stays',b:'Parliament cancels the Townshend duties on glass, paper, and paint. It keeps the tea tax to show that it still has the right to tax the colonies.'}],
+  changes:['🪟 Glass and 📜 paper taxes are gone.','🫖 Tea still carries a 1.5s tax.','Patriots are angrier and more of them are shopping.'],
+  want:{tea:3,paper:2,cloth:3,glass:2,powder:.4}},
+ {year:'1773',title:'The Tea Party',split:true,pat:.40,loy:.22,duty:{tea:1.0},mult:{tea:.65},goal:44,n:28,
+  news:[{h:'Cheap Tea From the Company!',b:'The Tea Act lets the East India Company sell tea directly in the colonies. Even with the tax, it is cheaper than smuggled Dutch tea. Many colonists see this as a trick to make them accept Parliament\'s taxes.'},
+        {h:'Tea Ships Arrive in Boston Harbor',b:'The Dartmouth is anchored at Griffin\'s Wharf with 342 chests of tea. Under the law, the tea will be taken and sold if the tax is not paid in twenty days. Boston waits.'}],
+  changes:['🫖 Tea is cheaper because of the Company, but still taxed (+1s).','Patriots still refuse any taxed tea.'],
+  want:{tea:4,paper:2,cloth:3,glass:2,powder:.4}},
+ {year:'1774',title:'The Intolerable Acts',split:true,pat:.45,loy:.20,duty:{tea:1.0},mult:{tea:1,paper:1.5,cloth:1.5,glass:1.5,powder:1.6},goal:46,n:24,startFx:{pat:5,loy:-5},
+  news:[{h:'Parliament Closes Boston Harbor',b:'To punish Boston for the tea, Parliament passes the Coercive Acts. Colonists call them the Intolerable Acts. No ships may load or unload until the tea is paid for, and British soldiers are sent into town.'},
+        {h:'Other Colonies Rally to Boston',b:'Committees of Correspondence spread the news from Massachusetts to Georgia. Other colonies send food and money, and a Continental Congress is being planned.'}],
+  changes:['⚓ The harbor is closed: legal goods are scarce and cost more.','🔒 Gunpowder and shot cannot be sold legally. You can only sell them from the Smuggled switch.','Customers are fewer and tempers are short.'],
+  want:{tea:2,paper:2,cloth:3,glass:2,powder:1.4}},
+ {year:'1775',title:'Lexington and Concord',split:true,pat:.45,loy:.15,duty:{tea:1.0},mult:{tea:1,paper:1.6,cloth:1.6,glass:1.6,powder:2},goal:46,n:24,startFx:{pat:5,loy:-8},
+  news:[{h:'Shots at Lexington and Concord!',b:'On April 19, British soldiers marched out of Boston to seize colonial gunpowder. Militiamen met them at Lexington and Concord, and the war for independence has begun.'},
+        {h:'Neighbors Choose Sides',b:'Families are splitting. Patriots are arming themselves, and many Loyalists are leaving Boston. Everyone is asking whose side the shopkeeper is on.'}],
+  changes:['💥 Gunpowder is in huge demand, and only smugglers can sell it.','Loyalist customers are leaving town.'],
+  want:{tea:1,paper:2,cloth:3,glass:1,powder:3.2}}
+];
+
+const DIL={
+ 0:{mid:{title:'A Pamphlet on the Counter',text:'A customer leaves a pamphlet saying Parliament plans to tax the colonies to pay for the war. Others in the shop are listening to see what you say.',
+   opts:[{t:'Read it aloud to the shop',d:'You are the first on your street to speak up.',fx:{pat:8,loy:-4}},
+         {t:'Say that Parliament knows best',d:'You trust the Crown.',fx:{loy:8,pat:-4}},
+         {t:'Keep working and say nothing',fx:{}}]}},
+ 1:{open:{title:'The Sugar Act',text:'Parliament has put a new tax on foreign cloth, and a customs officer has begun walking the docks. A smuggler has already offered you untaxed bolts at the back door.',
+   opts:[{t:'Pay the tax and raise prices',d:'Loyalists approve and Patriots mutter.',fx:{loy:8,pat:-6}},
+         {t:'Complain loudly to every customer',d:'Patriots cheer and Loyalists scowl.',fx:{pat:10,loy:-8}},
+         {t:'Quietly accept the smuggler\'s offer',d:'Smuggled goods cost 30% less this year, but Suspicion rises.',fx:{heat:8,disc:true}}]},
+  mid:{title:'The Town Meeting',text:'Boston\'s merchants are asked to stop importing British luxuries until the tax is gone. Customers are watching to see who signs.',
+   opts:[{t:'Sign the agreement and keep it',d:'Patriots are pleased.',fx:{pat:10,loy:-8}},
+         {t:'Refuse to sign',d:'Loyalists respect it.',fx:{loy:6,pat:-8}},
+         {t:'Sign it, but keep selling taxed goods quietly',d:'Risky if you are found out.',fx:{pat:6},delayed:{p:.6,fx:{pat:-12},msg:'Word got out that you signed the town agreement but kept selling taxed goods. Patriots feel betrayed.'}}]}},
+ 2:{open:{title:'A Crowd Outside Your Door',text:'The Stamp Act is in effect, and a crowd of Sons of Liberty has gathered outside your shop. A customs man is watching from across the street. What will your sign say?',
+   opts:[{t:'Hang a sign: "No Stamps Sold Here"',d:'You stand with the protesters.',fx:{pat:12,loy:-10}},
+         {t:'Sell stamped paper, as the law requires',d:'You follow the law.',fx:{loy:10,pat:-10}},
+         {t:'Close for a day and wait it out',d:'You avoid trouble but lose a day of sales.',fx:{cash:-15}}]},
+  mid:{title:'The Cellar Inspection',text:'A customs officer knocks and asks to look in your cellar for goods without stamps or taxes.',
+   opts:[{t:'Let him look',d:'Any smuggled goods on your shelves are taken, and you cannot smuggle for the rest of the year.',fx:{loy:6,pat:-4,seize:true}},
+         {t:'Refuse politely',d:'You say it is your cellar, and your business.',fx:{pat:5,loy:-6,heat:10}},
+         {t:'Slip him 12s',d:'A small "gift" to look the other way.',fx:{cash:-12,heat:-10}}]}},
+ 3:{open:{title:'The Pledge',text:'The new Townshend duties tax tea, glass, and paper. The Sons of Liberty are asking every merchant to sign a pledge not to sell taxed goods.',
+   opts:[{t:'Sign the pledge and keep it',d:'Patriots are pleased.',fx:{pat:12,loy:-8}},
+         {t:'Refuse. Business is business.',d:'Loyalists respect it.',fx:{loy:8,pat:-10}},
+         {t:'Sign it, but keep selling taxed goods quietly',d:'Risky if you are found out.',fx:{pat:8},delayed:{p:.6,fx:{pat:-16},msg:'Word got out that you signed the pledge but kept selling taxed goods. Patriots feel betrayed.'}}]},
+  mid:{title:'A Quiet Offer',text:'A sailor offers to introduce you to his Dutch suppliers, so your smuggled goods will cost less all year. No questions asked.',
+   opts:[{t:'Pay 18s for his contact',d:'Smuggled goods cost 30% less this year.',fx:{cash:-18,heat:8,disc:true}},
+         {t:'Politely decline',fx:{loy:3}},
+         {t:'Report him to the customs house',fx:{loy:10,pat:-12}}]}},
+ 4:{open:{title:'Blood on King Street',text:'British soldiers have fired into a crowd outside the Customs House, and wounded men are being carried toward your shop for help.',
+   opts:[{t:'Open your door and send for a doctor',fx:{pat:10,loy:-4}},
+         {t:'Lock the door until the street is quiet',fx:{pat:-3,loy:3}},
+         {t:'Sell bandages and cloth at triple the price',d:'You profit from the panic. +30s',fx:{cash:30,pat:-15}}]},
+  mid:{title:'The Soldiers\' Trial',text:'Customers ask what you think should happen to the soldiers. John Adams himself has agreed to defend them in court.',
+   opts:[{t:'"Everyone deserves a fair trial."',fx:{loy:6,pat:-2}},
+         {t:'"They must hang!"',fx:{pat:8,loy:-10}},
+         {t:'Say nothing and keep sweeping',d:'You stay out of it.',fx:{}}]}},
+ 5:{open:{title:'The Company\'s Offer',text:'The East India Company\'s agents offer you a contract to sell their cheap tea, and they pay 10s up front.',
+   opts:[{t:'Accept the contract',d:'+10s. Patriots will not like it.',fx:{cash:10,loy:10,pat:-14}},
+         {t:'Decline politely',fx:{pat:6,loy:-3}},
+         {t:'Sell herbal "Liberty Tea" instead',d:'Costs 8s to stock up. Patriots love it.',fx:{cash:-8,pat:8,loy:-2}}]},
+  mid:{title:'Griffin\'s Wharf',text:'It is the night of December 16, 1773. A crowd gathers at the harbor. Men dressed as Mohawks are heading for the ships.',
+   opts:[{t:'Join the crowd at the wharf',fx:{pat:15,loy:-15}},
+         {t:'Watch from your window',fx:{pat:2,loy:-1}},
+         {t:'Send a note to the Governor\'s men',fx:{loy:12,pat:-20}}]}},
+ 6:{open:{title:'Soldiers at Your Door',text:'With British soldiers in town, an officer offers to pay well to rent your back room for his men.',
+   opts:[{t:'Rent it to him for 40s',d:'Loyalists approve. Patriots do not.',fx:{cash:40,loy:12,pat:-16}},
+         {t:'Refuse',fx:{pat:8,loy:-8}},
+         {t:'Say the room is full of stock',fx:{pat:2,loy:-2}}]},
+  mid:{title:'Boston Is Hungry',text:'With the harbor closed, other colonies are sending supplies. The Committee of Correspondence asks merchants to share what they have.',
+   opts:[{t:'Donate cloth to the committee',d:'Costs you 15s.',fx:{cash:-15,pat:12,loy:-4}},
+         {t:'Sell at fair prices as usual',fx:{}},
+         {t:'Hoard it and raise prices',d:'+25s. People will remember.',fx:{cash:25,pat:-12,loy:2}}]}},
+ 7:{open:{title:'April 19, 1775',text:'Shots have been fired at Lexington and Concord. A militia captain asks for your gunpowder. A British officer offers gold for the same powder.',
+   opts:[{t:'Give it to the militia',d:'It costs you 20s of stock.',fx:{cash:-20,pat:15,loy:-15}},
+         {t:'Sell it to the British officer for 40s',d:'You earn 40s.',fx:{cash:40,loy:15,pat:-15}},
+         {t:'Say you have none',d:'You keep your stock and your head down.',fx:{}}]},
+  mid:{title:'Which Side?',text:'Neighbors are choosing sides, and both Patriot and Loyalist customers are watching what you do next.',
+   opts:[{t:'Hang a Patriot banner',fx:{pat:10,loy:-12}},
+         {t:'Fly the King\'s flag',fx:{loy:10,pat:-12}},
+         {t:'Keep your door open to everyone',d:'Neither side is fully pleased.',fx:{pat:2,loy:2}}]}}
+};
+
+
+let S=null;
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const r1=x=>Math.round(x*10)/10;
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const fmt=n=>(Math.round(n*10)/10).toFixed(1)+'s';
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const standMult=x=>0.25+1.5*x/100;
+
+function newGame(o){
+  S={name:o.name||'The Merchant',pace:PACE[o.pace||'relaxed'],colony:o.colony||pick(COLONIES),ch:-1,clock:0,chapterSec:0,phase:'start',pending:null,
+     cash:60,pat:50,loy:50,heat:0,mode:{},load:{},stock:{},sold:{},missed:{},app:{},snap:{},shares:{},cap:0,loaded:0,feed:[],feedN:0,
+     history:[],choices:[],delayed:[],headlines:[],midDone:false,inspected:false,inspTimer:10,mobTimer:11,snapT:0,ev:{},banSmug:false,smugDisc:false,smugSales:0,cs:{}};
+  for(const g of GK) S.mode[g]='legal';
+  startChapter(0); return S;
+}
+const cur=()=>CH[S.ch];
+const goalOf=()=>GOAL[S.ch];
+const taxed=g=>(cur().duty[g]||0)>0 || (g==='powder' && S.ch>=6);
+const unlocked=()=>S.ch>=1;
+const mult=g=>cur().mult[g]||1;
+const legalOK=g=>!(g==='powder'&&S.ch>=6);
+const canSmug=g=>unlocked()&&!S.banSmug&&(taxed(g)||!legalOK(g));
+function ref(g){ return r1(GOODS[g].ref*mult(g) + (cur().duty[g]||0)*1.3); }
+function costOf(g,kind){
+  const base=GOODS[g].w*mult(g);
+  if(kind==='legal') return r1(base+(cur().duty[g]||0));
+  return r1(base*1.4*1*(S.smugDisc?.7:1));
+}
+function stockLeft(){ return GK.reduce((a,g)=>a+S.stock[g],0); }
+function sharesFor(i){
+  if(!CH[i].split) return {pat:0,loy:0,neu:1};
+  const p=clamp(S.colony.pat+PD[i],.05,.7), l=clamp(S.colony.loy+LD[i],.04,.6);
+  return {pat:p,loy:l,neu:1-p-l};
+}
+function appTarget(g,f){
+  const m=S.mode[g]; if(m==='legal'&&!legalOK(g)) return 0;
+  const tx=taxed(g)&&m==='legal', b=(BIAS[S.ch][g]||[1,1]);
+  if(f==='n') return tx?.85:1;
+  if(f==='p') return (m==='smug'?1.4:tx?.05:1)*b[0];
+  return (m==='smug'?.3:1)*b[1];
+}
+function eff(g,f){ const a=S.app[g][f]; return a*(f==='p'?standMult(S.pat):f==='l'?standMult(S.loy):standMult((S.pat+S.loy)/2)); }
+function weights(g){ const sh=S.shares; return {p:sh.pat*eff(g,'p'),l:sh.loy*eff(g,'l'),n:sh.neu*eff(g,'n')}; }
+function rawRate(g){
+  const c=cur(), totW=GK.reduce((a,k)=>a+c.want[k],0), w=weights(g);
+  return c.n/S.chapterSec*(c.want[g]/totW)*(w.p+w.l+w.n);
+}
+function setMode(g,m){
+  if(m==='smug'&&!canSmug(g)) return false;
+  if(m==='legal'&&!legalOK(g)) return false;
+  S.mode[g]=m; return true;
+}
+function loseStock(frac,onlySmug){ for(const g of GK){ if(onlySmug&&S.mode[g]!=='smug') continue; S.stock[g]=Math.floor(S.stock[g]*(1-frac)); } }
+function banSmuggling(){ loseStock(1,true); S.banSmug=true; for(const g of GK) S.mode[g]='legal'; }
+function riskOf(f){ if(S.ch<1) return ''; const t=f==='patriot'?S.pat:S.loy; return t<25?'danger':t<40?'angry':''; }
+function addStanding(p,l){ if(!cur().split) return; S.pat=clamp(S.pat+p,0,100); S.loy=clamp(S.loy+l,0,100); }
+
+function startChapter(i){
+  S.ch=i; const c=cur();
+  S.chapterSec=S.pace.sec; S.clock=S.chapterSec;
+  S.midDone=false; S.inspected=false; S.inspTimer=10; S.mobTimer=11; S.ev={}; S.banSmug=false; S.smugDisc=false; S.smugSales=0; S.snapT=0;
+  S.shares=sharesFor(i); S.cap=Math.round(c.n*CAPF[i]); S.loaded=0;
+  S.cs={rev:0,profit:0,sold:0,missed:0,byF:{p:0,l:0,n:0},pg:{},msgs:[],pat0:S.pat,loy0:S.loy,cash0:S.cash};
+  if(c.startFx){ S.pat=clamp(S.pat+(c.startFx.pat||0),0,100); S.loy=clamp(S.loy+(c.startFx.loy||0),0,100); S.cs.pat0=S.pat; S.cs.loy0=S.loy; }
+  for(const g of GK){
+    S.load[g]=0; S.stock[g]=0; S.sold[g]=0; S.missed[g]=0; S.cs.pg[g]={sold:0,profit:0,missed:0};
+    if(!legalOK(g)) S.mode[g]=canSmug(g)?'smug':'legal'; else if(!canSmug(g)) S.mode[g]='legal';
+  }
+  const keep=[];
+  for(const d of S.delayed){ if(d.at===i){ if(Math.random()<d.p){ applyFx(d.fx); S.cs.msgs.push(d.msg); } } else if(d.at>i) keep.push(d); }
+  S.delayed=keep;
+  for(const g of GK) S.app[g]={p:appTarget(g,'p'),l:appTarget(g,'l'),n:appTarget(g,'n')};
+  saveSnap();
+  S.phase='gazette'; S.pending={type:'gazette',ch:i};
+}
+function saveSnap(){ for(const g of GK){ S.snap[g]={p:eff(g,'p'),l:eff(g,'l'),n:eff(g,'n')}; } }
+function dismissGazette(){
+  const d=DIL[S.ch]&&DIL[S.ch].open;
+  if(d){ S.phase='dilemma'; S.pending={type:'dilemma',kind:'open',d}; }
+  else { S.phase='plan'; S.pending=null; }
+}
+function chooseOption(idx){
+  const p=S.pending; if(!p||p.type!=='dilemma'&&p.type!=='inspect') return null;
+  const o=p.d.opts[idx]; let result='';
+  if(p.type==='inspect') result=resolveInspect(idx);
+  else { applyFx(o.fx); if(o.delayed) S.delayed.push({at:S.ch+1,p:o.delayed.p,fx:o.delayed.fx,msg:o.delayed.msg}); }
+  S.choices.push({year:cur().year,title:p.d.title,pick:o.t,fx:o.fx||{},result});
+  if(p.kind==='mid') S.midDone=true;
+  S.pending=null; S.phase=p.kind==='open'?'plan':'play';
+  return result;
+}
+function applyFx(fx){
+  if(!fx) return;
+  if(fx.pat) S.pat=clamp(S.pat+fx.pat,0,100);
+  if(fx.loy) S.loy=clamp(S.loy+fx.loy,0,100);
+  if(fx.cash){ S.cash=Math.max(0,S.cash+fx.cash); if(fx.profit&&S.cs) S.cs.profit+=fx.cash; }
+  if(fx.heat) S.heat=clamp(S.heat+fx.heat,0,100);
+  if(fx.disc) S.smugDisc=true;
+  if(fx.seize){ banSmuggling(); S.heat=Math.max(0,S.heat-25); }
+}
+function adjustLoad(g,d){
+  if(S.phase!=='plan'&&S.phase!=='play') return false;
+  if(d>0){
+    d=Math.min(d,S.cap-S.loaded); if(d<=0) return false;
+    if(S.mode[g]==='legal'&&!legalOK(g)) return false;
+    S.load[g]+=d; S.stock[g]+=d; S.loaded+=d; return true;
+  }
+  if(S.phase!=='plan') return false;
+  d=-Math.min(-d,S.stock[g]); if(!d) return false;
+  S.load[g]+=d; S.stock[g]+=d; S.loaded+=d; return true;
+}
+function autoFill(){
+  if(S.phase!=='plan') return;
+  for(const g of GK){ S.stock[g]=0; S.load[g]=0; } S.loaded=0;
+  const ex={}; let tot=0; for(const g of GK){ ex[g]=(S.mode[g]==='legal'&&!legalOK(g))?0:rawRate(g)*S.chapterSec; tot+=ex[g]; }
+  if(tot<=0) return;
+  const alloc={}; let used=0;
+  for(const g of GK){ alloc[g]=Math.floor(ex[g]/tot*S.cap); used+=alloc[g]; }
+  const order=GK.slice().sort((a,b)=>(ex[b]/tot*S.cap-alloc[b])-(ex[a]/tot*S.cap-alloc[a]));
+  for(let i=0;used<S.cap&&i<order.length;i++,used++) alloc[order[i]]++;
+  for(const g of GK){ S.load[g]=alloc[g]; S.stock[g]=alloc[g]; } S.loaded=used;
+}
+function openShop(){ if(S.phase==='plan'){ S.phase='play'; saveSnap(); } }
+
+function doSale(g){
+  const w=weights(g), tot=w.p+w.l+w.n; let r=Math.random()*tot, f='n';
+  if(r<w.p) f='p'; else if(r<w.p+w.l) f='l';
+  const kind=S.mode[g], price=ref(g), cost=costOf(g,kind), split=cur().split;
+  S.stock[g]--; S.sold[g]++; S.cash+=price; S.cs.rev+=price; S.cs.profit+=price-cost; S.cs.sold++; S.cs.byF[f]++;
+  S.cs.pg[g].sold++; S.cs.pg[g].profit+=price-cost;
+  let note='';
+  if(split){
+    if(kind==='smug'){ S.pat=clamp(S.pat+.35,0,100); S.loy=clamp(S.loy-.25,0,100); S.heat=clamp(S.heat+3,0,100); S.smugSales++;
+      if(f==='l'&&Math.random()<.3){ S.heat=clamp(S.heat+15,0,100); S.loy=clamp(S.loy-3,0,100); note='reported you!'; } }
+    else if(taxed(g)){ S.pat=clamp(S.pat-.30,0,100); S.loy=clamp(S.loy+.08,0,100); }
+    else { S.pat=clamp(S.pat+.08,0,100); S.loy=clamp(S.loy+.08,0,100); }
+  }
+  const who=f==='p'?'Patriot':f==='l'?'Loyalist':'neighbor';
+  S.feed.push({id:++S.feedN,txt:'<b>'+pick(NAMES)+'</b> ('+who+') bought '+GOODS[g].name.toLowerCase()+' for '+fmt(price)+(kind==='smug'?' 🕯️':'')+(note?' <span>'+note+'</span>':''),bad:!!note});
+}
+function updateAppeal(dt){
+  for(const g of GK){
+    const a=S.app[g];
+    for(const f of ['p','l','n']){
+      const t=appTarget(g,f);
+      a[f]+= (t-a[f])*Math.min(1,.7*dt) + (Math.random()-.5)*.5*dt*(t>0?1:0);
+      a[f]=clamp(a[f],0,t*1.6+.1);
+      if(t===0) a[f]=Math.max(0,a[f]-dt);
+    }
+  }
+}
+
+function checkEvents(){
+  if(S.ch<1) return null;
+  if(S.clock>S.chapterSec*.9||S.clock<8) return null;
+  for(const f of ['patriot','loyalist']){
+    if(S.ev[f]) continue;
+    const t=f==='patriot'?S.pat:S.loy;
+    if(t<40){
+      const p=clamp((40-t)/45,0,.75);
+      if(Math.random()<p){ S.ev[f]=true; const r=Math.random(), sev= t<12?(r<.5?3:2) : t<25?(r<.3?3:r<.8?2:1) : (r<.2?2:1); return makeEvent(f,sev); }
+    } else if(t>=75 && Math.random()<.2){ S.ev[f]=true; return makeEvent(f,0); }
+  }
+  return null;
+}
+function makeEvent(f,sev){
+  const nm=S.name, tone=sev===0?'rich':'bad'; let e;
+  if(f==='patriot'){
+    if(sev===0){ S.cash+=18; e={title:'The Sons of Liberty Rally to You',text:'Word has spread that your shop honors the cause. A crowd of Patriots buys up what they can and leaves a generous purse on the counter. +18s.',head:'Patriots Crowd an Honest Shop'}; }
+    else if(sev===1){ S.cash=Math.max(0,S.cash-12); S.pat=Math.min(100,S.pat+8); loseStock(.2); e={title:'Windows Smashed!',text:'An angry crowd of Patriots throws stones through your windows at night. The glass costs 12s to replace, and a fifth of your stock is ruined by the rain. Their anger is a little spent afterward.',head:'Windows Broken at Shop of '+nm+', Who Served the King\'s Tax'}; }
+    else if(sev===2){ S.cash=Math.max(0,S.cash-25); S.pat=Math.min(100,S.pat+12); S.loy=Math.min(100,S.loy+8); loseStock(.3); S.clock=Math.max(3,S.clock-10); e={title:'Tarred and Feathered!',text:'A mob drags you into the street, covers you in hot tar and feathers, and parades you through town. You lose 25s in doctor bills, 30% of your stock is looted, and you spend days recovering. Loyalists pity you, and the crowd goes home satisfied.',head:nm+' Tarred and Feathered by Sons of Liberty'}; }
+    else { const before=S.cash; S.cash=Math.max(10,Math.round(S.cash*.45)); S.pat=Math.max(S.pat,30); S.loy=Math.min(100,S.loy+10); loseStock(1); S.clock=Math.max(3,S.clock-12); e={title:'Your Shop Is Burned!',text:'In the night a mob sets fire to your shop. All the stock is lost and so is about half your cash ('+fmt(before-S.cash)+'). You rebuild in a hurry. Loyalists offer sympathy, and the Patriots, their anger spent, are willing to give you another chance.',head:'Fire Destroys the Shop of '+nm+'; Patriot Crowd Suspected'}; }
+  } else {
+    if(sev===0){ S.cash+=22; S.pat=Math.max(0,S.pat-6); e={title:'A Royal Supply Contract',text:'The Governor\'s men are pleased with a merchant who keeps faith with the law. They sign a contract to buy supplies from you. +22s, though Patriots grumble.',head:'Governor Rewards Loyal Merchant '+nm}; }
+    else if(sev===1){ S.cash=Math.max(0,S.cash-15); S.loy=Math.min(100,S.loy+8); banSmuggling(); e={title:'The Customs Raid',text:'Customs officers burst in and search your shop from cellar to attic. You are fined 15s, any smuggled goods are seized, and no smuggling is possible for the rest of the year.',head:'Customs Officers Search Shop of '+nm}; }
+    else if(sev===2){ S.cash=Math.max(0,S.cash-22); S.loy=Math.min(100,S.loy+10); S.pat=Math.max(0,S.pat-6); loseStock(.25); S.clock=Math.max(3,S.clock-8); e={title:'Soldiers Quartered in Your Shop',text:'Redcoats move into your back room and eat your stores. You lose 22s and a quarter of your stock. Loyalists feel better about you, and Patriots are furious that you hosted them.',head:'British Soldiers Quartered at '+nm+'\'s Shop'}; }
+    else { S.cash=Math.max(0,S.cash-30); S.loy=Math.min(100,S.loy+12); loseStock(.4); S.clock=Math.max(3,S.clock-15); banSmuggling(); e={title:'Shop Closed by the Governor',text:'The Governor orders your shop closed for a time, after reports that you dealt with smugglers and rebels. You pay a 30s fine and lose 40% of your stock. When you reopen, you are watched closely and cannot smuggle.',head:'Governor Closes Shop of '+nm+' for Dealing With Smugglers'}; }
+  }
+  e.tone=tone; e.sev=sev; e.faction=f;
+  S.headlines.push({year:cur().year,text:e.head}); S.cs.msgs.push('Gazette: '+e.head);
+  S.phase='event'; S.pending={type:'event',ev:e};
+  return e;
+}
+function ackEvent(){ if(S.pending&&S.pending.type==='event'){ S.pending=null; S.phase='play'; } }
+
+function tick(dt){
+  if(!S||S.phase!=='play'||S.pending) return;
+  S.clock-=dt; S.heat=Math.max(0,S.heat-0.25*dt);
+  updateAppeal(dt);
+  S.snapT+=dt; if(S.snapT>=6){ S.snapT=0; saveSnap(); }
+  for(const g of GK){
+    let e=rawRate(g)*dt;
+    if(S.stock[g]<=0){ if(e>0&&(S.mode[g]==='smug'||legalOK(g))){ S.missed[g]+=e; S.cs.missed+=e; S.cs.pg[g].missed+=e; } continue; }
+    while(e>0&&S.stock[g]>0){ if(Math.random()<Math.min(1,e)) doSale(g); e-=1; }
+  }
+  if(!S.midDone && DIL[S.ch]&&DIL[S.ch].mid && S.clock<=S.chapterSec*.5){ S.phase='dilemma'; S.pending={type:'dilemma',kind:'mid',d:DIL[S.ch].mid}; return; }
+  S.mobTimer-=dt;
+  if(S.mobTimer<=0){ S.mobTimer=11; if(checkEvents()) return; }
+  S.inspTimer-=dt;
+  if(S.inspTimer<=0){
+    S.inspTimer=10;
+    if(!S.inspected&&!S.banSmug&&S.smugSales>0&&S.heat>=22&&Math.random()<clamp((S.heat-15)/60,.1,.8)){
+      S.inspected=true; S.phase='dilemma';
+      S.pending={type:'inspect',kind:'inspect',d:{title:'Customs Officers at the Door!',text:'Two officers are at your door asking to search the shop. People have been talking about smuggled goods.',
+        opts:[{t:'Let them search',d:'They take your smuggled stock, fine you, and forbid smuggling for the rest of the year.',fx:{}},
+              {t:'Bribe the inspector (25s)',d:'Keeps you in business if you can pay.',fx:{}},
+              {t:'Hide the evidence',d:'A gamble. Even odds.',fx:{}}]}};
+      return;
+    }
+  }
+  if(stockLeft()<=0&&S.loaded>=S.cap){ S.cs.msgs.push('You sold out before the year ended.'); endChapter(); return; }
+  if(S.clock<=0) endChapter();
+}
+function resolveInspect(idx){
+  const fine=n=>{ const f=Math.min(n,S.cash); S.cash-=f; return f; };
+  if(idx===0){ const f=fine(10); banSmuggling(); S.loy=clamp(S.loy+4,0,100); S.heat=15; return 'The officers took your smuggled stock, fined you '+fmt(f)+', and ordered you to stop smuggling this year.'; }
+  if(idx===1){ if(S.cash<25){ const f=fine(10); banSmuggling(); S.heat=15; return 'You could not afford the bribe. The officers took your smuggled stock and fined you '+fmt(f)+'.'; } S.cash-=25; S.heat=Math.max(0,S.heat-25); return 'The inspector pocketed the coins and left.'; }
+  if(Math.random()<.5){ S.heat=Math.max(0,S.heat-10); S.pat=clamp(S.pat+2,0,100); return 'The officers found nothing. Your hiding place kept its secrets.'; }
+  const f=fine(20); banSmuggling(); S.loy=clamp(S.loy-6,0,100); S.heat=15; return 'They found the evidence! They took your smuggled stock and fined you '+fmt(f)+'.';
+}
+function reportLines(){
+  const L=[], cs=S.cs, pg=cs.pg, c=cur();
+  const best=GK.slice().sort((a,b)=>pg[b].profit-pg[a].profit)[0];
+  if(pg[best].sold>0) L.push('Your best seller was '+GOODS[best].name.toLowerCase()+': '+pg[best].sold+' sold for about '+fmt(pg[best].profit)+' profit.');
+  const tot=cs.byF.p+cs.byF.l+cs.byF.n;
+  if(tot>0&&c.split) L.push('Patriots bought '+cs.byF.p+' items, Loyalists '+cs.byF.l+', and neighbors '+cs.byF.n+'.');
+  for(const g of GK){ if(pg[g].missed>=2) { L.push('You ran out of '+GOODS[g].name.toLowerCase()+' and missed about '+Math.round(pg[g].missed)+' sales. Load more of it, or keep some shipment in reserve.'); break; } }
+  for(const g of GK){ if(S.stock[g]>=3&&S.load[g]>0){ L.push(S.stock[g]+' '+GOODS[g].name.toLowerCase()+' went unsold'+(S.shares.pat>=.25&&taxed(g)&&S.mode[g]==='legal'?', because Patriots refuse taxed goods':', so fewer customers wanted it than you expected')+'.'); break; } }
+  if(cs.msgs.length) for(const m of cs.msgs) L.push(m);
+  return L;
+}
+function endChapter(){
+  const c=cur(); S.phase='ledger';
+  const L=Object.assign({},S.cs,{year:c.year,title:c.title,goal:goalOf(),met:S.cs.profit>=goalOf(),pat:S.pat,loy:S.loy,patD:S.pat-S.cs.pat0,loyD:S.loy-S.cs.loy0,cash:S.cash,last:S.ch===CH.length-1,lines:reportLines()});
+  S.history.push(L); S.pending={type:'ledger',L};
+}
+function nextChapter(){
+  if(S.ch>=CH.length-1){ S.phase='end'; S.pending={type:'end'}; return; }
+  S.pending=null; startChapter(S.ch+1);
+}
+function legacy(){
+  const p=S.pat,l=S.loy; let t,e;
+  if(p<30&&l<30){ t='Trusted by No One'; e='Neither side trusts you. Patriots remember the times you sold to the King\'s men, and Loyalists remember the times you sold to rebels. When war comes you are left with an empty shop and no friends on either side.'; }
+  else if(p>=60&&p>l+15){ t='A Merchant of Liberty'; e='Patriots call you a friend of the cause. When the war begins, your shop becomes a meeting place and a supply stop for the militia, though Loyalist neighbors have quietly stopped greeting you.'; }
+  else if(l>=60&&l>p+15){ t='A Loyal Subject of the King'; e='You have kept faith with the Crown and the law. Loyalists stand by you, but as war begins your Patriot neighbors turn away, and many Loyalist families are leaving. You may have to follow them.'; }
+  else if(p>=40&&l>=40){ t='The Careful Neutral'; e='You managed to stay on speaking terms with both sides. Neither Patriots nor Loyalists fully trust you, but neither wants to see your shop burn. Historians say a lot of colonists tried exactly this, and that the war made it harder every month.'; }
+  else { t='A Merchant Divided'; e='You pleased one side and lost the other. When the war begins, you are on shaky ground with half the town.'; }
+  return {title:t,text:e,cash:S.cash};
+}
+/*==LOGIC-END*/
+
+/* ═══════ UI ═══════ */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let paceKey='relaxed', rolled=null, paused=false, last=0, loopOn=false, feedSeen=0, lastRisk={}, uiT=0, builtFor=-1;
+document.querySelectorAll('#pace label').forEach(l=>l.addEventListener('click',()=>{ document.querySelectorAll('#pace label').forEach(x=>x.classList.remove('sel')); l.classList.add('sel'); paceKey=l.dataset.p; }));
+function colonyCard(c){
+  const pp=Math.round(c.pat*100), lp=Math.round(c.loy*100), np=100-pp-lp;
+  return '<div class="colony"><div class="k">YOUR COLONY</div><div class="n">'+c.name+'</div><div class="d">'+c.d+'</div><div class="popbar"><i class="p" style="width:'+pp+'%">Patriots '+pp+'%</i><i class="n" style="width:'+np+'%">Neutral '+np+'%</i><i class="l" style="width:'+lp+'%">Loyalists '+lp+'%</i></div></div>';
+}
+function rollColony(){
+  $('rollbtn').disabled=true; let n=0; const fin=pick(COLONIES);
+  const iv=setInterval(()=>{ $('colonyslot').innerHTML=colonyCard(COLONIES[n%COLONIES.length]); n++; if(n>14){ clearInterval(iv); rolled=fin; $('colonyslot').innerHTML=colonyCard(fin); $('rollbtn').style.display='none'; $('beginbtn').style.display='inline-block'; } },90);
+}
+function beginGame(){
+  newGame({name:$('pname').value.trim()||'The Merchant',pace:paceKey,colony:rolled});
+  $('splash').style.display='none'; $('game').style.display='flex';
+  builtFor=-1; renderAll(); handlePending();
+  if(!loopOn){ loopOn=true; last=performance.now(); requestAnimationFrame(loop); }
+}
+function anyOverlay(){ return $('ov').classList.contains('on'); }
+function loop(now){
+  const dt=Math.min(.5,(now-last)/1000); last=now;
+  if(S&&!paused&&!anyOverlay()){ tick(dt); frame(dt); }
+  requestAnimationFrame(loop);
+}
+function togglePause(){ paused=!paused; $('pausebtn').textContent=paused?'Resume':'Pause'; $('pausedtag').classList.toggle('on',paused); }
+function flash(msg,cls){ const d=document.createElement('div'); d.className='flash '+(cls||'good'); d.textContent=msg; document.body.appendChild(d); setTimeout(()=>d.remove(),1600); }
+
+function renderAll(){ renderTimeline(); renderHeader(); buildRows(); updateRows(); renderTown(); $('cash').textContent=fmt(S.cash); $('cprofit').textContent=fmt(S.cs.profit); $('gfill').style.width=clamp(S.cs.profit/goalOf()*100,0,100)+'%'; $('goaltxt').textContent='Goal this year: '+goalOf()+'s profit'; $('goalline').innerHTML='🎯 <b>Goal:</b> end 1775 with the biggest fortune and a good name. &nbsp; 📌 <b>This year:</b> '+goalOf()+'s profit'; $('feed').innerHTML=''; feedSeen=S.feedN; }
+function renderTimeline(){
+  $('tl').innerHTML=CH.map((c,i)=>{
+    const cls=i<S.ch?'done':i===S.ch?'now':'';
+    const tx=Object.keys(c.duty).length?'<span class="tx">tax '+Object.keys(c.duty).map(g=>GOODS[g].icon).join('')+'</span>':'<span class="tx">&nbsp;</span>';
+    return '<div class="tn '+cls+'"><b>'+c.year+'</b>'+tx+'</div>';
+  }).join('');
+}
+function renderHeader(){
+  const c=cur();
+  $('colonyline').innerHTML='🗺️ <b>'+S.colony.name+'</b> &nbsp;·&nbsp; '+c.year+': '+c.title;
+  $('ticker').textContent=c.news[0].h+'  •  '+c.news[1].h;
+}
+function buildRows(){
+  const sp=cur().split; let h='';
+  for(const g of GK){
+    const G=GOODS[g], duty=cur().duty[g]||0, restricted=!legalOK(g);
+    const chip=duty>0?'<span class="chip tax">TAX +'+duty+'s</span>':restricted?'<span class="chip tax">BANNED</span>':'<span class="chip free">no tax</span>';
+    const bars=sp?
+      '<div class="ap"><span class="l" style="color:var(--pat)">P</span><div class="trk p"><i id="ap-'+g+'-p"></i></div><span class="ar" id="ar-'+g+'-p"></span></div><div class="ap"><span class="l" style="color:var(--loy)">L</span><div class="trk l2"><i id="ap-'+g+'-l"></i></div><span class="ar" id="ar-'+g+'-l"></span></div><div class="ap"><span class="l" style="color:var(--neu)">N</span><div class="trk n"><i id="ap-'+g+'-n"></i></div><span class="ar" id="ar-'+g+'-n"></span></div>':
+      '<div class="ap"><span class="l" style="width:auto">All</span><div class="trk n"><i id="ap-'+g+'-n"></i></div><span class="ar" id="ar-'+g+'-n"></span></div>';
+    const route=(unlocked()&&(taxed(g)||restricted))?'<div class="route"><button id="rl-'+g+'" data-mode="'+g+':legal">Legal</button><button class="s" id="rs-'+g+'" data-mode="'+g+':smug">🕯️ Smuggled</button></div>':'<div class="sold" style="margin:0">Always legal</div>';
+    h+='<div class="row"><div class="gname"><span class="ic">'+G.icon+'</span><div><b>'+G.name+'</b>'+chip+'</div></div>'+
+      '<div class="price" id="pr-'+g+'"></div>'+
+      '<div>'+bars+'</div>'+
+      '<div><div class="stk"><span class="num" id="st-'+g+'">0</span><div class="btns"><button class="m" data-load="'+g+':-3">−3</button><button class="m" data-load="'+g+':-1">−1</button><button data-load="'+g+':1">+1</button><button data-load="'+g+':3">+3</button><button data-load="'+g+':6">+6</button></div></div><div class="sbar"><i id="sb-'+g+'" style="width:0"></i></div></div>'+
+      '<div>'+route+'<div class="sold" id="sd-'+g+'"></div></div></div>';
+  }
+  $('rows').innerHTML=h; builtFor=S.ch;
+}
+function arrow(cur0,prev){ const d=cur0-prev; return d>.12?'<span class="up">▲</span>':d<-.12?'<span class="dn">▼</span>':''; }
+function updateRows(){
+  const sp=cur().split, plan=S.phase==='plan';
+  for(const g of GK){
+    const price=ref(g), cost=costOf(g,S.mode[g]);
+    $('pr-'+g).innerHTML=fmt(price)+'<small>earn '+fmt(price-cost)+' each</small>';
+    const fs=sp?['p','l','n']:['n'];
+    for(const f of fs){ const v=eff(g,f); $('ap-'+g+'-'+f).style.width=Math.min(100,v/2*100)+'%'; $('ar-'+g+'-'+f).innerHTML=arrow(v,S.snap[g][f]); }
+    const n=S.stock[g]; const el=$('st-'+g); el.textContent=n; el.className='num'+(n<=0&&S.load[g]>0?' out':'');
+    $('sb-'+g).style.width=(S.load[g]>0?n/S.load[g]*100:0)+'%';
+    const rl=$('rl-'+g), rs=$('rs-'+g);
+    if(rl){ rl.className=S.mode[g]==='legal'?'on':''; rs.className='s'+(S.mode[g]==='smug'?' on':''); rl.disabled=!legalOK(g); rs.disabled=S.banSmug; }
+    $('sd-'+g).textContent=plan?'':'Sold '+S.sold[g]+(S.missed[g]>=1?' · missed ~'+Math.round(S.missed[g]):'');
+  }
+  const free=S.cap-S.loaded;
+  $('shipinfo').innerHTML='Shipment: <b>'+S.loaded+' / '+S.cap+'</b> units loaded';
+  $('autobtn').style.display=plan?'':'none'; $('openbtn').style.display=plan?'':'none';
+  $('bt').textContent=plan?'Plan Your Year':'The Exchange Board';
+  $('hint2').innerHTML=plan?'<b>Timer paused.</b> Spread your shipment across the goods. The bars show how much each group wants each good right now. Leave a few units unloaded if you want to react to changes during the year. When you are ready, open the shop.':
+    (free>0?'You still have <b>'+free+'</b> units of shipment you can add (+ buttons). Watch the bars: popularity shifts during the year.':'Your shipment is fully loaded.');
+  const cl=$('clock');
+  if(plan){ cl.textContent='PLANNING'; cl.className='clock plan'; }
+}
+function renderTown(){
+  const sh=S.shares, sp=cur().split;
+  const pp=Math.round(sh.pat*100), lp=Math.round(sh.loy*100), np=100-pp-lp;
+  $('popbar').innerHTML=sp?'<div class="popbar"><i class="p" style="width:'+pp+'%">'+pp+'%</i><i class="n" style="width:'+np+'%">'+np+'%</i><i class="l" style="width:'+lp+'%">'+lp+'%</i></div><div class="note" style="margin-bottom:8px">Share of customers: 🔵 Patriots, ⚪ neutral, 🔴 Loyalists. Patriots are growing as the years go by.</div>':'<div class="note" style="margin-bottom:8px">Everyone in town is a neighbor for now. The town splits into Patriots and Loyalists in 1764.</div>';
+  const rk=f=>{ const r=riskOf(f); if(!r) return ''; const w=f==='patriot'?(r==='danger'?'🔥 DANGER: a mob could come any moment':'⚠ Growing angry: a mob is possible'):(r==='danger'?'🔥 DANGER: a raid could come any moment':'⚠ The customs men are watching you'); return '<div class="risk '+r+'">'+w+'</div>'; };
+  $('townbox').innerHTML=sp?
+   '<div class="meter"><div class="lab"><span>🔵 Patriot standing</span><span>'+Math.round(S.pat)+'</span></div><div class="bar"><i class="p" style="width:'+S.pat+'%"></i></div>'+rk('patriot')+'</div>'+
+   '<div class="meter"><div class="lab"><span>🔴 Loyalist standing</span><span>'+Math.round(S.loy)+'</span></div><div class="bar"><i class="l" style="width:'+S.loy+'%"></i></div>'+rk('loyalist')+'</div>'+
+   '<div class="note">Higher standing means that group buys more from you. Below 40, a faction may turn on you.</div>'+
+   (unlocked()?'<div class="meter" style="margin-top:10px"><div class="lab"><span>🏮 Suspicion</span><span>'+Math.round(S.heat)+'</span></div><div class="bar"><i class="h" style="width:'+S.heat+'%"></i></div><div class="note">'+(S.banSmug?'You are being watched. No smuggling this year.':'Smuggled sales raise it. High suspicion brings inspectors.')+'</div></div>':''):'';
+}
+function frame(dt){
+  if(S.pending){ handlePending(); return; }
+  if(builtFor!==S.ch){ renderAll(); return; }
+  if(S.phase==='play'){
+    const m=Math.max(0,Math.ceil(S.clock)); const cl=$('clock'); cl.textContent=Math.floor(m/60)+':'+String(m%60).padStart(2,'0'); cl.className='clock'+(S.clock<=10?' low':'');
+    $('cprog').style.width=((1-S.clock/S.chapterSec)*100)+'%';
+  }
+  uiT+=dt;
+  if(uiT>=.25){ uiT=0; updateRows(); renderTown();
+    $('cash').textContent=fmt(S.cash); $('cprofit').textContent=fmt(S.cs.profit);
+    const g=goalOf(); $('gfill').style.width=clamp(S.cs.profit/g*100,0,100)+'%'; $('goaltxt').textContent='Goal this year: '+g+'s profit';
+    $('goalline').innerHTML='🎯 <b>Goal:</b> end 1775 with the biggest fortune and a good name. &nbsp; 📌 <b>This year:</b> '+g+'s profit';
+  }
+  if(S.feedN>feedSeen){ const f=$('feed'); for(const it of S.feed.filter(x=>x.id>feedSeen)){ const d=document.createElement('div'); d.className='fi'+(it.bad?' bad':''); d.innerHTML=it.txt; f.insertBefore(d,f.firstChild); } while(f.children.length>6) f.removeChild(f.lastChild); feedSeen=S.feedN; S.feed=S.feed.slice(-20); }
+  for(const f of ['patriot','loyalist']){ const r=riskOf(f); if(r!==lastRisk[f]){ if(r==='angry') flash((f==='patriot'?'Patriots':'Loyalists')+' are getting angry!','bad'); if(r==='danger') flash('DANGER: a '+(f==='patriot'?'mob':'raid')+' could come any moment!','bad'); lastRisk[f]=r; } }
+}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button'); if(!t||!S) return; const d=t.dataset;
+  if(d.load){ const [g,n]=d.load.split(':'); if(!adjustLoad(g,+n)&&+n>0) flash(S.cap-S.loaded<=0?'Your shipment is full.':'Cannot load that.','bad'); updateRows(); }
+  else if(d.mode){ const [g,m]=d.mode.split(':'); setMode(g,m); if(m==='smug') flash('Smuggled: no tax, but risky','bad'); updateRows(); }
+});
+function doAuto(){ autoFill(); updateRows(); }
+function doOpen(){
+  if(S.loaded===0){ flash('Load some goods first.','bad'); return; }
+  openShop(); S.snapT=0; updateRows(); $('clock').className='clock';
+}
+
+/* ── overlays ── */
+function openOv(html,cls){ $('paper').innerHTML=html; $('paper').className='paper'+(cls?' '+cls:''); $('ov').classList.add('on'); $('paper').scrollTop=0; }
+function closeOv(){ $('ov').classList.remove('on'); }
+function handlePending(){
+  if(!S.pending||anyOverlay()) return;
+  const p=S.pending;
+  if(p.type==='gazette') showGazette();
+  else if(p.type==='dilemma'||p.type==='inspect') showDilemma(p);
+  else if(p.type==='event') showEvent(p.ev);
+  else if(p.type==='ledger') showLedgerEnd(p.L);
+  else if(p.type==='end') showEnd();
+}
+function showGazette(){
+  const c=cur(), i=S.ch;
+  openOv('<div class="p-head"><div class="p-title">The Colonial Gazette</div><div class="p-date">'+c.year+' &mdash; '+c.title.toUpperCase()+'</div></div>'+
+    '<div class="news">'+c.news.map(n=>'<div><h3>'+n.h+'</h3><p>'+n.b+'</p></div>').join('')+'</div>'+
+    '<div class="changes"><h4>What changes this year</h4><ul>'+c.changes.map(x=>'<li>'+x+'</li>').join('')+'</ul></div>'+
+    '<div class="changes" style="background:rgba(211,169,76,.22)"><h4>Your goal this year</h4><ul><li>Earn at least <b>'+goalOf()+'s</b> profit.</li><li>Your shipment is <b>'+Math.round(c.n*CAPF[i])+' units</b>. Choose which goods to carry.</li></ul></div>'+
+    '<button class="p-btn" onclick="gazetteDone()">Read On</button>');
+}
+function gazetteDone(){ closeOv(); dismissGazette(); renderAll(); handlePending(); }
+function hintsFor(o){
+  const fx=o.fx||{}, h=[];
+  const mk=(v,cls,lab)=>h.push('<span class="hint '+cls+'">'+(v>0?'▲ ':'▼ ')+lab+'</span>');
+  if(fx.pat) mk(fx.pat,'pat','Patriots'); if(fx.loy) mk(fx.loy,'loy','Loyalists');
+  if(fx.cash) h.push('<span class="hint '+(fx.cash>0?'up':'dn')+'">'+(fx.cash>0?'+':'−')+Math.abs(fx.cash)+'s</span>');
+  if(fx.heat>0) h.push('<span class="hint dn">▲ Suspicion</span>'); if(fx.heat<0) h.push('<span class="hint up">▼ Suspicion</span>');
+  if(fx.disc) h.push('<span class="hint up">▼ Smuggling costs</span>');
+  if(fx.seize) h.push('<span class="hint dn">Smuggled stock taken, no smuggling this year</span>');
+  return h.join('');
+}
+function showDilemma(p){
+  const d=p.d, isI=p.type==='inspect';
+  openOv('<div class="pause-tag">⏸ TIME STANDS STILL WHILE YOU DECIDE</div><div class="p-head"><div class="p-title">'+d.title+'</div><div class="p-date">'+cur().year+'</div></div><div class="dil-text">'+d.text+'</div>'+
+    d.opts.map((o,i)=>'<button class="dil-opt" '+(isI&&i===1&&S.cash<25?'disabled':'')+' onclick="pickOpt('+i+')"><b>'+o.t+'</b>'+(o.d?'<span>'+o.d+'</span>':'')+'<div class="hints">'+(isI?'':hintsFor(o))+'</div></button>').join(''));
+}
+function pickOpt(i){
+  const res=chooseOption(i); closeOv();
+  if(res) openOv('<div class="p-head"><div class="p-title">'+esc(res.split('.')[0])+'.</div></div><div class="dil-text">'+esc(res)+'</div><button class="p-btn" onclick="closeOv()">Back to the Shop</button>');
+  renderAll();
+}
+function showEvent(e){
+  openOv('<div class="pause-tag">⏸ TIME STANDS STILL</div><div class="p-head"><div class="p-title">'+esc(e.title)+'</div><div class="p-date">'+cur().year+'</div></div><div class="dil-text">'+esc(e.text)+'</div><div class="headline"><small>THE GAZETTE REPORTS</small><b>'+esc(e.head)+'</b></div><button class="p-btn" onclick="eventDone()">'+(e.sev===0?'Count the Money':'Pick Up the Pieces')+'</button>',e.tone);
+}
+function eventDone(){ closeOv(); ackEvent(); renderAll(); }
+function showLedgerEnd(L){
+  const sgn=v=>(v>0?'+':'')+Math.round(v), sp=CH[S.ch].split;
+  openOv('<div class="p-head"><div class="p-title">The Year Closes</div><div class="p-date">'+L.year+' &mdash; '+L.title.toUpperCase()+'</div></div>'+
+   '<div class="stats"><div class="stat"><small>Items sold</small><span>'+L.sold+'</span></div><div class="stat"><small>Revenue</small><span>'+fmt(L.rev)+'</span></div><div class="stat"><small>Profit</small><span>'+fmt(L.profit)+'</span></div><div class="stat"><small>Cash</small><span>'+fmt(L.cash)+'</span></div></div>'+
+   '<div class="goalcheck '+(L.met?'ok':'no')+'">'+(L.met?'✔ You reached this year\'s goal of '+L.goal+'s profit.':'✖ You earned '+fmt(L.profit)+' of the '+L.goal+'s profit goal.')+'</div>'+
+   (sp?'<div class="stats"><div class="stat"><small>Patriot standing</small><span>'+Math.round(L.pat)+' ('+sgn(L.patD)+')</span></div><div class="stat"><small>Loyalist standing</small><span>'+Math.round(L.loy)+' ('+sgn(L.loyD)+')</span></div></div>':'')+
+   '<div class="endblock"><h2>Market Report</h2><ul>'+L.lines.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>'+
+   '<button class="p-btn" onclick="ledgerNext()">'+(L.last?'See How It All Ended':'On to '+CH[S.ch+1].year)+'</button>');
+}
+function ledgerNext(){ closeOv(); nextChapter(); renderAll(); handlePending(); }
+function showLedger(){
+  const items=S.choices.map(c=>'<li><b>'+c.year+': '+esc(c.title)+'.</b> You chose "'+esc(c.pick)+'."'+(c.result?' '+esc(c.result):'')+'</li>').join('')||'<li>No choices yet.</li>';
+  const rows=S.history.map(h=>'<li><b>'+h.year+'</b>: profit '+fmt(h.profit)+(h.met?' ✔':' ✖')+', cash '+fmt(h.cash)+'</li>').join('')||'<li>No years finished yet.</li>';
+  openOv('<div class="p-head"><div class="p-title">Your Ledger</div></div><div class="endblock"><h2>Years so far</h2><ul>'+rows+'</ul></div><div class="endblock"><h2>Choices you made</h2><ul>'+items+'</ul></div><button class="p-btn" onclick="closeOv()">Back to the Shop</button>');
+}
+function showHelp(){
+  openOv('<div class="p-head"><div class="p-title">How to Play</div></div><div class="endblock"><ul>'+
+   '<li><b>Goal:</b> end 1775 with the biggest fortune and a good name, one year at a time.</li>'+
+   '<li><b>Plan:</b> each year starts with the timer paused. You have a limited shipment, so spread it across the goods. Auto-fill suggests a split.</li>'+
+   '<li><b>Watch:</b> when you open the shop, sales happen by themselves. The blue, red, and gray bars show how much Patriots, Loyalists, and neighbors want each good right now. They change during the year, and the arrows show which way.</li>'+
+   '<li><b>React:</b> if you kept some shipment unloaded, you can add more goods during the year with the + buttons.</li>'+
+   '<li><b>Standing:</b> the more a group likes you, the more it buys. Selling taxed goods upsets Patriots. Smuggling pleases them but upsets Loyalists and raises Suspicion.</li>'+
+   '<li><b>Route:</b> taxed goods can be Legal or Smuggled. Smuggled goods carry no tax, but cost more and bring inspectors.</li>'+
+   '<li><b>Danger:</b> if either faction\'s standing falls below 40, a mob or raid may come. Very high standing can bring rewards.</li>'+
+   '<li><b>Choices</b> stop the clock. The arrows show who will like or dislike each one.</li></ul></div><button class="p-btn" onclick="closeOv()">Got It</button>');
+}
+function showEnd(){
+  const lg=legacy();
+  openOv('<div class="p-head"><div class="p-title">April 1775</div><div class="p-date">THE WAR BEGINS &mdash; '+S.colony.name.toUpperCase()+'</div></div>'+
+   '<div class="endblock"><div class="legacy">'+lg.title+'</div><p>'+lg.text+'</p></div>'+
+   '<div class="stats"><div class="stat"><small>Final cash</small><span>'+fmt(lg.cash)+'</span></div><div class="stat"><small>Patriot standing</small><span>'+Math.round(S.pat)+'</span></div><div class="stat"><small>Loyalist standing</small><span>'+Math.round(S.loy)+'</span></div><div class="stat"><small>Years on target</small><span>'+S.history.filter(h=>h.met).length+' / '+S.history.length+'</span></div></div>'+
+   '<div class="endblock"><h2>Your Journey</h2><div class="chart"><canvas id="chart"></canvas><div class="cl"><span><i style="background:#2d7a45"></i>Cash</span><span><i style="background:#3b6fc4"></i>Patriot standing</span><span><i style="background:#b5322e"></i>Loyalist standing</span></div></div></div>'+
+   '<div class="endblock"><h2>Your Name in the Gazette</h2><ul>'+(S.headlines.length?S.headlines.map(h=>'<li><b>'+h.year+':</b> '+esc(h.text)+'</li>').join(''):'<li>The town had nothing bad to print about you.</li>')+'</ul></div>'+
+   '<div class="endblock"><h2>The Choices You Made</h2><ul>'+S.choices.map(c=>'<li><b>'+c.year+': '+esc(c.title)+'.</b> '+esc(c.pick)+'</li>').join('')+'</ul></div>'+
+   '<div class="endblock"><h2>Think Like a Historian</h2><ul><li>Your colony started with '+Math.round(S.colony.pat*100)+'% Patriots and '+Math.round(S.colony.loy*100)+'% Loyalists. How did that shape your best choices? What would you have done in another colony?</li><li>When did you earn the most, and what was going on in history that year?</li><li>Which choice made one group like you more and the other less? Was there any choice that pleased everyone?</li><li>Why did smuggling tempt so many merchants? What did it cost the ones who tried it?</li></ul></div>'+
+   '<button class="p-btn" onclick="location.reload()">Start Another Business</button>');
+  setTimeout(drawChart,60);
+}
+function drawChart(){
+  const cv=$('chart'); if(!cv) return; const H=S.history;
+  const dpr=window.devicePixelRatio||1,W=cv.clientWidth,Hh=cv.clientHeight; cv.width=W*dpr; cv.height=Hh*dpr;
+  const c=cv.getContext('2d'); c.scale(dpr,dpr);
+  const pL=36,pR=10,pT=10,pB=24,w=W-pL-pR,h=Hh-pT-pB, maxC=Math.max(100,...H.map(x=>x.cash)), n=H.length, x=i=>pL+(n<2?0:i/(n-1))*w;
+  c.strokeStyle='rgba(36,26,16,.2)'; c.fillStyle='#5b4630'; c.font='11px "Special Elite",monospace';
+  for(let v=0;v<=100;v+=25){ const y=pT+h-(v/100)*h; c.beginPath(); c.moveTo(pL,y); c.lineTo(pL+w,y); c.stroke(); c.fillText(v,6,y+4); }
+  H.forEach((hh,i)=>c.fillText(hh.year,x(i)-14,Hh-7));
+  const line=(fn,col)=>{ c.strokeStyle=col; c.fillStyle=col; c.lineWidth=3; c.beginPath(); H.forEach((hh,i)=>{const y=pT+h-fn(hh)*h; i?c.lineTo(x(i),y):c.moveTo(x(i),y);}); c.stroke(); H.forEach((hh,i)=>{const y=pT+h-fn(hh)*h; c.beginPath(); c.arc(x(i),y,3.5,0,7); c.fill();}); };
+  line(hh=>hh.cash/maxC,'#2d7a45'); line(hh=>hh.pat/100,'#3b6fc4'); line(hh=>hh.loy/100,'#b5322e');
+  c.fillStyle='#5b4630'; c.fillText('Cash scale: 0 to '+Math.round(maxC)+'s',pL+6,pT+12);
+}
+</script>
+</body>
+</html>
